@@ -1,0 +1,181 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         12/Sep/2014  00:28:16
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\timers.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\timers.c" -lC
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\timers.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\timers.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\timers.c
+      1          #include "macros.h"
+      2          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      3          volatile unsigned int Time_Sequence;
+   \                     Time_Sequence:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      4          volatile unsigned int five_msec_count;
+   \                     five_msec_count:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      5          volatile char one_time;
+   \                     one_time:
+   \   000000                DS8 1
+      6          
+      7          
+
+   \                                 In  segment CODE, align 2
+      8          void usleep10(unsigned int usec){
+   \                     usleep10:
+      9          //******************************************************************************
+     10          //------------------------------------------------------------------------------
+     11          // At the current clock rate this yields about 10usec per value passed
+     12          // A value of  0 yields 1.37 uSec
+     13          // A value of  1 yields 1.87 uSec
+     14          // A value of  2 yields 2.36 uSec
+     15          // A value of  3 yields 2.86 uSec
+     16          // A value of  4 yields 3.36 uSec
+     17          // A value of  5 yields 3.86 uSec
+     18          // A value of  6 yields 4.36 uSec
+     19          // A value of  7 yields 4.85 uSec
+     20          // A value of  8 yields 5.354 uSec
+     21          // A value of  9 yields 5.854 uSec
+     22          // A value of 10 yields 6.353 uSec
+     23          // A value of 11 yields 6.851 uSec
+     24          // A value of 12 yields 7.351 uSec
+     25          // A value of 13 yields 7.849 uSec
+     26          // A value of 14 yields 8.350 uSec
+     27          // A value of 15 yields 8.849 uSec
+     28          // A value of 16 yields 9.342 uSec
+     29          // A value of 17 yields 9.84 uSec
+     30          // A value of 18 yields 10.34 uSec
+     31          // A value of 19 yields 10.84 uSec
+     32            int i,j;
+     33            for(j=0;j<usec;j++){
+   \   000000   0E43         MOV.W   #0x0, R14
+   \   000002   053C         JMP     ??usleep10_2
+     34              for(i=0;i<14;i++);
+   \                     ??usleep10_0:
+   \   000004   1F53         ADD.W   #0x1, R15
+   \                     ??usleep10_1:
+   \   000006   3F900E00     CMP.W   #0xe, R15
+   \   00000A   FC3B         JL      ??usleep10_0
+   \   00000C   1E53         ADD.W   #0x1, R14
+   \                     ??usleep10_2:
+   \   00000E   0E9C         CMP.W   R12, R14
+   \   000010   022C         JC      ??usleep10_3
+   \   000012   0F43         MOV.W   #0x0, R15
+   \   000014   F83F         JMP     ??usleep10_1
+     35            }
+     36          //------------------------------------------------------------------------------
+     37          //******************************************************************************
+     38          }
+   \                     ??usleep10_3:
+   \   000016   1001         RETA
+     39          
+
+   \                                 In  segment CODE, align 2
+     40          void five_msec_sleep(unsigned int fivemsec){
+   \                     five_msec_sleep:
+     41          //------------------------------------------------------------------------------
+     42          //Each count passed is at least x times 5 milliseconds
+     43            five_msec_count = 0;
+   \   000000   8243....     MOV.W   #0x0, &five_msec_count
+     44            while(fivemsec > (five_msec_count+1));
+   \                     ??five_msec_sleep_0:
+   \   000004   1F42....     MOV.W   &five_msec_count, R15
+   \   000008   1F53         ADD.W   #0x1, R15
+   \   00000A   0F9C         CMP.W   R12, R15
+   \   00000C   FB2B         JNC     ??five_msec_sleep_0
+     45          //------------------------------------------------------------------------------
+     46          }
+   \   00000E   1001         RETA
+     47          
+
+   \                                 In  segment CODE, align 2
+     48          void TimerB0code(void){
+   \                     TimerB0code:
+     49          //------------------------------------------------------------------------------
+     50          // Timer B0 interrupt code
+     51          //------------------------------------------------------------------------------
+     52            Time_Sequence++;
+   \   000000   9253....     ADD.W   #0x1, &Time_Sequence
+     53            one_time = 1;
+   \   000004   D243....     MOV.B   #0x1, &one_time
+     54            if (five_msec_count < 1000){
+   \   000008   B290E803.... CMP.W   #0x3e8, &five_msec_count
+   \   00000E   022C         JC      ??TimerB0code_0
+     55              five_msec_count++;
+   \   000010   9253....     ADD.W   #0x1, &five_msec_count
+     56            }
+     57          //------------------------------------------------------------------------------
+     58          }
+   \                     ??TimerB0code_0:
+   \   000014   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   TimerB0code
+      4   five_msec_sleep
+      4   usleep10
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  Time_Sequence
+      22  TimerB0code
+       2  five_msec_count
+      16  five_msec_sleep
+       1  one_time
+      24  usleep10
+
+ 
+ 62 bytes in segment CODE
+  5 bytes in segment DATA16_Z
+ 
+ 62 bytes of CODE memory
+  5 bytes of DATA memory
+
+Errors: none
+Warnings: none

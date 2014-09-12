@@ -1,0 +1,284 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         12/Sep/2014  00:28:16
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\switch.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\switch.c" -lC
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\switch.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\switch.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\switch.c
+      1          #include "macros.h"
+      2          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+      3          #include "functions.h"
+      4          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      5          unsigned char SW1_Debounce = SET_0, SW2_Debounce = SET_0;
+   \                     SW1_Debounce:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     SW2_Debounce:
+   \   000000                DS8 1
+      6          extern char *display_1;
+      7          extern char *display_2;
+      8          
+
+   \                                 In  segment CODE, align 2
+      9          void Switches_Process(void){
+   \                     Switches_Process:
+     10          //------------------------------------------------------------------------------
+     11          // Switch Configurations
+     12          //------------------------------------------------------------------------------
+     13            if (!(P4IN & SW1)){
+   \   000000   D2B32102     BIT.B   #0x1, &0x221
+   \   000004   3B2C         JC      ??Switches_Process_0
+     14              SW1_Debounce++;
+   \   000006   D253....     ADD.B   #0x1, &SW1_Debounce
+     15              if (SW1_Debounce == DEBOUNCE_COUNTER){
+   \   00000A   F2900500.... CMP.B   #0x5, &SW1_Debounce
+   \   000010   3520         JNE     ??Switches_Process_0
+     16                // Second letter
+     17                //Current_Letter = display_2 + 0x01; // Should give me the address of the second
+     18                //Current_Letter ^=
+     19                P3OUT ^= (R_FORWARD);
+   \   000012   F2E010002202 XOR.B   #0x10, &0x222
+     20                P3OUT |= TEST_PROBE;
+   \   000018   F2D22202     BIS.B   #0x8, &0x222
+     21          
+     22                if (!(P3OUT & R_FORWARD)){
+   \   00001C   F2B010002202 BIT.B   #0x10, &0x222
+   \   000022   0C2C         JC      ??Switches_Process_1
+     23                  if (!(P3OUT & L_FORWARD)){
+   \   000024   F2B040002202 BIT.B   #0x40, &0x222
+   \   00002A   042C         JC      ??Switches_Process_2
+     24                    //           1234567890123456
+     25                    display_2 = "OFF          OFF";
+   \   00002C   B240........ MOV.W   #`?<Constant "OFF          OFF">`, &display_2
+   \   000032   0F3C         JMP     ??Switches_Process_3
+     26                  } else {
+     27                    //           1234567890123456
+     28                    display_2 = "OFF           ON";
+   \                     ??Switches_Process_2:
+   \   000034   B240........ MOV.W   #`?<Constant "OFF           ON">`, &display_2
+   \   00003A   0B3C         JMP     ??Switches_Process_3
+     29                  }
+     30                } else {
+     31                  if (!(P3OUT & L_FORWARD)){
+   \                     ??Switches_Process_1:
+   \   00003C   F2B040002202 BIT.B   #0x40, &0x222
+   \   000042   042C         JC      ??Switches_Process_4
+     32                    //           1234567890123456
+     33                    display_2 = "ON           OFF";
+   \   000044   B240........ MOV.W   #`?<Constant "ON           OFF">`, &display_2
+   \   00004A   033C         JMP     ??Switches_Process_3
+     34                  } else {
+     35                    //           1234567890123456
+     36                    display_2 = "ON            ON";
+   \                     ??Switches_Process_4:
+   \   00004C   B240........ MOV.W   #`?<Constant "ON            ON">`, &display_2
+     37                  }
+     38                }
+     39                //lcd_clear();
+     40            //           1234567890123456
+     41            display_1 = "Lt  Forward   Rt";
+   \                     ??Switches_Process_3:
+   \   000052   B240........ MOV.W   #`?<Constant "Lt  Forward   Rt">`, &display_1
+     42                lcd_out(display_1,LCD_LINE_1);       // 16 characters max between quotes - line 1
+   \   000058   7D408000     MOV.B   #0x80, R13
+   \   00005C   1C42....     MOV.W   &display_1, R12
+   \   000060   ........     CALLA   #lcd_out
+     43                lcd_out(display_2,LCD_LINE_2);        // 16 characters max between quotes - line 2
+   \   000064   7D40C000     MOV.B   #0xc0, R13
+   \   000068   1C42....     MOV.W   &display_2, R12
+   \   00006C   ........     CALLA   #lcd_out
+     44                SW1_Debounce = SET_0;
+   \   000070   C243....     MOV.B   #0x0, &SW1_Debounce
+     45                five_msec_sleep(DEBOUNCE_TIMER);
+   \   000074   3C401400     MOV.W   #0x14, R12
+   \   000078   ........     CALLA   #five_msec_sleep
+     46              }
+     47            }
+     48            if (!(P4IN & SW2)) {
+   \                     ??Switches_Process_0:
+   \   00007C   E2B32102     BIT.B   #0x2, &0x221
+   \   000080   3B2C         JC      ??Switches_Process_5
+     49              SW2_Debounce++;
+   \   000082   D253....     ADD.B   #0x1, &SW2_Debounce
+     50              if (SW2_Debounce == DEBOUNCE_COUNTER){
+   \   000086   F2900500.... CMP.B   #0x5, &SW2_Debounce
+   \   00008C   3520         JNE     ??Switches_Process_5
+     51                P3OUT ^= (L_FORWARD);
+   \   00008E   F2E040002202 XOR.B   #0x40, &0x222
+     52                P3OUT |= TEST_PROBE;
+   \   000094   F2D22202     BIS.B   #0x8, &0x222
+     53          
+     54                if (!(P3OUT & R_FORWARD)){
+   \   000098   F2B010002202 BIT.B   #0x10, &0x222
+   \   00009E   0C2C         JC      ??Switches_Process_6
+     55                  if (!(P3OUT & L_FORWARD)){
+   \   0000A0   F2B040002202 BIT.B   #0x40, &0x222
+   \   0000A6   042C         JC      ??Switches_Process_7
+     56                    //           1234567890123456
+     57                    display_2 = "OFF          OFF";
+   \   0000A8   B240........ MOV.W   #`?<Constant "OFF          OFF">`, &display_2
+   \   0000AE   0F3C         JMP     ??Switches_Process_8
+     58                  } else {
+     59                    //           1234567890123456
+     60                    display_2 = "OFF           ON";
+   \                     ??Switches_Process_7:
+   \   0000B0   B240........ MOV.W   #`?<Constant "OFF           ON">`, &display_2
+   \   0000B6   0B3C         JMP     ??Switches_Process_8
+     61                  }
+     62                } else {
+     63                  if (!(P3OUT & L_FORWARD)){   
+   \                     ??Switches_Process_6:
+   \   0000B8   F2B040002202 BIT.B   #0x40, &0x222
+   \   0000BE   042C         JC      ??Switches_Process_9
+     64                    //           1234567890123456
+     65                    display_2 = "ON           OFF";
+   \   0000C0   B240........ MOV.W   #`?<Constant "ON           OFF">`, &display_2
+   \   0000C6   033C         JMP     ??Switches_Process_8
+     66                  } else {
+     67                 //              1234567890123456
+     68                    display_2 = "ON            ON";
+   \                     ??Switches_Process_9:
+   \   0000C8   B240........ MOV.W   #`?<Constant "ON            ON">`, &display_2
+     69                  }
+     70                }
+     71                //lcd_clear();
+     72             //              1234567890123456
+     73              display_1 = "Lt  Forward   Rt";
+   \                     ??Switches_Process_8:
+   \   0000CE   B240........ MOV.W   #`?<Constant "Lt  Forward   Rt">`, &display_1
+     74                lcd_out(display_1,LCD_LINE_1);       // 16 characters max between quotes - line 1
+   \   0000D4   7D408000     MOV.B   #0x80, R13
+   \   0000D8   1C42....     MOV.W   &display_1, R12
+   \   0000DC   ........     CALLA   #lcd_out
+     75                lcd_out(display_2,LCD_LINE_2);        // 16 characters max between quotes - line 2
+   \   0000E0   7D40C000     MOV.B   #0xc0, R13
+   \   0000E4   1C42....     MOV.W   &display_2, R12
+   \   0000E8   ........     CALLA   #lcd_out
+     76                SW2_Debounce = SET_0;
+   \   0000EC   C243....     MOV.B   #0x0, &SW2_Debounce
+     77                five_msec_sleep(DEBOUNCE_TIMER);
+   \   0000F0   3C401400     MOV.W   #0x14, R12
+   \   0000F4   ........     CALLA   #five_msec_sleep
+     78              }
+     79            }
+     80          //------------------------------------------------------------------------------
+     81          }
+   \                     ??Switches_Process_5:
+   \   0000F8   1001         RETA
+   \   0000FA                REQUIRE _A_PBIN_L
+   \   0000FA                REQUIRE _A_PBOUT_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "OFF          OFF">`:
+   \   000000   4F4646202020 DC8 "OFF          OFF"
+   \            202020202020
+   \            204F464600  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "OFF           ON">`:
+   \   000000   4F4646202020 DC8 "OFF           ON"
+   \            202020202020
+   \            20204F4E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "ON           OFF">`:
+   \   000000   4F4E20202020 DC8 "ON           OFF"
+   \            202020202020
+   \            204F464600  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "ON            ON">`:
+   \   000000   4F4E20202020 DC8 "ON            ON"
+   \            202020202020
+   \            20204F4E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Lt  Forward   Rt">`:
+   \   000000   4C742020466F DC8 "Lt  Forward   Rt"
+   \            727761726420
+   \            2020527400  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Switches_Process
+        4   -> five_msec_sleep
+        4   -> lcd_out
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "Lt  Forward   Rt">
+      17  ?<Constant "OFF           ON">
+      17  ?<Constant "OFF          OFF">
+      17  ?<Constant "ON            ON">
+      17  ?<Constant "ON           OFF">
+       1  SW1_Debounce
+       1  SW2_Debounce
+     250  Switches_Process
+       2  _A_PBIN_L
+       2  _A_PBOUT_L
+
+ 
+ 250 bytes in segment CODE
+   4 bytes in segment DATA16_AN
+  85 bytes in segment DATA16_C
+   2 bytes in segment DATA16_Z
+ 
+ 250 bytes of CODE  memory
+  85 bytes of CONST memory
+   2 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

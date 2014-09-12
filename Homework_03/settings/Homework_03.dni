@@ -1,0 +1,78 @@
+[DebugChecksum]
+Checksum=-3380774
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[State Storage]
+Control Register=-1
+[EEM State Storage]
+Buffer=BAAAAAAADAAAAAAAAAAAAAAA
+[Sequencer]
+Control Register=0
+NextState0=0
+NextState1=0
+[Action Register]
+Break=0
+State Storage=0
+[NumberOfSequencerBp]
+Number=4
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[EEM Sequencer]
+Buffer=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[watch_formats]
+Fmt0={W}0:Debounced_State	1	0
+Fmt1={W}0:P3OUT	1	0
+Fmt2={W}0:P3SEL0	1	0
+Fmt3={W}0:P3SEL1	1	0
+Fmt4={W}0:P4IN	1	0
+Fmt5={W}0:R_FORWARD	1	0
+Fmt6={W}0:Shift_Register	1	0
+Fmt7={W}0:Time_Sequence	3	0
+Fmt8={W}0:display_l	4	0
+Fmt9={W}0:test	4	0
+[Breakpoints]
+Count=0
+[FET]
+Clock mode=46
+Extended Clock mode=1039
+Secure Password=
+Extended Clock Control Enable=1
+Advanced Extended Clock Control=0
+Emulation mode=0
+Free running=0
+Shutting Down=3
+[Memory Dump]
+Start address=
+Lenghth=
+Address info=0
+Format=0
+Dump registers=0
+PC=0
+SP=0
+SR=0
+all registers=0
+File name=
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Aliases]
+A0=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_01\ports.c" ""
+A1=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_01\timersB2.c" ""
+A2=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_03\LCD.c" ""
+A3=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_03\ports.c" ""
+Count=4
+SuppressDialog=1

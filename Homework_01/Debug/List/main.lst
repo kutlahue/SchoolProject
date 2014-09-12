@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         26/Aug/2014  17:00:21
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         10/Sep/2014  16:42:49
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -137,8 +137,8 @@
    \   000004   ........     CALLA   #Init_Clocks
      53            Init_Conditions();
    \   000008   ........     CALLA   #Init_Conditions
-     54            PJOUT |= LED1;                            // Turn LED 1 on to indicate boot
-   \   00000C   92D32203     BIS.W   #0x1, &0x322
+     54            PJOUT |= LED2;                            // Turn LED 1 on to indicate boot
+   \   00000C   A2D32203     BIS.W   #0x2, &0x322
      55            Time_Sequence = 0;               // 
    \   000010   8243....     MOV.W   #0x0, &Time_Sequence
      56            Init_Timers();                            // Initialize Timers

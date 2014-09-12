@@ -20,7 +20,7 @@ NextState1=0
 Break=0
 State Storage=0
 [DebugChecksum]
-Checksum=835631919
+Checksum=-2024766122
 [CallStack]
 ShowArgs=0
 [Disassembly]
@@ -33,19 +33,21 @@ Buffer=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 Fmt0=unsigned char[3]	4	0
 [watch_formats]
 Fmt0={W}0:PJOUT	4	0
-Fmt1={W}0:Time_Sequence	4	0
+Fmt1={W}0:Time_Sequence	3	0
 Fmt2={W}0:led_smclk	4	0
 Fmt3={W}0:one_time	4	0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\main.c}.52.1" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\main.c}.63.1" 1 0 0 0 "" 0 ""
-Count=2
+Count=0
 [FET]
 Clock mode=65518
-Extended Clock mode=65535
+Extended Clock mode=1
 Secure Password=
 Extended Clock Control Enable=1
 Advanced Extended Clock Control=0
@@ -63,10 +65,6 @@ SP=0
 SR=0
 all registers=0
 File name=
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
 [Aliases]
 A0=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_01\ports.c" ""
 Count=1

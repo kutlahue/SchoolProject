@@ -51,7 +51,7 @@ void main(void){
   Init_Ports();                             // Initialize Ports
   Init_Clocks();                            // Initialize Clock System 
   Init_Conditions();
-  PJOUT |= LED1;                            // Turn LED 1 on to indicate boot
+  PJOUT |= LED2;                            // Turn LED 1 on to indicate boot
   Time_Sequence = 0;               // 
   Init_Timers();                            // Initialize Timers
   Init_LEDs();                              // Initialize LEDs

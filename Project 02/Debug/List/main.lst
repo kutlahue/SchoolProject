@@ -1,0 +1,415 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         02/Sep/2014  20:27:16
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  D:\NCSU\Current\Code Class\Project 02\main.c
+#    Command line  =  
+#        "D:\NCSU\Current\Code Class\Project 02\main.c" -lC
+#        "D:\NCSU\Current\Code Class\Project 02\Debug\List\" -o
+#        "D:\NCSU\Current\Code Class\Project 02\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  D:\NCSU\Current\Code Class\Project 02\Debug\List\main.lst
+#    Object file   =  D:\NCSU\Current\Code Class\Project 02\Debug\Obj\main.r43
+#
+###############################################################################
+
+D:\NCSU\Current\Code Class\Project 02\main.c
+      1          //******************************************************************************
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //
+      6          //  Jim Carlson
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //******************************************************************************
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          
+     15          // Required defines
+     16          // In the event the universe no longer exists, this bit will reset
+     17          #define ALWAYS                  (1)
+     18          #define LED1                 (0x01) // LED 1
+     19          #define BLINK_LED            (0x01) // Allow LED to Blink
+     20          #define CNTL_STATE_INDEX        (3) // Control States
+     21          #define LCD_LINE_1           (0x80) // Position Cursor at Character 01 of Line 1
+     22          #define LCD_LINE_2           (0xC0) // Position Cursor at Character 01 of Line 2
+     23          #define GPS_ONOFF            (0x08) //
+     24          #define LED1                 (0x01) // LED 1
+     25          #define LED2                 (0x02) // LED 2
+     26          #define LED3                 (0x04) // LED 3
+     27          #define LED4                 (0x08) // LED 4
+     28          #define LED5                 (0x10) // LED 5
+     29          #define LED6                 (0x20) // LED 6
+     30          #define LED7                 (0x40) // LED 7
+     31          #define LED8                 (0x80) // LED 8
+     32          #define SW1                  (0x01) // Switch 1
+     33          #define SW2                  (0x02) // Switch 2
+     34          #define CNTL_STATE_INDEX        (3)
+     35          #define LCD_BACKLITE         (0x08) // TEST_PROBE
+     36          
+     37          
+     38          // Global Variables
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     39          volatile unsigned char control_state[CNTL_STATE_INDEX];
+   \                     control_state:
+   \   000000                DS8 3
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     40          volatile unsigned int Time_Sequence;
+   \                     Time_Sequence:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     41          char led_smclk;
+   \                     led_smclk:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     42          volatile char one_time;
+   \                     one_time:
+   \   000000                DS8 1
+     43          extern char *display_1;
+     44          extern char *display_2;
+     45          extern volatile char switch_states;
+     46          
+
+   \                                 In  segment CODE, align 2
+     47          void main(void){
+   \                     main:
+     48          //------------------------------------------------------------------------------
+     49          // Main Program
+     50          // This is the main routine for the program. Execution of code starts here.
+     51          // The operating system is Back Ground Fore Ground.
+     52          // 
+     53          //------------------------------------------------------------------------------
+     54            Init_Ports();                             // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+     55            Init_Clocks();                            // Initialize Clock System 
+   \   000004   ........     CALLA   #Init_Clocks
+     56            Init_Conditions();
+   \   000008   ........     CALLA   #Init_Conditions
+     57            PJOUT |= LED1;                            // Turn LED 1 on to indicate boot
+   \   00000C   92D32203     BIS.W   #0x1, &0x322
+     58            Time_Sequence = 0;                        // 
+   \   000010   8243....     MOV.W   #0x0, &Time_Sequence
+     59            Init_Timers();                            // Initialize Timers
+   \   000014   ........     CALLA   #Init_Timers
+     60            Init_LEDs();                              // Initialize LEDs
+   \   000018   ........     CALLA   #Init_LEDs
+     61            Init_LCD();                               // Initialize LCD
+   \   00001C   ........     CALLA   #Init_LCD
+     62            
+     63          //               1234567890123456
+     64              display_1 = "   N.C. State   ";
+   \   000020   B240........ MOV.W   #`?<Constant "   N.C. State   ">`, &display_1
+     65              display_2 = "    ECE-306     ";
+   \   000026   B240........ MOV.W   #`?<Constant "    ECE-306     ">`, &display_2
+   \   00002C   083C         JMP     ??main_3
+     66          
+     67          
+     68          //------------------------------------------------------------------------------
+     69          // Begining of the "While" Operating System
+     70          //------------------------------------------------------------------------------
+     71           while(ALWAYS) {                            // Can the Operating system run
+     72            switch(Time_Sequence){
+     73              case 250:                               // 1000 msec  
+     74                if(one_time){
+     75                  Init_LEDs();                        // Initialize LEDs
+     76                  one_time = 0;
+     77                }
+     78                Time_Sequence = 0;                    // 
+     79              case 200:                               // 1000 msec  
+     80                if(one_time){
+     81                  PJOUT |= LED4;                      // Change State of LED 4
+     82                  P3OUT |= LED5;                      // Change State of LED 5
+     83                  one_time = 0;
+     84                }
+     85              case 150:                               // 750 msec  
+     86                if(one_time){
+     87                  PJOUT |= LED3;                      // Change State of LED 3
+     88                  P3OUT |= LED6;                      // Change State of LED 6
+     89                  one_time = 0;
+     90                }
+     91              case 100:                               // 500 msec  
+     92                if(one_time){
+     93                  PJOUT |= LED2;                      // Change State of LED 2
+     94                  P3OUT |= LED7;                      // Change State of LED 7
+     95                  one_time = 0;
+     96                }
+     97              case  50:                               // 250 msec  
+     98                if(one_time){
+     99                  PJOUT |= LED1;                      // Change State of LED 1
+    100                  P3OUT |= LED8;                      // Change State of LED 8
+    101                  one_time = 0;
+    102                }
+    103                Display_Process();
+    104                break;                                // 
+    105              default: break; 
+    106            }
+    107            Switches_Process();                       // Check for switch state change 
+   \                     ??main_0:
+   \   00002E   ........     CALLA   #Switches_Process
+    108            if(Time_Sequence > 250){
+   \   000032   B290FB00.... CMP.W   #0xfb, &Time_Sequence
+   \   000038   0228         JNC     ??main_3
+    109              Time_Sequence = 0;
+   \   00003A   8243....     MOV.W   #0x0, &Time_Sequence
+    110            }
+   \                     ??main_3:
+   \   00003E   1F42....     MOV.W   &Time_Sequence, R15
+   \   000042   3F803200     SUB.W   #0x32, R15
+   \   000046   3324         JEQ     ??main_4
+   \   000048   3F803200     SUB.W   #0x32, R15
+   \   00004C   2624         JEQ     ??main_5
+   \   00004E   3F803200     SUB.W   #0x32, R15
+   \   000052   1924         JEQ     ??main_6
+   \   000054   3F803200     SUB.W   #0x32, R15
+   \   000058   0C24         JEQ     ??main_7
+   \   00005A   3F803200     SUB.W   #0x32, R15
+   \   00005E   E723         JNE     ??main_0
+   \   000060   C293....     CMP.B   #0x0, &one_time
+   \   000064   0424         JEQ     ??main_8
+   \   000066   ........     CALLA   #Init_LEDs
+   \   00006A   C243....     MOV.B   #0x0, &one_time
+   \                     ??main_8:
+   \   00006E   8243....     MOV.W   #0x0, &Time_Sequence
+   \                     ??main_7:
+   \   000072   C293....     CMP.B   #0x0, &one_time
+   \   000076   0724         JEQ     ??main_6
+   \   000078   B2D22203     BIS.W   #0x8, &0x322
+   \   00007C   F2D010002202 BIS.B   #0x10, &0x222
+   \   000082   C243....     MOV.B   #0x0, &one_time
+   \                     ??main_6:
+   \   000086   C293....     CMP.B   #0x0, &one_time
+   \   00008A   0724         JEQ     ??main_5
+   \   00008C   A2D22203     BIS.W   #0x4, &0x322
+   \   000090   F2D020002202 BIS.B   #0x20, &0x222
+   \   000096   C243....     MOV.B   #0x0, &one_time
+   \                     ??main_5:
+   \   00009A   C293....     CMP.B   #0x0, &one_time
+   \   00009E   0724         JEQ     ??main_4
+   \   0000A0   A2D32203     BIS.W   #0x2, &0x322
+   \   0000A4   F2D040002202 BIS.B   #0x40, &0x222
+   \   0000AA   C243....     MOV.B   #0x0, &one_time
+   \                     ??main_4:
+   \   0000AE   C293....     CMP.B   #0x0, &one_time
+   \   0000B2   0724         JEQ     ??main_9
+   \   0000B4   92D32203     BIS.W   #0x1, &0x322
+   \   0000B8   F2D080002202 BIS.B   #0x80, &0x222
+   \   0000BE   C243....     MOV.B   #0x0, &one_time
+   \                     ??main_9:
+   \   0000C2   ........     CALLA   #Display_Process
+   \   0000C6   B33F         JMP     ??main_0
+   \   0000C8   0343         NOP
+   \   0000CA                REQUIRE _A_PJOUT_L
+   \   0000CA                REQUIRE _A_PBOUT_L
+    111           }
+    112          //------------------------------------------------------------------------------
+    113          }
+    114          
+
+   \                                 In  segment CODE, align 2
+    115          void Init_Conditions(void){
+   \                     Init_Conditions:
+    116          //------------------------------------------------------------------------------
+    117          // Initializations Configurations
+    118          //------------------------------------------------------------------------------
+    119          // Interrupts are disabled by default, enable them. 
+    120            enable_interrupts();
+   \   000000   ........     BRA     #enable_interrupts
+    121          
+    122          //------------------------------------------------------------------------------
+    123          }
+    124          
+
+   \                                 In  segment CODE, align 2
+    125          void Switches_Process(void){
+   \                     Switches_Process:
+    126          //------------------------------------------------------------------------------
+    127            if (switch_states & SW1){
+   \   000000   D2B3....     BIT.B   #0x1, &switch_states
+   \   000004   0828         JNC     ??Switches_Process_0
+    128              switch_states &= ~SW1;
+   \   000006   D2C3....     BIC.B   #0x1, &switch_states
+    129          //               1234567890123456
+    130              display_1 = "   N.C. State   ";
+   \   00000A   B240........ MOV.W   #`?<Constant "   N.C. State   ">`, &display_1
+    131              display_2 = "    ECE-306     ";
+   \   000010   B240........ MOV.W   #`?<Constant "    ECE-306     ">`, &display_2
+    132              }
+    133          
+    134            if (switch_states & SW2) {
+   \                     ??Switches_Process_0:
+   \   000016   E2B3....     BIT.B   #0x2, &switch_states
+   \   00001A   0828         JNC     ??Switches_Process_1
+    135              switch_states &= ~SW2;
+   \   00001C   E2C3....     BIC.B   #0x2, &switch_states
+    136          //               1234567890123456
+    137              display_1 = "Embedded Systems";
+   \   000020   B240........ MOV.W   #`?<Constant "Embedded Systems">`, &display_1
+    138              display_2 = "     Rock!      ";
+   \   000026   B240........ MOV.W   #`?<Constant "     Rock!      ">`, &display_2
+    139              }
+    140          //------------------------------------------------------------------------------
+    141          }
+   \                     ??Switches_Process_1:
+   \   00002C   1001         RETA
+    142          
+
+   \                                 In  segment CODE, align 2
+    143          void Init_Timers(void){
+   \                     Init_Timers:
+    144          //------------------------------------------------------------------------------
+    145          // Timer Configurations
+    146          //------------------------------------------------------------------------------
+    147          //  Init_Timer_A0(); //
+    148          //  Init_Timer_A1(); // 
+    149          //  Init_Timer_B0(); // 
+    150          //  Init_Timer_B1(); //  
+    151            Init_Timer_B2();   //  Required for provided compiled code to work
+   \   000000   ........     BRA     #Init_Timer_B2
+    152          //------------------------------------------------------------------------------
+    153          }
+    154          
+
+   \                                 In  segment CODE, align 2
+    155          void Init_LEDs(void){
+   \                     Init_LEDs:
+    156          //------------------------------------------------------------------------------
+    157          // LED Configurations
+    158          //------------------------------------------------------------------------------
+    159          // Turns on all 8 LEDs
+    160            PJOUT &= ~LED1;
+   \   000000   92C32203     BIC.W   #0x1, &0x322
+    161            PJOUT &= ~LED2;
+   \   000004   A2C32203     BIC.W   #0x2, &0x322
+    162            PJOUT &= ~LED3;
+   \   000008   A2C22203     BIC.W   #0x4, &0x322
+    163            PJOUT &= ~LED4;
+   \   00000C   B2C22203     BIC.W   #0x8, &0x322
+    164            P3OUT &= ~LED5;
+   \   000010   F2C010002202 BIC.B   #0x10, &0x222
+    165            P3OUT &= ~LED6;
+   \   000016   F2C020002202 BIC.B   #0x20, &0x222
+    166            P3OUT &= ~LED7;
+   \   00001C   F2C040002202 BIC.B   #0x40, &0x222
+    167            P3OUT &= ~LED8;
+   \   000022   F2C080002202 BIC.B   #0x80, &0x222
+    168          //------------------------------------------------------------------------------
+    169          }
+   \   000028   1001         RETA
+   \   00002A                REQUIRE _A_PJOUT_L
+   \   00002A                REQUIRE _A_PBOUT_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   N.C. State   ">`:
+   \   000000   2020204E2E43 DC8 "   N.C. State   "
+   \            2E2053746174
+   \            6520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "    ECE-306     ">`:
+   \   000000   202020204543 DC8 "    ECE-306     "
+   \            452D33303620
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Embedded Systems">`:
+   \   000000   456D62656464 DC8 "Embedded Systems"
+   \            656420537973
+   \            74656D7300  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "     Rock!      ">`:
+   \   000000   202020202052 DC8 "     Rock!      "
+   \            6F636B212020
+   \            2020202000  
+    170          
+    171          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Conditions
+        4   -> enable_interrupts
+      4   Init_LEDs
+      4   Init_Timers
+        4   -> Init_Timer_B2
+      4   Switches_Process
+      4   main
+        4   -> Display_Process
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_Ports
+        4   -> Init_Timers
+        4   -> Switches_Process
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "     Rock!      ">
+      17  ?<Constant "    ECE-306     ">
+      17  ?<Constant "   N.C. State   ">
+      17  ?<Constant "Embedded Systems">
+       4  Init_Conditions
+      42  Init_LEDs
+       4  Init_Timers
+      46  Switches_Process
+       2  Time_Sequence
+       2  _A_PBOUT_L
+       2  _A_PJOUT_L
+       3  control_state
+       1  led_smclk
+     202  main
+       1  one_time
+
+ 
+ 298 bytes in segment CODE
+   4 bytes in segment DATA16_AN
+  68 bytes in segment DATA16_C
+   7 bytes in segment DATA16_Z
+ 
+ 298 bytes of CODE  memory
+  68 bytes of CONST memory
+   7 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

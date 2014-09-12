@@ -1,0 +1,165 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         12/Sep/2014  00:28:15
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\main.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\main.c" -lC
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\main.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\main.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  Description: This file contains the Main Routine - "While" Operating System
+      3          //
+      4          //  Jim Carlson
+      5          //  Aug 2013
+      6          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      7          //------------------------------------------------------------------------------
+      8          
+      9          //------------------------------------------------------------------------------
+     10          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     11          #include  "functions.h"
+     12          #include "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\macros.h",41  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+     13          
+     14          
+     15          // Global Variables
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile unsigned char control_state[CNTL_STATE_INDEX];
+   \                     control_state:
+   \   000000                DS8 3
+     17          
+     18          extern char *display_1;
+     19          
+     20          
+     21          //------------------------------------------------------------------------------
+     22          
+
+   \                                 In  segment CODE, align 2
+     23          void main(void){
+   \                     main:
+     24          //------------------------------------------------------------------------------
+     25          // Main Program
+     26          // This is the main routine for the program. Execution of code starts here.
+     27          // The operating system is Back Ground Fore Ground.
+     28          // 
+     29          //------------------------------------------------------------------------------
+     30            Init_Ports();                             // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+     31            Init_Clocks();                            // Initialize Clock System 
+   \   000004   ........     CALLA   #Init_Clocks
+     32            Init_Conditions();
+   \   000008   ........     CALLA   #Init_Conditions
+     33            PJOUT |= LED1;                            // Turn LED 1 on to indicate boot
+   \   00000C   92D32203     BIS.W   #0x1, &0x322
+     34            Init_Timers();                            // Initialize Timers
+   \   000010   ........     CALLA   #Init_Timers
+     35            five_msec_sleep(50);                      // 250 msec delay for the clock to settle
+   \   000014   3C403200     MOV.W   #0x32, R12
+   \   000018   ........     CALLA   #five_msec_sleep
+     36            Init_LCD();                               // Initialize LCD
+   \   00001C   ........     CALLA   #Init_LCD
+     37            five_msec_sleep(75);                      // 375 msec delay for the clock to settle
+   \   000020   3C404B00     MOV.W   #0x4b, R12
+   \   000024   ........     CALLA   #five_msec_sleep
+     38            Init_LEDs();                              // Initialize LEDs
+   \   000028   ........     CALLA   #Init_LEDs
+     39             
+     40              
+     41          //------------------------------------------------------------------------------
+     42          // Begining of the "While" Operating System
+     43          //------------------------------------------------------------------------------
+     44           while(ALWAYS) {                            // Can the Operating system run
+     45            
+     46            Switches_Process();                       // Check for switch state change 
+   \                     ??main_0:
+   \   00002C   ........     CALLA   #Switches_Process
+   \   000030   FD3F         JMP     ??main_0
+   \   000032   0343         NOP
+   \   000034                REQUIRE _A_PJOUT_L
+     47          
+     48           }
+     49          //------------------------------------------------------------------------------
+     50          }
+     51          
+     52          
+     53          
+     54          
+     55          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_Ports
+        4   -> Init_Timers
+        4   -> Switches_Process
+        4   -> five_msec_sleep
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PJOUT_L
+       3  control_state
+      52  main
+
+ 
+ 52 bytes in segment CODE
+  2 bytes in segment DATA16_AN
+  3 bytes in segment DATA16_Z
+ 
+ 52 bytes of CODE memory
+  3 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: 1
