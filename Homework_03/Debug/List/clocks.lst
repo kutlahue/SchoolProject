@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         12/Sep/2014  00:28:15
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         15/Sep/2014  16:08:07
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -39,14 +39,16 @@
 
 \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\clocks.c
       1          //------------------------------------------------------------------------------
-      2          //  Description: This file contains the Clock Initialization 
-      3          //
-      4          //  Jim Carlson
-      5          //  Aug 2014
-      6          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
-      7          //------------------------------------------------------------------------------
-      8          
-      9          #include  "msp430.h"
+      2          // File Name : clocks.c
+      3          // 
+      4          // Description: This file contains the Clock Initialization 
+      5          //
+      6          //  Jim Carlson
+      7          //  Aug 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include  "msp430.h"
 
    \                                 In  segment DATA16_AN, at 0x160
    \   union <unnamed> _A_CSCTL0_L
@@ -72,54 +74,54 @@
    \   union <unnamed> _A_WDTCTL_L
    \                     _A_WDTCTL_L:
    \   000000                DS8 2
-     10          #include  "functions.h"
-     11          #include  "macros.h"
+     12          #include  "functions.h"
+     13          #include  "macros.h"
 
   #define Z                    (0x04) // Port 3 Pin 2 offset
           ^
-"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\macros.h",41  Warning[Pe047]: 
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\macros.h",55  Warning[Pe047]: 
           incompatible redefinition of macro "Z" (declared at line 149 of
           "C:\Program Files (x86)\IAR Systems\Embedded Workbench
           7.0\430\inc\msp430fr5739.h")
-     12          
-     13          
+     14          
+     15          
 
    \                                 In  segment CODE, align 2
-     14          void Init_Clocks(void){
+     16          void Init_Clocks(void){
    \                     Init_Clocks:
-     15          //------------------------------------------------------------------------------
-     16          // Clock Configurtaions
-     17          // This is the clock initialization for the program.
-     18          //
-     19          // Initial clock configuration, runs immediately after boot.
-     20          // Disables 1ms watchdog timer, 
-     21          //      configure MCLK to 8MHz
-     22          //      configure SMCLK to 8MHz.  
-     23          // Since the X1 oscillator is not currently connected, 
-     24          // X1CLK is an unknown speed (probably ~10kHz).
-     25          //------------------------------------------------------------------------------
-     26            WDTCTL = WDTPW | WDTHOLD;            // Disable watchdog
+     17          //------------------------------------------------------------------------------
+     18          // Clock Configurtaions
+     19          // This is the clock initialization for the program.
+     20          //
+     21          // Initial clock configuration, runs immediately after boot.
+     22          // Disables 1ms watchdog timer, 
+     23          //      configure MCLK to 8MHz
+     24          //      configure SMCLK to 8MHz.  
+     25          // Since the X1 oscillator is not currently connected, 
+     26          // X1CLK is an unknown speed (probably ~10kHz).
+     27          //------------------------------------------------------------------------------
+     28            WDTCTL = WDTPW | WDTHOLD;            // Disable watchdog
    \   000000   B240805A5C01 MOV.W   #0x5a80, &0x15c
-     27          // Clocks:
-     28            CSCTL0 = CSKEY;                      // Unlock register
+     29          // Clocks:
+     30            CSCTL0 = CSKEY;                      // Unlock register
    \   000006   B24000A56001 MOV.W   #0xa500, &0x160
-     29            CSCTL1 |= DCOFSEL0 + DCOFSEL1;       // Set max. DCO setting [8MHz]
+     31            CSCTL1 |= DCOFSEL0 + DCOFSEL1;       // Set max. DCO setting [8MHz]
    \   00000C   B2D006006201 BIS.W   #0x6, &0x162
-     30            CSCTL2 = SELA_1 + SELS_3 + SELM_3;   // set ACLK = vlo; SMCLK = DCO; MCLK = DCO
+     32            CSCTL2 = SELA_1 + SELS_3 + SELM_3;   // set ACLK = vlo; SMCLK = DCO; MCLK = DCO
    \   000012   B24033016401 MOV.W   #0x133, &0x164
-     31            CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;   // set all dividers /1
+     33            CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;   // set all dividers /1
    \   000018   82436601     MOV.W   #0x0, &0x166
-     32            CSCTL0_H = CSLOCK;                   // Lock registers
+     34            CSCTL0_H = CSLOCK;                   // Lock registers
    \   00001C   D2436101     MOV.B   #0x1, &0x161
-     33          //------------------------------------------------------------------------------
-     34          }
+     35          //------------------------------------------------------------------------------
+     36          }
    \   000020   1001         RETA
    \   000022                REQUIRE _A_WDTCTL_L
    \   000022                REQUIRE _A_CSCTL0_L
    \   000022                REQUIRE _A_CSCTL1_L
    \   000022                REQUIRE _A_CSCTL2_L
    \   000022                REQUIRE _A_CSCTL3_L
-     35          
+     37          
 
    Maximum stack usage in bytes:
 

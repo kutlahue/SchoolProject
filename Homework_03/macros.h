@@ -1,4 +1,6 @@
 //------------------------------------------------------------------------------
+//  File Name : macros.h
+//
 //  Description: This file contains all the constants 
 //
 //  Mattia Muller
@@ -9,6 +11,9 @@
 
 // Required defines
 // In the event the universe no longer exists, this bit will reset
+#define USLEEP_TIMER           (14) // Counter to simulate 1 usec
+#define B0_COUNTER           (1000) // Counter for the TimerB0 function
+#define INIT_TIMER             (75) // 375 msec delay
 #define CSLOCK               (0x01) // Any incorrect password locks registers
 #define MCLK_FREQ        (8000000L)
 #define SMCLK_FREQ       (8000000L)
@@ -30,7 +35,7 @@
 #define LED7                 (0x40) // LED 7
 #define LED8                 (0x80) // LED 8
 #define SET_0                   (0) // Set the state to 0
-#define SET_1                (0x01) // Set the state to 1
+#define SET_1                   (1) // Set the state to 1
 #define ERROR                   (1) // Return an error
 #define V_DETECT_R           (0x01) // Port 1 Pin 0 offset
 #define V_DETECT_L           (0x02) // Port 1 Pin 1 offset

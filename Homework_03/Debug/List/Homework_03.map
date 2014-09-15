@@ -2,7 +2,7 @@
 #                                                                              #
 #      IAR Universal Linker V6.0.0.46                                          #
 #                                                                              #
-#           Link time     =  12/Sep/2014  00:29:14                             #
+#           Link time     =  15/Sep/2014  16:08:09                             #
 #           Target CPU    =  MSP430                                            #
 #           List file     =  "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolP #
 #                            roject\Homework_03\Debug\List\Homework_03.map"    #
@@ -92,7 +92,7 @@
                 *                                      *
                 ****************************************
 
-       Program entry at :           C256  Relocatable, from module : ?cstart
+       Program entry at :           C244  Relocatable, from module : ?cstart
 
 
 
@@ -143,7 +143,7 @@ clocks ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debu
         _A_CSCTL2_L                         0164
         _A_CSCTL3_L                         0166
         _A_WDTCTL_L                         015C
-        Init_Clocks                         C638
+        Init_Clocks                         C5F2
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         CSCTL0                              0160
@@ -164,10 +164,10 @@ clocks ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debu
 init ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debug\Obj\init.r43 )
         _A_PBOUT_L                          0222
         _A_PJOUT_L                          0322
-        Init_Ports                          C68C
-        Init_Conditions                     C740
-        Init_Timers                         C730
-        Init_LEDs                           C550
+        Init_Ports                          C646
+        Init_Conditions                     C6FA
+        Init_Timers                         C6EA
+        Init_LEDs                           C50A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PBOUT                               0222
@@ -191,21 +191,21 @@ LCD ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\LCD.r43
         current_line                        1C0A
         update_display_count                NOT NEEDED
         display_update_time                 NOT NEEDED
-        Init_SPI_B0                         C5CA
-        SPI_B0_write                        C6D2
-        spi_rs_data                         C738
-        spi_rs_command                      C720
-        spi_chipselect_idle                 C708
-        spi_chipselect_active               C718
-        spi_reset_idle                      C728
-        spi_reset_active                    C710
-        Init_LCD                            C378
+        Init_SPI_B0                         C584
+        SPI_B0_write                        C68C
+        spi_rs_data                         C6F2
+        spi_rs_command                      C6DA
+        spi_chipselect_idle                 C6C2
+        spi_chipselect_active               C6D2
+        spi_reset_idle                      C6E2
+        spi_reset_active                    C6CA
+        Init_LCD                            C332
         lcd_clear                           NOT NEEDED
-        lcd_write                           C47E
+        lcd_write                           C438
         lcd_command                         NOT NEEDED
-        lcd_putc                            C4F2
+        lcd_putc                            C4AC
         lcd_puts                            NOT NEEDED
-        lcd_out                             C614
+        lcd_out                             C5CE
         Display_Process                     NOT NEEDED
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -230,7 +230,7 @@ LED ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debug\O
 main ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debug\Obj\main.r43 )
         _A_PJOUT_L                          NOT NEEDED
         control_state                       NOT NEEDED
-        main                                C4BE
+        main                                C478
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PJOUT                               0322
@@ -251,11 +251,11 @@ ports ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debug
         _A_PJDIR_L                          0324
         _A_PJSEL0_L                         032A
         _A_PJSEL1_L                         032C
-        Init_Port1                          C406
-        Init_Port2                          C5A4
-        Init_Port3                          C57A
-        Init_Port4                          C5F0
-        Init_PortJ                          C522
+        Init_Port1                          C3C0
+        Init_Port2                          C55E
+        Init_Port3                          C534
+        Init_Port4                          C5AA
+        Init_PortJ                          C4DC
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PAOUT                               0202
@@ -305,7 +305,7 @@ switch ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debu
         _A_PBOUT_L                          NOT NEEDED
         SW1_Debounce                        1C0B
         SW2_Debounce                        1C0C
-        Switches_Process                    C27E
+        Switches_Process                    C26C
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PBIN                                0220
@@ -315,16 +315,16 @@ switch ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debu
         PBOUT_H                             0223
         PBOUT_L                             0222
 system ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debug\Obj\system.r43 )
-        enable_interrupts                   C74C
+        enable_interrupts                   C706
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timers ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\Debug\Obj\timers.r43 )
         Time_Sequence                       1C06
         five_msec_count                     1C08
         one_time                            1C0D
-        usleep10                            C674
-        five_msec_sleep                     C6F8
-        TimerB0code                         C6BC
+        usleep10                            C62E
+        five_msec_sleep                     C6B2
+        TimerB0code                         C676
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timersB2 ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\timersB2.r43 )
@@ -334,29 +334,29 @@ timersB2 ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\ti
         TB2EX0                              0460
         sleeping                            NOT NEEDED
         sleeptime                           NOT NEEDED
-        Init_Timer_B2                       C65A
+        Init_Timer_B2                       C614
         led_blink                           NOT NEEDED
         gps_resetting                       NOT NEEDED
         gps_2b_reset                        NOT NEEDED
         reset_gps_time                      NOT NEEDED
         transmit_delay                      NOT NEEDED
         transmit_time                       NOT NEEDED
-        Timer2_B0_ISR                       C26E
+        Timer2_B0_ISR                       C25C
         Timer2_B0_ISR::??INTVEC 70          FFD6
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 ?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         abort                               NOT NEEDED
 ?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __DebugBreak                        C750
+        __DebugBreak                        C70A
 ?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         __dwrite                            NOT NEEDED
 ?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __exit                              C6A4
+        __exit                              C65E
 ?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         __write                             NOT NEEDED
 ?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        _exit                               C744
+        _exit                               C6FE
         __cstart_call_dtors                 NOT NEEDED
         __cstart_closeall                   NOT NEEDED
         __cstart_clearlocks                 NOT NEEDED
@@ -367,25 +367,25 @@ timersB2 ( \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\ti
         __call_dtors                        NOT NEEDED
         __data16_vec_cctor                  NOT NEEDED
 ?cstart ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __program_start                     C256
-        ?cstart_begin                       C256
+        __program_start                     C244
+        ?cstart_begin                       C244
         ?cstart_call_mpu_init               NOT NEEDED
         ?cstart_call_low_level_init         NOT NEEDED
         ?cstart_init_copy_ramfunc           NOT NEEDED
-        ?cstart_init_zero                   C25A
+        ?cstart_init_zero                   C248
         ?cstart_init_copy                   NOT NEEDED
         ?cstart_init_zero20                 NOT NEEDED
         ?cstart_init_copy20                 NOT NEEDED
         __cstart_init_tls                   NOT NEEDED
         ?cstart_call_ctors                  NOT NEEDED
-        ?cstart_call_main                   C266
-        ?cstart_end                         C26E
+        ?cstart_call_main                   C254
+        ?cstart_end                         C25C
 lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         __low_level_init                    NOT NEEDED
 ?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         ?reset_vector                       FFFE
 ?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        exit                                C748
+        exit                                C702
 ?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         malloc                              NOT NEEDED
 ?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
@@ -393,7 +393,7 @@ lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib
 ?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         memmove                             NOT NEEDED
 ?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __data16_memzero                    C6E6
+        __data16_memzero                    C6A0
         __data16_memcpy                     NOT NEEDED
         __data16_memmove                    NOT NEEDED
 ?MpuInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
@@ -451,7 +451,7 @@ init                   78
   + shared                            4
 main                   52
 ports                 282            22
-switch                250      2      2     85
+switch                198      2      2     68
 system                  4
 timers                 62      5
 timersB2               42             8
@@ -459,7 +459,7 @@ timersB2               42             8
 N/A (command line)           160
 N/A (alignment)
 ----------          -----    ---     --     --
-Total:              1 278    174     56     85
+Total:              1 226    174     56     68
   + common             72
 
 
@@ -490,10 +490,10 @@ DATA16_AN                              015C - 015D               2   rel    0
 DATA16_I                                  1C00                       dse    0
 DATA16_Z                               1C00 - 1C0D               E   rel    1
 CSTACK                                 1F60 - 1FFF              A0   rel    1
-DATA16_C                               C200 - C254              55   rel    0
-CSTART                                 C256 - C26D              18   rel    1
-ISR_CODE                               C26E - C27D              10   rel    1
-<CODE> 1                               C27E - C751             4D4   rel    1
+DATA16_C                               C200 - C243              44   rel    0
+CSTART                                 C244 - C25B              18   rel    1
+ISR_CODE                               C25C - C26B              10   rel    1
+<CODE> 1                               C26C - C70B             4A0   rel    1
 INTVEC                                 FF90 - FFD7              48   com    1
 RESET                                  FFFE - FFFF               2   rel    1
 
@@ -503,9 +503,9 @@ RESET                                  FFFE - FFFF               2   rel    1
                 *                                      *
                 ****************************************
 
- 1 350 bytes of CODE  memory
+ 1 298 bytes of CODE  memory
    174 bytes of DATA  memory (+ 56 absolute )
-    85 bytes of CONST memory
+    68 bytes of CONST memory
 
 Errors: none
 Warnings: none

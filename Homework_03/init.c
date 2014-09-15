@@ -1,5 +1,7 @@
 //------------------------------------------------------------------------------
-//  Description: This file contains the Initialization calls for the different sub systems
+// File Name : init.c
+// 
+// Description: This file contains the Initialization calls for the different sub systems
 //
 //  Mattia Muller
 //  Sep 2014

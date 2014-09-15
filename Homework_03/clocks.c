@@ -1,5 +1,7 @@
 //------------------------------------------------------------------------------
-//  Description: This file contains the Clock Initialization 
+// File Name : clocks.c
+// 
+// Description: This file contains the Clock Initialization 
 //
 //  Jim Carlson
 //  Aug 2014

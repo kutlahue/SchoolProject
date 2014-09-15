@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         12/Sep/2014  00:29:14
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         15/Sep/2014  16:08:07
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -38,9 +38,19 @@
 ###############################################################################
 
 \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\init.c
-      1          #include "macros.h"
-      2          #include "functions.h"
-      3          #include "msp430.h"
+      1          //------------------------------------------------------------------------------
+      2          // File Name : init.c
+      3          // 
+      4          // Description: This file contains the Initialization calls for the different sub systems
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include "macros.h"
+     12          #include "functions.h"
+     13          #include "msp430.h"
 
    \                                 In  segment DATA16_AN, at 0x222
    \   union <unnamed> _A_PBOUT_L
@@ -51,88 +61,90 @@
    \   union <unnamed> _A_PJOUT_L
    \                     _A_PJOUT_L:
    \   000000                DS8 2
-      4          
-      5          extern volatile unsigned int Time_Sequence;
-      6          
-      7          
+     14          
+     15          extern volatile unsigned int Time_Sequence;
+     16          
+     17          //------------------------------------------------------------------------------
+     18          // Initialization of all the Ports
+     19          //------------------------------------------------------------------------------
 
    \                                 In  segment CODE, align 2
-      8          void Init_Ports(void){ //This calls the rest of the initialization functions
+     20          void Init_Ports(void){ //This calls the rest of the initialization functions
    \                     Init_Ports:
-      9            Init_Port1();
+     21            Init_Port1();
    \   000000   ........     CALLA   #Init_Port1
-     10            Init_Port2();
+     22            Init_Port2();
    \   000004   ........     CALLA   #Init_Port2
-     11            Init_Port3(' ');
+     23            Init_Port3(' ');
    \   000008   7C402000     MOV.B   #0x20, R12
    \   00000C   ........     CALLA   #Init_Port3
-     12            Init_Port4();
+     24            Init_Port4();
    \   000010   ........     CALLA   #Init_Port4
-     13            Init_PortJ();
+     25            Init_PortJ();
    \   000014   ........     BRA     #Init_PortJ
-     14          }
-     15          
+     26          }
+     27          
 
    \                                 In  segment CODE, align 2
-     16          void Init_Conditions(void){
+     28          void Init_Conditions(void){
    \                     Init_Conditions:
-     17          //------------------------------------------------------------------------------
-     18          // Initializations Configurations
-     19          //------------------------------------------------------------------------------
-     20          // Interrupts are disabled by default, enable them. 
-     21            enable_interrupts();
+     29          //------------------------------------------------------------------------------
+     30          // Initializations Configurations
+     31          //------------------------------------------------------------------------------
+     32          // Interrupts are disabled by default, enable them. 
+     33            enable_interrupts();
    \   000000   ........     BRA     #enable_interrupts
-     22          
-     23          //------------------------------------------------------------------------------
-     24          }
-     25          
+     34          
+     35          //------------------------------------------------------------------------------
+     36          }
+     37          
 
    \                                 In  segment CODE, align 2
-     26          void Init_Timers(void){
+     38          void Init_Timers(void){
    \                     Init_Timers:
-     27            Time_Sequence = 0;                        
+     39            Time_Sequence = 0;                        
    \   000000   8243....     MOV.W   #0x0, &Time_Sequence
-     28          // 
-     29          //******************************************************************************
-     30          //------------------------------------------------------------------------------
-     31          // Timer Configurations
-     32          //------------------------------------------------------------------------------
-     33          //  Init_Timer_A0(); //
-     34          //  Init_Timer_A1(); // 
-     35          //  Init_Timer_B0(); // 
-     36          //  Init_Timer_B1(); //  
-     37            Init_Timer_B2();   //  Required for provided compiled code to work
+     40          // 
+     41          //******************************************************************************
+     42          //------------------------------------------------------------------------------
+     43          // Timer Configurations
+     44          //------------------------------------------------------------------------------
+     45          //  Init_Timer_A0(); //
+     46          //  Init_Timer_A1(); // 
+     47          //  Init_Timer_B0(); // 
+     48          //  Init_Timer_B1(); //  
+     49            Init_Timer_B2();   //  Required for provided compiled code to work
    \   000004   ........     BRA     #Init_Timer_B2
-     38          //------------------------------------------------------------------------------
-     39          //******************************************************************************
-     40          }
-     41          
+     50          //------------------------------------------------------------------------------
+     51          //******************************************************************************
+     52          }
+     53          
 
    \                                 In  segment CODE, align 2
-     42          void Init_LEDs(void){
+     54          void Init_LEDs(void){
    \                     Init_LEDs:
-     43          //------------------------------------------------------------------------------
-     44          // LED Configurations
-     45          //------------------------------------------------------------------------------
-     46          // Turns on all 8 LEDs
-     47            PJOUT &= ~LED1;
-   \   000000   92C32203     BIC.W   #0x1, &0x322
-     48            PJOUT &= ~LED2;
-   \   000004   A2C32203     BIC.W   #0x2, &0x322
-     49            PJOUT &= ~LED3;
-   \   000008   A2C22203     BIC.W   #0x4, &0x322
-     50            PJOUT &= ~LED4;
-   \   00000C   B2C22203     BIC.W   #0x8, &0x322
-     51            P3OUT &= ~LED5;
-   \   000010   F2C010002202 BIC.B   #0x10, &0x222
-     52            P3OUT &= ~LED6;
-   \   000016   F2C020002202 BIC.B   #0x20, &0x222
-     53            P3OUT &= ~LED7;
-   \   00001C   F2C040002202 BIC.B   #0x40, &0x222
-     54            P3OUT &= ~LED8;
-   \   000022   F2C080002202 BIC.B   #0x80, &0x222
      55          //------------------------------------------------------------------------------
-     56          }
+     56          // LED Configurations
+     57          //------------------------------------------------------------------------------
+     58          // Turns on all 8 LEDs
+     59            PJOUT &= ~LED1;
+   \   000000   92C32203     BIC.W   #0x1, &0x322
+     60            PJOUT &= ~LED2;
+   \   000004   A2C32203     BIC.W   #0x2, &0x322
+     61            PJOUT &= ~LED3;
+   \   000008   A2C22203     BIC.W   #0x4, &0x322
+     62            PJOUT &= ~LED4;
+   \   00000C   B2C22203     BIC.W   #0x8, &0x322
+     63            P3OUT &= ~LED5;
+   \   000010   F2C010002202 BIC.B   #0x10, &0x222
+     64            P3OUT &= ~LED6;
+   \   000016   F2C020002202 BIC.B   #0x20, &0x222
+     65            P3OUT &= ~LED7;
+   \   00001C   F2C040002202 BIC.B   #0x40, &0x222
+     66            P3OUT &= ~LED8;
+   \   000022   F2C080002202 BIC.B   #0x80, &0x222
+     67          //------------------------------------------------------------------------------
+     68          }
    \   000028   1001         RETA
    \   00002A                REQUIRE _A_PJOUT_L
    \   00002A                REQUIRE _A_PBOUT_L

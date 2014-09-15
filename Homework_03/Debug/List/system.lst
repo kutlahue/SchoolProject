@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         07/Sep/2014  17:35:00
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         15/Sep/2014  16:02:26
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -13,27 +13,31 @@
 #    __data_model  =  small
 #    __code_model  =  large
 #    Source file   =  
-#        D:\NCSU\Current\Software Tools\Code Master\Homework_03\system.c
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\system.c
 #    Command line  =  
-#        "D:\NCSU\Current\Software Tools\Code Master\Homework_03\system.c" -lC
-#        "D:\NCSU\Current\Software Tools\Code Master\Homework_03\Debug\List\"
-#        -o "D:\NCSU\Current\Software Tools\Code Master\Homework_03\Debug\Obj\"
-#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\system.c" -lC
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
 #        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
 #        --core=430X --data_model=small -Ol --multiplier=32
 #        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
 #        --code_model=large
 #    List file     =  
-#        D:\NCSU\Current\Software Tools\Code
-#        Master\Homework_03\Debug\List\system.lst
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\system.lst
 #    Object file   =  
-#        D:\NCSU\Current\Software Tools\Code
-#        Master\Homework_03\Debug\Obj\system.r43
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\system.r43
 #
 ###############################################################################
 
-D:\NCSU\Current\Software Tools\Code Master\Homework_03\system.c
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\system.c
       1          //------------------------------------------------------------------------------
       2          // System Configurations
       3          
@@ -48,19 +52,33 @@ D:\NCSU\Current\Software Tools\Code Master\Homework_03\system.c
      12          #include  "msp430.h"
      13          #include  "functions.h"
      14          
-     15          //------------------------------------------------------------------------------
-     16          
+     15          //=========================================================================== 
+     16          // Function name: enable_interrupts
+     17          //
+     18          // Description: This function enables interrupts
+     19          //
+     20          // Passed : no variables passed
+     21          // Locals: no variables declared
+     22          // Returned: no values returned
+     23          //
+     24          // Author: Mattia Muller
+     25          // Date: Sept 2013
+     26          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+                                                                                            ^
+Warning[Pa050]: non-native end of line sequence detected (this diagnostic is
+          only issued once)
+     27          //===========================================================================
 
    \                                 In  segment CODE, align 2
-     17          void enable_interrupts(void){
+     28          void enable_interrupts(void){
    \                     enable_interrupts:
-     18          //------------------------------------------------------------------------------
-     19            __bis_SR_register(GIE);     // enable interrupts
+     29          //------------------------------------------------------------------------------
+     30            __bis_SR_register(GIE);     // enable interrupts
    \   000000   32D2         BIS.W   #0x8, SR
-     20          //------------------------------------------------------------------------------
-     21          }
+     31          //------------------------------------------------------------------------------
+     32          }
    \   000002   1001         RETA
-     22          
+     33          
 
    Maximum stack usage in bytes:
 
@@ -81,4 +99,4 @@ D:\NCSU\Current\Software Tools\Code Master\Homework_03\system.c
  4 bytes of CODE memory
 
 Errors: none
-Warnings: none
+Warnings: 1

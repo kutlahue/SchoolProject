@@ -1,4 +1,6 @@
 //------------------------------------------------------------------------------
+//  File Name : timers.c
+//
 //  Description: This file contains the timer control functions
 //
 //  Mattia Muller
@@ -14,6 +16,19 @@ volatile unsigned int five_msec_count;
 volatile char one_time;
 
 
+//=========================================================================== 
+// Function name: usleep10
+//
+// Description: This function is comparable to a classical sleep function
+//
+// Passed : usec - the amount of usec we want to sleep
+// Locals: no variables declared
+// Returned: no values returned
+//
+// Author: Mattia Muller
+// Date: Sept 2013
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+//===========================================================================
 void usleep10(unsigned int usec){
 //******************************************************************************
 //------------------------------------------------------------------------------
@@ -39,28 +54,54 @@ void usleep10(unsigned int usec){
 // A value of 18 yields 10.34 uSec
 // A value of 19 yields 10.84 uSec
   int i,j;
-  for(j=0;j<usec;j++){
-    for(i=0;i<14;i++);
+  for(j=SET_0;j<usec;j++){
+    for(i=SET_0;i<USLEEP_TIMER;i++);
   }
 //------------------------------------------------------------------------------
 //******************************************************************************
 }
 
+//=========================================================================== 
+// Function name: five_msec_sleep
+//
+// Description: This function is comparable to a classical sleep function
+//
+// Passed : fivemsec - the amount of 5 msec we want to sleep
+// Locals: no variables declared
+// Returned: no values returned
+//
+// Author: Mattia Muller
+// Date: Sept 2013
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+//===========================================================================
 void five_msec_sleep(unsigned int fivemsec){
 //------------------------------------------------------------------------------
 //Each count passed is at least x times 5 milliseconds
-  five_msec_count = 0;
-  while(fivemsec > (five_msec_count+1));
+  five_msec_count = SET_0;
+  while(fivemsec > (five_msec_count+SET_1));
 //------------------------------------------------------------------------------
 }
 
+//=========================================================================== 
+// Function name: TimerB0code
+//
+// Description: This function interrupts the timer B0
+//
+// Passed : no variables passed
+// Locals: no variables declared
+// Returned: no values returned
+//
+// Author: Mattia Muller
+// Date: Sept 2013
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+//===========================================================================
 void TimerB0code(void){
 //------------------------------------------------------------------------------
 // Timer B0 interrupt code
 //------------------------------------------------------------------------------
   Time_Sequence++;
   one_time = 1;
-  if (five_msec_count < 1000){
+  if (five_msec_count < B0_COUNTER){
     five_msec_count++;
   }
 //------------------------------------------------------------------------------

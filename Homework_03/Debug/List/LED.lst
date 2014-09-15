@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         12/Sep/2014  00:28:15
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         15/Sep/2014  16:08:08
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -38,7 +38,17 @@
 ###############################################################################
 
 \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\LED.c
-      1          #include "macros.h"
+      1          //------------------------------------------------------------------------------
+      2          //  File Name : LED.c
+      3          // 
+      4          //  Description: This file contains the LED related functions after Initialization 
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include "macros.h"
 
 
  
