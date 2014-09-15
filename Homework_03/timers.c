@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------
+//  Description: This file contains the timer control functions
+//
+//  Mattia Muller
+//  Sep 2014
+//  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//------------------------------------------------------------------------------
+
+
 #include "macros.h"
 
 volatile unsigned int Time_Sequence;

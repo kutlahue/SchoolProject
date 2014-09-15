@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------
+//  Description: This file contains the Port related Initializations
+//
+//  Mattia Muller
+//  Sep 2014
+//  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//------------------------------------------------------------------------------
+
+
 #include "macros.h"
 #include "msp430.h"
 
@@ -54,15 +63,15 @@ void Init_Port1(void){
 // CPU_RXD              (0x40) // Port 2 Pin 6 offset
 void Init_Port2(void) { 
 
-    P2SEL0 = SET_0;
-    P2SEL1 = SET_0;
-    P2DIR = SET_0;
-    P2OUT = SET_0;
+    P2SEL0 = SET_0; // P2 set as I/0
+    P2SEL1 = SET_0; // P2 set as I/0
+    P2DIR = SET_0;  // P2 set as input
+    P2OUT = SET_0;  // P2 initialized as low
   
-    P2SEL0 &= ~(USB_TXD | USB_RXD | SPI_SCK | CPU_TXD | CPU_RXD); // Set specific pins as function
-    P2SEL1 |= (USB_TXD | USB_RXD | SPI_SCK | CPU_TXD | CPU_RXD); // Set specific pins as function
-    P2OUT |= SPI_SCK;
-    P2REN |= SPI_SCK;
+    P2SEL0 &= ~(USB_TXD | USB_RXD | SPI_SCK | CPU_TXD | CPU_RXD); // Set specified pins as function
+    P2SEL1 |= (USB_TXD | USB_RXD | SPI_SCK | CPU_TXD | CPU_RXD); // Set specified pins as function
+    P2OUT |= SPI_SCK; // SPI_SCK Port Pin set high
+    P2REN |= SPI_SCK; // Enable pullup resistor
 }
 //------------------------------------------------------------------------------
 
@@ -79,16 +88,16 @@ void Init_Port2(void) {
 // L_REVERSE            (0x80) // Port 3 Pin 7 offset
 void Init_Port3(char clock_state) { //This function will initialize all pins in port 3.
 
-    P3SEL0 = SET_0;
-    P3SEL1 = SET_0;
-    P3DIR = SET_0;
-    P3OUT = SET_0;
+    P3SEL0 = SET_0; // P3 set as I/0
+    P3SEL1 = SET_0; // P3 set as I/0
+    P3DIR = SET_0;  // P3 set as input
+    P3OUT = SET_0;  // P3 initialized as low
   
-    P3DIR |= (R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specific pins as output
-    P3DIR &= ~(X | Y | Z ); // Set specific pins as input
-    P3SEL0 &= ~(X | Y | Z | R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specific pins as GP I/O
-    P3SEL1 &= ~(X | Y | Z | R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specific pins as GP I/O
-    P3OUT &= ~(X | Y | Z | R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specific pins to 0
+    P3DIR |= (R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specified pins as outputs
+    P3DIR &= ~(X | Y | Z ); // Set specified pins as inputs
+    P3SEL0 &= ~(X | Y | Z | R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specified pins as GP I/O
+    P3SEL1 &= ~(X | Y | Z | R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specified pins as GP I/O
+    P3OUT &= ~(X | Y | Z | R_FORWARD | L_FORWARD | TEST_PROBE | R_REVERSE | L_REVERSE); // Set specified pins to low
     
     
 }
@@ -107,7 +116,7 @@ void Init_Port4(void){
    P4SEL1 = SET_0; // P4 set as I/0
    P4DIR = SET_0; // Set P4 direction to input
    P4DIR &= ~(SW1 | SW2); // Direction = input
-   P4OUT = SET_0;
+   P4OUT = SET_0; // Set specified pins to high
    P4OUT |= SW1 | SW2; // Configure pullup resistor
    P4REN |= SW1 | SW2; // Enable pullup resistor
    //P4IES |= SW1 | SW2; // P4.0 Hi/Lo edge interrupt
@@ -122,16 +131,16 @@ void Init_Port4(void){
 // GPS_PWRCHK           (0x08) // Port J Pin 3 offset
 void Init_PortJ(void) { //This function will initialize all pins in port 3.
 
-    PJSEL0 = SET_0;
-    PJSEL1 = SET_0;
-    PJDIR = SET_0;
-    PJOUT = SET_0;
+    PJSEL0 = SET_0; // PJ set as I/0
+    PJSEL1 = SET_0; // PJ set as I/0
+    PJDIR = SET_0;  // PJ set as input
+    PJOUT = SET_0;  // PJ initialized as low
   
-    PJDIR |= (GPS_PWR | GPS_RESET | GPS_PWRCNTL); // Set specific pins as output
-    PJDIR &= ~(GPS_PWRCHK); // Set specific pins as input
-    PJSEL0 &= ~(GPS_PWR | GPS_RESET | GPS_PWRCNTL | GPS_PWRCHK); // Set specific pins as GP I/O
-    PJSEL1 &= ~(GPS_PWR | GPS_RESET | GPS_PWRCNTL | GPS_PWRCHK); // Set specific pins as GP I/O
-    PJOUT &= ~(GPS_PWR | GPS_RESET | GPS_PWRCNTL | GPS_PWRCHK); // Set specific pins to 0
+    PJDIR |= (GPS_PWR | GPS_RESET | GPS_PWRCNTL); // Set specified pins as output
+    PJDIR &= ~(GPS_PWRCHK); // Set specified pins as input
+    PJSEL0 &= ~(GPS_PWR | GPS_RESET | GPS_PWRCNTL | GPS_PWRCHK); // Set specified pins as GP I/O
+    PJSEL1 &= ~(GPS_PWR | GPS_RESET | GPS_PWRCNTL | GPS_PWRCHK); // Set specified pins as GP I/O
+    PJOUT &= ~(GPS_PWR | GPS_RESET | GPS_PWRCNTL | GPS_PWRCHK); // Set specified pins to 0
 }
 //----------------------------------------------------------------
 

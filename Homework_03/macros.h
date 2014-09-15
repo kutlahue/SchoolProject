@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------
+//  Description: This file contains all the constants 
+//
+//  Mattia Muller
+//  Sep 2014
+//  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//------------------------------------------------------------------------------
+
+
 // Required defines
 // In the event the universe no longer exists, this bit will reset
 #define CSLOCK               (0x01) // Any incorrect password locks registers
