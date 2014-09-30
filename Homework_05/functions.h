@@ -36,16 +36,3 @@ void lcd_puts(char *s);
 void lcd_out(char *s, char line);
 void lcd_write(char data, char command);
 void lcd_command( char data);
-
-// Switch proto
-void Switch1_Process(void);
-void Switch2_Process(void);
-void Switches_Process(void);
-
-
-
-// Shapes
-void select_menu(void);
-void shape_Blank(void);
-void STRAIGHT_Process(void);
-void CIRCLE_Process(void);

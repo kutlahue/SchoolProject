@@ -1,0 +1,315 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         29/Sep/2014  19:16:05
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\switch.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\switch.c" -lC "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Project 03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\" --no_cse --no_unroll --no_inline --no_code_motion
+#        --no_tbaa --debug -D__MSP430FR5739__ -e --double=32 --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\430\lib\dlib\dl430xlsfn.h" --core=430X --data_model=small -Ol
+#        --multiplier=32 --multiplier_location=4C0 --hw_workaround=CPU40
+#        --hw_workaround=CPU39 --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\List\switch.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\switch.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\switch.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name : switch.c
+      3          //
+      4          //  Description: This file contains the switch control functions
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          
+     12          #include "macros.h"
+
+  #define FIGURE_8			(0x0E)
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\macros.h",91  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 76)
+     13          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+     14          #include "functions.h"
+     15          
+     16          extern char *display_1;
+     17          extern char *display_2;
+                                       ^
+Warning[Pa050]: non-native end of line sequence detected (this diagnostic is
+          only issued once)
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     18          char okay_to_look_at_switch1 = OKAY;
+   \                     okay_to_look_at_switch1:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for okay_to_look_at_switch1>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     19          char okay_to_look_at_switch2 = OKAY;
+   \                     okay_to_look_at_switch2:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for okay_to_look_at_switch2>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     20          char sw1_position = RELEASED;
+   \                     sw1_position:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for sw1_position>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     21          char sw2_position = RELEASED;
+   \                     sw2_position:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for sw2_position>`
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          char count_debounce_SW1 = SET_0;
+   \                     count_debounce_SW1:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          char count_debounce_SW2 = SET_0;
+   \                     count_debounce_SW2:
+   \   000000                DS8 1
+     24          
+     25          
+     26          //=========================================================================== 
+     27          // Function name: Switch1_Process
+     28          //
+     29          // Description: This function handles the detection of SW1
+     30          //
+     31          // Passed : no variables passed
+     32          // Locals: no variables declared
+     33          // Returned: no values returned
+     34          // Globals: none
+     35          //
+     36          // Author: Mattia Muller
+     37          // Date: Sept 2013
+     38          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     39          void Switch1_Process(void){
+   \                     Switch1_Process:
+     40          	if (okay_to_look_at_switch1 && sw1_position){
+   \   000000   C293....     CMP.B   #0x0, &okay_to_look_at_switch1
+   \   000004   0E24         JEQ     ??Switch1_Process_0
+   \   000006   C293....     CMP.B   #0x0, &sw1_position
+   \   00000A   0B24         JEQ     ??Switch1_Process_0
+     41          		if (!(P4IN & SW1)){
+   \   00000C   D2B32102     BIT.B   #0x1, &0x221
+   \   000010   082C         JC      ??Switch1_Process_0
+     42          			 sw1_position = PRESSED;
+   \   000012   C243....     MOV.B   #0x0, &sw1_position
+     43          			 okay_to_look_at_switch1 = NOT_OKAY;
+   \   000016   C243....     MOV.B   #0x0, &okay_to_look_at_switch1
+     44          			 count_debounce_SW1 = DEBOUNCE_RESTART;
+   \   00001A   C243....     MOV.B   #0x0, &count_debounce_SW1
+     45          			 shape_menu();
+   \   00001E   ........     CALLA   #shape_menu
+     46          		}
+     47           	}
+     48           	if (count_debounce_SW1 <= DEBOUNCE_TIME){
+   \                     ??Switch1_Process_0:
+   \   000022   F2901500.... CMP.B   #0x15, &count_debounce_SW1
+   \   000028   032C         JC      ??Switch1_Process_1
+     49           		count_debounce_SW1++;
+   \   00002A   D253....     ADD.B   #0x1, &count_debounce_SW1
+   \   00002E   1001         RETA
+     50           	}else{
+     51           		okay_to_look_at_switch1 = OKAY;
+   \                     ??Switch1_Process_1:
+   \   000030   D243....     MOV.B   #0x1, &okay_to_look_at_switch1
+     52           		if (P4IN & SW1){
+   \   000034   D2B32102     BIT.B   #0x1, &0x221
+   \   000038   0228         JNC     ??Switch1_Process_2
+     53           			sw1_position = RELEASED;
+   \   00003A   D243....     MOV.B   #0x1, &sw1_position
+     54           		}
+     55           	}
+     56          }
+   \                     ??Switch1_Process_2:
+   \   00003E   1001         RETA
+   \   000040                REQUIRE _A_PBIN_L
+     57          
+     58          
+     59          //=========================================================================== 
+     60          // Function name: Switch2_Process
+     61          //
+     62          // Description: This function handles the detection of SW2
+     63          //
+     64          // Passed : no variables passed
+     65          // Locals: no variables declared
+     66          // Returned: no values returned
+     67          // Globals: none
+     68          //
+     69          // Author: Mattia Muller
+     70          // Date: Sept 2013
+     71          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     72          void Switch2_Process(void){
+   \                     Switch2_Process:
+     73          	if (okay_to_look_at_switch2 && sw2_position){
+   \   000000   C293....     CMP.B   #0x0, &okay_to_look_at_switch2
+   \   000004   0E24         JEQ     ??Switch2_Process_0
+   \   000006   C293....     CMP.B   #0x0, &sw2_position
+   \   00000A   0B24         JEQ     ??Switch2_Process_0
+     74          		if (!(P4IN & SW2)){
+   \   00000C   E2B32102     BIT.B   #0x2, &0x221
+   \   000010   082C         JC      ??Switch2_Process_0
+     75          			 sw2_position = PRESSED;
+   \   000012   C243....     MOV.B   #0x0, &sw2_position
+     76          			 okay_to_look_at_switch2 = NOT_OKAY;
+   \   000016   C243....     MOV.B   #0x0, &okay_to_look_at_switch2
+     77          			 count_debounce_SW2 = DEBOUNCE_RESTART;
+   \   00001A   C243....     MOV.B   #0x0, &count_debounce_SW2
+     78          			 select_menu();
+   \   00001E   ........     CALLA   #select_menu
+     79          		}
+     80           	}
+     81           	if (count_debounce_SW2 <= DEBOUNCE_TIME){
+   \                     ??Switch2_Process_0:
+   \   000022   F2901500.... CMP.B   #0x15, &count_debounce_SW2
+   \   000028   032C         JC      ??Switch2_Process_1
+     82           		count_debounce_SW2++;
+   \   00002A   D253....     ADD.B   #0x1, &count_debounce_SW2
+   \   00002E   1001         RETA
+     83           	}else{
+     84           		okay_to_look_at_switch2 = OKAY;
+   \                     ??Switch2_Process_1:
+   \   000030   D243....     MOV.B   #0x1, &okay_to_look_at_switch2
+     85           		if (P4IN & SW2){
+   \   000034   E2B32102     BIT.B   #0x2, &0x221
+   \   000038   0228         JNC     ??Switch2_Process_2
+     86           			sw2_position = RELEASED;
+   \   00003A   D243....     MOV.B   #0x1, &sw2_position
+     87           		}
+     88           	}
+     89          }
+   \                     ??Switch2_Process_2:
+   \   00003E   1001         RETA
+   \   000040                REQUIRE _A_PBIN_L
+     90          
+     91          //=========================================================================== 
+     92          // Function name: Switches_Process
+     93          //
+     94          // Description: This function handles the detection of SW1 and SW2
+     95          //
+     96          // Passed : no variables passed
+     97          // Locals: no variables declared
+     98          // Returned: no values returned
+     99          // Globals: none
+    100          //
+    101          // Author: Mattia Muller
+    102          // Date: Sept 2013
+    103          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    104          //******************************************************************************
+    105          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    106          void Switches_Process(void){
+   \                     Switches_Process:
+    107           Switch1_Process();
+   \   000000   ........     CALLA   #Switch1_Process
+    108           Switch2_Process();
+   \   000004   ........     BRA     #Switch2_Process
+    109          } 
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for okay_to_look_at_switch1>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for okay_to_look_at_switch2>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for sw1_position>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for sw2_position>`:
+   \   000000   01           DC8 1
+    110          //------------------------------------------------------------------------------
+    111          //******************************************************************************
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Switch1_Process
+        4   -> shape_menu
+      4   Switch2_Process
+        4   -> select_menu
+      4   Switches_Process
+        4   -> Switch1_Process
+        4   -> Switch2_Process
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  ?<Initializer for okay_to_look_at_switch1>
+       1  ?<Initializer for okay_to_look_at_switch2>
+       1  ?<Initializer for sw1_position>
+       1  ?<Initializer for sw2_position>
+      64  Switch1_Process
+      64  Switch2_Process
+       8  Switches_Process
+       2  _A_PBIN_L
+       1  count_debounce_SW1
+       1  count_debounce_SW2
+       1  okay_to_look_at_switch1
+       1  okay_to_look_at_switch2
+       1  sw1_position
+       1  sw2_position
+
+ 
+ 136 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+   4 bytes in segment DATA16_I
+   4 bytes in segment DATA16_ID
+   2 bytes in segment DATA16_Z
+ 
+ 136 bytes of CODE  memory
+   4 bytes of CONST memory
+   6 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: 2

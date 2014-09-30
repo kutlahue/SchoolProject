@@ -1,0 +1,191 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         29/Sep/2014  19:16:02
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\init.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\init.c" -lC "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Project 03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\" --no_cse --no_unroll --no_inline --no_code_motion
+#        --no_tbaa --debug -D__MSP430FR5739__ -e --double=32 --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\430\lib\dlib\dl430xlsfn.h" --core=430X --data_model=small -Ol
+#        --multiplier=32 --multiplier_location=4C0 --hw_workaround=CPU40
+#        --hw_workaround=CPU39 --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\List\init.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\init.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\init.c
+      1          //------------------------------------------------------------------------------
+      2          // File Name : init.c
+      3          // 
+      4          // Description: This file contains the Initialization calls for the different sub systems
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include "macros.h"
+
+  #define FIGURE_8			(0x0E)
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\macros.h",91  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 76)
+     12          #include "functions.h"
+     13          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     14          
+     15          extern volatile unsigned int Time_Sequence;
+     16          
+     17          //------------------------------------------------------------------------------
+     18          // Initialization of all the Ports
+     19          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     20          void Init_Ports(void){ //This calls the rest of the initialization functions
+   \                     Init_Ports:
+     21            Init_Port1();
+   \   000000   ........     CALLA   #Init_Port1
+     22            Init_Port2();
+   \   000004   ........     CALLA   #Init_Port2
+     23            Init_Port3(' ');
+   \   000008   7C402000     MOV.B   #0x20, R12
+   \   00000C   ........     CALLA   #Init_Port3
+     24            Init_Port4();
+   \   000010   ........     CALLA   #Init_Port4
+     25            Init_PortJ();
+   \   000014   ........     BRA     #Init_PortJ
+     26          }
+     27          
+
+   \                                 In  segment CODE, align 2
+     28          void Init_Conditions(void){
+   \                     Init_Conditions:
+     29          //------------------------------------------------------------------------------
+     30          // Initializations Configurations
+     31          //------------------------------------------------------------------------------
+     32          // Interrupts are disabled by default, enable them. 
+     33            enable_interrupts();
+   \   000000   ........     BRA     #enable_interrupts
+     34          
+     35          //------------------------------------------------------------------------------
+     36          }
+     37          
+
+   \                                 In  segment CODE, align 2
+     38          void Init_Timers(void){
+   \                     Init_Timers:
+     39            Time_Sequence = 0;                        
+   \   000000   8243....     MOV.W   #0x0, &Time_Sequence
+     40          // 
+     41          //******************************************************************************
+     42          //------------------------------------------------------------------------------
+     43          // Timer Configurations
+     44          //------------------------------------------------------------------------------
+     45          //  Init_Timer_A0(); //
+     46          //  Init_Timer_A1(); // 
+     47          //  Init_Timer_B0(); // 
+     48          //  Init_Timer_B1(); //  
+     49            Init_Timer_B2();   //  Required for provided compiled code to work
+   \   000004   ........     BRA     #Init_Timer_B2
+     50          //------------------------------------------------------------------------------
+     51          //******************************************************************************
+     52          }
+     53          
+
+   \                                 In  segment CODE, align 2
+     54          void Init_LEDs(void){
+   \                     Init_LEDs:
+     55          //------------------------------------------------------------------------------
+     56          // LED Configurations
+     57          //------------------------------------------------------------------------------
+     58          // Turns on all 8 LEDs
+     59            PJOUT &= ~LED1;
+   \   000000   92C32203     BIC.W   #0x1, &0x322
+     60            PJOUT &= ~LED2;
+   \   000004   A2C32203     BIC.W   #0x2, &0x322
+     61            PJOUT &= ~LED3;
+   \   000008   A2C22203     BIC.W   #0x4, &0x322
+     62            PJOUT &= ~LED4;
+   \   00000C   B2C22203     BIC.W   #0x8, &0x322
+     63            P3OUT &= ~LED5;
+   \   000010   F2C010002202 BIC.B   #0x10, &0x222
+     64            P3OUT &= ~LED6;
+   \   000016   F2C020002202 BIC.B   #0x20, &0x222
+     65            P3OUT &= ~LED7;
+   \   00001C   F2C040002202 BIC.B   #0x40, &0x222
+     66            P3OUT &= ~LED8;
+   \   000022   F2C080002202 BIC.B   #0x80, &0x222
+     67          //------------------------------------------------------------------------------
+     68          }
+   \   000028   1001         RETA
+   \   00002A                REQUIRE _A_PJOUT_L
+   \   00002A                REQUIRE _A_PBOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Conditions
+        4   -> enable_interrupts
+      4   Init_LEDs
+      4   Init_Ports
+        4   -> Init_Port1
+        4   -> Init_Port2
+        4   -> Init_Port3
+        4   -> Init_Port4
+        4   -> Init_PortJ
+      4   Init_Timers
+        4   -> Init_Timer_B2
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  Init_Conditions
+      42  Init_LEDs
+      24  Init_Ports
+       8  Init_Timers
+       2  _A_PBOUT_L
+       2  _A_PJOUT_L
+
+ 
+ 78 bytes in segment CODE
+  4 bytes in segment DATA16_AN
+ 
+ 78 bytes of CODE memory
+  0 bytes of DATA memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: 1

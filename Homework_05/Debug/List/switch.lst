@@ -1,0 +1,269 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         15/Sep/2014  16:08:08
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\switch.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\switch.c" -lC
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\List\switch.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Homework_03\Debug\Obj\switch.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Homework_03\switch.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name : switch.c
+      3          //
+      4          //  Description: This file contains the switch control functions
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          
+     12          #include "macros.h"
+     13          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+     14          #include "functions.h"
+     15          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          unsigned char SW1_Debounce = SET_0, SW2_Debounce = SET_0;
+   \                     SW1_Debounce:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     SW2_Debounce:
+   \   000000                DS8 1
+     17          extern char *display_1;
+     18          extern char *display_2;
+                                       ^
+Warning[Pa050]: non-native end of line sequence detected (this diagnostic is
+          only issued once)
+     19          
+     20          //=========================================================================== 
+     21          // Function name: Switches_Process
+     22          //
+     23          // Description: This function handles the detection of SW1 and SW2
+     24          //
+     25          // Passed : no variables passed
+     26          // Locals: no variables declared
+     27          // Returned: no values returned
+     28          // Globals: SW1_Debounce -Dbounce counter for switch 1/ SW2_Debounce -Dbounce counter for switch 2
+     29          //
+     30          // Author: Mattia Muller
+     31          // Date: Sept 2013
+     32          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     33          void Switches_Process(void){
+   \                     Switches_Process:
+     34          //------------------------------------------------------------------------------
+     35          // Switch Configurations
+     36          //
+     37          // To debounce the switches we use a timer and a counter
+     38          // The counter is there to avoid that a simple vibration is perceived as the switch being pressed
+     39          // The timer is there to avoid that if the switch is pressed to long it turns on and off
+     40          //
+     41          //------------------------------------------------------------------------------
+     42            if (!(P4IN & SW1)){ 						// Check for SW1 being pressed
+   \   000000   D2B32102     BIT.B   #0x1, &0x221
+   \   000004   2E2C         JC      ??Switches_Process_0
+     43              SW1_Debounce++;   						// Increment the SW1 counter
+   \   000006   D253....     ADD.B   #0x1, &SW1_Debounce
+     44              if (SW1_Debounce == DEBOUNCE_COUNTER){  // Check that the counter is high enough to be considered a press					// Set Port 3 pin 5 to high
+   \   00000A   F2900500.... CMP.B   #0x5, &SW1_Debounce
+   \   000010   2820         JNE     ??Switches_Process_0
+     45                P3OUT &= ~(L_FORWARD);
+   \   000012   F2C040002202 BIC.B   #0x40, &0x222
+     46                P3OUT ^= (R_FORWARD);                                    // Deactivate the other port
+   \   000018   F2E010002202 XOR.B   #0x10, &0x222
+     47                P3OUT |= TEST_PROBE;					// Turn the LCD screen on
+   \   00001E   F2D22202     BIS.B   #0x8, &0x222
+     48          
+     49                if (!(P3OUT & R_FORWARD)){			// Check the status of the ports to determine what the display will be showing.
+   \   000022   F2B010002202 BIT.B   #0x10, &0x222
+   \   000028   042C         JC      ??Switches_Process_1
+     50                    //           1234567890123456
+     51                    display_2 = "OFF          OFF";   // Set the display line 2
+   \   00002A   B240........ MOV.W   #`?<Constant "OFF          OFF">`, &display_2
+   \   000030   033C         JMP     ??Switches_Process_2
+     52                  } else {
+     53                    //           1234567890123456
+     54                    display_2 = "OFF           ON";   // Set the display line 2
+   \                     ??Switches_Process_1:
+   \   000032   B240........ MOV.W   #`?<Constant "OFF           ON">`, &display_2
+     55                }
+     56            //           1234567890123456
+     57            	  display_1 = "Lt  Forward   Rt";       // Set the display line 1
+   \                     ??Switches_Process_2:
+   \   000038   B240........ MOV.W   #`?<Constant "Lt  Forward   Rt">`, &display_1
+     58                lcd_out(display_1,LCD_LINE_1);        // Show display line 1 on the LCD
+   \   00003E   7D408000     MOV.B   #0x80, R13
+   \   000042   1C42....     MOV.W   &display_1, R12
+   \   000046   ........     CALLA   #lcd_out
+     59                lcd_out(display_2,LCD_LINE_2);        // Show display line 2 on the LCD
+   \   00004A   7D40C000     MOV.B   #0xc0, R13
+   \   00004E   1C42....     MOV.W   &display_2, R12
+   \   000052   ........     CALLA   #lcd_out
+     60                SW1_Debounce = SET_0;					// Reset the SW1 counter
+   \   000056   C243....     MOV.B   #0x0, &SW1_Debounce
+     61                five_msec_sleep(DEBOUNCE_TIMER);		// Set the programm to sleep to avoid the recognition of any other input
+   \   00005A   3C401400     MOV.W   #0x14, R12
+   \   00005E   ........     CALLA   #five_msec_sleep
+     62              }
+     63            }
+     64            if (!(P4IN & SW2)) {						// Same procedure for SW2
+   \                     ??Switches_Process_0:
+   \   000062   E2B32102     BIT.B   #0x2, &0x221
+   \   000066   2E2C         JC      ??Switches_Process_3
+     65              SW2_Debounce++;
+   \   000068   D253....     ADD.B   #0x1, &SW2_Debounce
+     66              if (SW2_Debounce == DEBOUNCE_COUNTER){
+   \   00006C   F2900500.... CMP.B   #0x5, &SW2_Debounce
+   \   000072   2820         JNE     ??Switches_Process_3
+     67                P3OUT &= ~(R_FORWARD);
+   \   000074   F2C010002202 BIC.B   #0x10, &0x222
+     68                P3OUT ^= (L_FORWARD);                                  
+   \   00007A   F2E040002202 XOR.B   #0x40, &0x222
+     69                P3OUT |= TEST_PROBE;
+   \   000080   F2D22202     BIS.B   #0x8, &0x222
+     70          
+     71                
+     72                  if (!(P3OUT & L_FORWARD)){
+   \   000084   F2B040002202 BIT.B   #0x40, &0x222
+   \   00008A   042C         JC      ??Switches_Process_4
+     73                    //           1234567890123456
+     74                    display_2 = "OFF          OFF";
+   \   00008C   B240........ MOV.W   #`?<Constant "OFF          OFF">`, &display_2
+   \   000092   033C         JMP     ??Switches_Process_5
+     75                  } else {
+     76                    //           1234567890123456
+     77                    display_2 = "ON           OFF";
+   \                     ??Switches_Process_4:
+   \   000094   B240........ MOV.W   #`?<Constant "ON           OFF">`, &display_2
+     78                  }
+     79             //            1234567890123456
+     80              display_1 = "Lt  Forward   Rt";
+   \                     ??Switches_Process_5:
+   \   00009A   B240........ MOV.W   #`?<Constant "Lt  Forward   Rt">`, &display_1
+     81                lcd_out(display_1,LCD_LINE_1);       
+   \   0000A0   7D408000     MOV.B   #0x80, R13
+   \   0000A4   1C42....     MOV.W   &display_1, R12
+   \   0000A8   ........     CALLA   #lcd_out
+     82                lcd_out(display_2,LCD_LINE_2); 
+   \   0000AC   7D40C000     MOV.B   #0xc0, R13
+   \   0000B0   1C42....     MOV.W   &display_2, R12
+   \   0000B4   ........     CALLA   #lcd_out
+     83                SW2_Debounce = SET_0;
+   \   0000B8   C243....     MOV.B   #0x0, &SW2_Debounce
+     84                five_msec_sleep(DEBOUNCE_TIMER);
+   \   0000BC   3C401400     MOV.W   #0x14, R12
+   \   0000C0   ........     CALLA   #five_msec_sleep
+     85              }
+     86            }
+     87          //------------------------------------------------------------------------------
+     88          }
+   \                     ??Switches_Process_3:
+   \   0000C4   1001         RETA
+   \   0000C6                REQUIRE _A_PBIN_L
+   \   0000C6                REQUIRE _A_PBOUT_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "OFF          OFF">`:
+   \   000000   4F4646202020 DC8 "OFF          OFF"
+   \            202020202020
+   \            204F464600  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "OFF           ON">`:
+   \   000000   4F4646202020 DC8 "OFF           ON"
+   \            202020202020
+   \            20204F4E00  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Lt  Forward   Rt">`:
+   \   000000   4C742020466F DC8 "Lt  Forward   Rt"
+   \            727761726420
+   \            2020527400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "ON           OFF">`:
+   \   000000   4F4E20202020 DC8 "ON           OFF"
+   \            202020202020
+   \            204F464600  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Switches_Process
+        4   -> five_msec_sleep
+        4   -> lcd_out
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "Lt  Forward   Rt">
+      17  ?<Constant "OFF           ON">
+      17  ?<Constant "OFF          OFF">
+      17  ?<Constant "ON           OFF">
+       1  SW1_Debounce
+       1  SW2_Debounce
+     198  Switches_Process
+       2  _A_PBIN_L
+       2  _A_PBOUT_L
+
+ 
+ 198 bytes in segment CODE
+   4 bytes in segment DATA16_AN
+  68 bytes in segment DATA16_C
+   2 bytes in segment DATA16_Z
+ 
+ 198 bytes of CODE  memory
+  68 bytes of CONST memory
+   2 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: 1

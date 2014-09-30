@@ -3,7 +3,7 @@
 //
 //  Description: This file contains the Main Routine - "While" Operating System
 //
-//  Jim Carlson
+//  Mattia Muller
 //  Aug 2013
 //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
 //------------------------------------------------------------------------------
@@ -16,6 +16,8 @@
 
 // Global Variables
 volatile unsigned char control_state[CNTL_STATE_INDEX];
+extern volatile unsigned char what_to_do;
+extern volatile unsigned int Time_Sequence;
 
 //=========================================================================== 
 // Function name: Main
@@ -48,165 +50,78 @@ void main(void){
 // Begining of the "While" Operating System
 //------------------------------------------------------------------------------
  while(ALWAYS) {                            // Can the Operating system run
-  
-while(ALWAYS) { 
-
- Switches_Process(); 
-
- switch(what_to_do){
-
- case LED_STATE:
-
- Default_Process();
-
- break;
-
- case RW_FOR_ON:
-
- if(!(P3IN & R_FORWARD)){
-
- P3OUT &= ~R_REVERSE;
-
- P3OUT |= R_FORWARD;
-
- 
-
-}
-
- break;
-
- case RW_FOR_OFF:
-
- if(P3IN & R_FORWARD){
-
- P3OUT &= ~R_REVERSE;
-
- P3OUT &= ~R_FORWARD;
-
- 
-
-}
-
- break;
-
- case LW_FOR_ON:
-
- if(!(P3IN & L_FORWARD)){
-
- P3OUT &= ~L_REVERSE;
-
- P3OUT |= L_FORWARD;
-
- 
-
-}
-
- break;
-
- case LW_FOR_OFF:
-
- if(P3IN & L_FORWARD){
-
- P3OUT &= ~L_REVERSE;
-
- P3OUT &= ~L_FORWARD;
-
- 
-
-}
-
- break;
-
- case RW_REV_ON:
-
- if(!(P3IN & R_REVERSE)){
-
- P3OUT &= ~R_FORWARD;
-
- P3OUT |= R_REVERSE;
-
- 
-
-}
-
- break;
-
- case RW_REV_OFF:
-
- if(P3IN & R_REVERSE){
-
- P3OUT &= ~R_REVERSE;
-
- P3OUT &= ~R_FORWARD;
-
- 
-
-}
-
- case LW_REV_ON:
-
- if(!(P3IN & L_REVERSE)){
-
- P3OUT &= ~L_FORWARD;
-
- P3OUT |= L_REVERSE;
-
- 
-
-}
-
- break;
-
- case LW_REV_OFF:
-
- if(P3IN & L_REVERSE){
-
- P3OUT &= ~L_FORWARD;
-
- P3OUT &= ~L_REVERSE;
-
- 
-
-}
-
- break;
-
- case STRAIGHT: // 1250 msec 
-
- STRAIGHT_Process();
-
- break;
-
- case CIRCLE: // 1250 msec 
-
- CIRCLE_Process();
-
- break;
-
- case FIGURE_8: // 1250 msec 
-
- Figure_8_Process();
-
- break;
-
- case TRIANGLE: // 1250 msec 
-
- Triangle_Process();
-
- break;
-
- default: 
-
- Default_Process();
-
- break;
-
- 
-
-}
-
-    }
- }
+	 Switches_Process(); 
+	 switch(what_to_do){
+		 case LED_STATE:
+                        Default_Process();
+			break;
+	 	case RW_FOR_ON:
+			if(!(P3IN & R_FORWARD)){
+			P3OUT &= ~R_REVERSE;
+			P3OUT |= R_FORWARD;
+			}
+	 		break;
+	 	case RW_FOR_OFF:
+			if(P3IN & R_FORWARD){
+			P3OUT &= ~R_REVERSE;
+			P3OUT &= ~R_FORWARD; 
+			}
+	 	break;
+	 	case LW_FOR_ON:
+			if(!(P3IN & L_FORWARD)){
+			P3OUT &= ~L_REVERSE;
+			P3OUT |= L_FORWARD;
+			}
+	 	break;
+	 	case LW_FOR_OFF:
+			if(P3IN & L_FORWARD){
+			P3OUT &= ~L_REVERSE;
+			P3OUT &= ~L_FORWARD;
+			}
+	 	break;
+	 	case RW_REV_ON:
+			if(!(P3IN & R_REVERSE)){
+			P3OUT &= ~R_FORWARD;
+			P3OUT |= R_REVERSE; 
+			}
+	 	break;
+	 	case RW_REV_OFF:
+			if(P3IN & R_REVERSE){
+			P3OUT &= ~R_REVERSE;
+			P3OUT &= ~R_FORWARD; 
+			}
+	 	case LW_REV_ON:
+			if(!(P3IN & L_REVERSE)){
+			P3OUT &= ~L_FORWARD;
+			P3OUT |= L_REVERSE; 
+			}
+	 	break;
+	 	case LW_REV_OFF:
+			if(P3IN & L_REVERSE){
+			P3OUT &= ~L_FORWARD;
+			P3OUT &= ~L_REVERSE;
+			}
+	 	break;
+		case STRAIGHT: // 1250 msec 
+			STRAIGHT_Process();
+		break;
+		case CIRCLE: // 1250 msec 
+			CIRCLE_Process();
+		break;
+		case FIGURE_8: // 1250 msec 
+		 	FIGURE_8_Process();
+		break;
+		case TRIANGLE: // 1250 msec 
+			TRIANGLE_Process();
+		break;
+		default: 
+		 	Default_Process();
+		break;
+		}
+         if(Time_Sequence > 250){
+            Time_Sequence = 0;
+         }
+      	}
 //------------------------------------------------------------------------------
 }
 

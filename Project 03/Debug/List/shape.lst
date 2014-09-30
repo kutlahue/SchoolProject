@@ -1,0 +1,948 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         29/Sep/2014  19:36:24
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\shape.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\shape.c" -lC "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Project 03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\" --no_cse --no_unroll --no_inline --no_code_motion
+#        --no_tbaa --debug -D__MSP430FR5739__ -e --double=32 --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\430\lib\dlib\dl430xlsfn.h" --core=430X --data_model=small -Ol
+#        --multiplier=32 --multiplier_location=4C0 --hw_workaround=CPU40
+#        --hw_workaround=CPU39 --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\List\shape.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\shape.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\shape.c
+      1          //------------------------------------------------------------------------------
+      2          //File Name: shape.c
+      3          //
+      4          //Description: This file contains the different preprogrammed shapes
+      5          //
+      6          //Mattia Muller
+      7          //Aug 2013
+      8          //Built with IAR Embedded Workbench Version:V4.10A/W32(5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\macros.h",55  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+
+  #define FIGURE_8			(0x0E)
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\macros.h",91  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 76)
+     15          
+     16          
+     17          extern volatile unsigned char what_to_do;
+     18          extern char *display_1;
+     19          extern char *display_2;
+     20          extern volatile unsigned int Time_Sequence;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          volatile unsigned int cycle_time, complete;
+   \                     cycle_time:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     complete:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          char count_time, straight_direction = SET_0, left_wheel_on = SET_0, right_wheel_on = SET_0, left_wheel_count, right_wheel_count, next_move = SET_0;
+   \                     count_time:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     straight_direction:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     left_wheel_on:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     right_wheel_on:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     left_wheel_count:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     right_wheel_count:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     next_move:
+   \   000000                DS8 1
+     23          
+     24          //******************************************************************************
+     25          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     26          void shape_LED_STATE(void){
+   \                     shape_LED_STATE:
+     27          	int i;					  //1234567890123456
+     28          	char *Line1_LED_STATE = "  LEDs Blinking ";
+   \   000000   3E40....     MOV.W   #`?<Constant "  LEDs Blinking ">`, R14
+     29          	for(i=0;i<=(sizeof(Line1_LED_STATE)-1);i++){
+   \   000004   0F43         MOV.W   #0x0, R15
+   \   000006   033C         JMP     ??shape_LED_STATE_1
+     30          		display_1=Line1_LED_STATE;
+   \                     ??shape_LED_STATE_0:
+   \   000008   824E....     MOV.W   R14, &display_1
+     31          	}
+   \   00000C   1F53         ADD.W   #0x1, R15
+   \                     ??shape_LED_STATE_1:
+   \   00000E   2F93         CMP.W   #0x2, R15
+   \   000010   FB2B         JNC     ??shape_LED_STATE_0
+     32          	lcd_out(display_1,LCD_LINE_1);//16charactersmaxbetweenquotes-line1
+   \   000012   7D408000     MOV.B   #0x80, R13
+   \   000016   1C42....     MOV.W   &display_1, R12
+   \   00001A   ........     CALLA   #lcd_out
+     33          	shape_Blank();
+   \   00001E   ........     BRA     #shape_Blank
+     34          }
+     35          //******************************************************************************
+     36          //------------------------------------------------------------------------------
+     37          //******************************************************************************
+     38          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     39          void shape_Blank(void){
+   \                     shape_Blank:
+     40          		int i;				  //1234567890123456
+     41          		char *Line2_BLANK = "                ";
+   \   000000   3E40....     MOV.W   #`?<Constant "                ">`, R14
+     42          		for(i=0;i<=(sizeof(Line2_BLANK)-1);i++){
+   \   000004   0F43         MOV.W   #0x0, R15
+   \   000006   033C         JMP     ??shape_Blank_1
+     43          			display_2=Line2_BLANK;
+   \                     ??shape_Blank_0:
+   \   000008   824E....     MOV.W   R14, &display_2
+     44          		}
+   \   00000C   1F53         ADD.W   #0x1, R15
+   \                     ??shape_Blank_1:
+   \   00000E   2F93         CMP.W   #0x2, R15
+   \   000010   FB2B         JNC     ??shape_Blank_0
+     45          		lcd_out(display_2,LCD_LINE_2);//16charactersmaxbetweenquotes-line2
+   \   000012   7D40C000     MOV.B   #0xc0, R13
+   \   000016   1C42....     MOV.W   &display_2, R12
+   \   00001A   ........     BRA     #lcd_out
+     46          }
+     47          //------------------------------------------------------------------------------
+     48          //******************************************************************************
+     49          //------------------------------------------------------------------------------
+     50          
+     51          
+
+   \                                 In  segment CODE, align 2
+     52          void STRAIGHT_Process(void){
+   \                     STRAIGHT_Process:
+     53          	if(count_time!=Time_Sequence){
+   \   000000   5F42....     MOV.B   &count_time, R15
+   \   000004   4F4F         MOV.B   R15, R15
+   \   000006   1F92....     CMP.W   &Time_Sequence, R15
+   \   00000A   0624         JEQ     ??STRAIGHT_Process_1
+     54          		count_time=Time_Sequence;
+   \   00000C   1E42....     MOV.W   &Time_Sequence, R14
+   \   000010   C24E....     MOV.B   R14, &count_time
+     55          		cycle_time++;
+   \   000014   9253....     ADD.W   #0x1, &cycle_time
+     56          	}
+     57          	if(straight_direction){
+   \                     ??STRAIGHT_Process_1:
+   \   000018   C293....     CMP.B   #0x0, &straight_direction
+   \   00001C   6424         JEQ     ??STRAIGHT_Process_2
+     58          		if(left_wheel_on++<left_wheel_count){
+   \   00001E   5E42....     MOV.B   &left_wheel_on, R14
+   \   000022   4F4E         MOV.B   R14, R15
+   \   000024   5F53         ADD.B   #0x1, R15
+   \   000026   C24F....     MOV.B   R15, &left_wheel_on
+   \   00002A   5E92....     CMP.B   &left_wheel_count, R14
+   \   00002E   082C         JC      ??STRAIGHT_Process_3
+     59          			if(!(P3IN&L_FORWARD)){
+   \   000030   F2B040002002 BIT.B   #0x40, &0x220
+   \   000036   112C         JC      ??STRAIGHT_Process_4
+     60          				P3OUT|=L_FORWARD;
+   \   000038   F2D040002202 BIS.B   #0x40, &0x222
+   \   00003E   0D3C         JMP     ??STRAIGHT_Process_4
+     61          			}
+     62          		}else{
+     63          			if(left_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_Process_3:
+   \   000040   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   000046   092C         JC      ??STRAIGHT_Process_4
+     64          				left_wheel_on=0;
+   \   000048   C243....     MOV.B   #0x0, &left_wheel_on
+     65          				if(P3IN&L_FORWARD){
+   \   00004C   F2B040002002 BIT.B   #0x40, &0x220
+   \   000052   0328         JNC     ??STRAIGHT_Process_4
+     66          					P3OUT&=~L_FORWARD;
+   \   000054   F2C040002202 BIC.B   #0x40, &0x222
+     67          				}
+     68          			}
+     69          		}
+     70          		if(right_wheel_on++<right_wheel_count){
+   \                     ??STRAIGHT_Process_4:
+   \   00005A   5E42....     MOV.B   &right_wheel_on, R14
+   \   00005E   4F4E         MOV.B   R14, R15
+   \   000060   5F53         ADD.B   #0x1, R15
+   \   000062   C24F....     MOV.B   R15, &right_wheel_on
+   \   000066   5E92....     CMP.B   &right_wheel_count, R14
+   \   00006A   082C         JC      ??STRAIGHT_Process_5
+     71          			if(!(P3IN&R_FORWARD)){
+   \   00006C   F2B010002002 BIT.B   #0x10, &0x220
+   \   000072   112C         JC      ??STRAIGHT_Process_6
+     72          				P3OUT|=R_FORWARD;
+   \   000074   F2D010002202 BIS.B   #0x10, &0x222
+   \   00007A   0D3C         JMP     ??STRAIGHT_Process_6
+     73          			}
+     74          		}else{
+     75          			if(right_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_Process_5:
+   \   00007C   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000082   092C         JC      ??STRAIGHT_Process_6
+     76          				right_wheel_on=0;
+   \   000084   C243....     MOV.B   #0x0, &right_wheel_on
+     77                                          if(P3IN&R_FORWARD){
+   \   000088   F2B010002002 BIT.B   #0x10, &0x220
+   \   00008E   0328         JNC     ??STRAIGHT_Process_6
+     78                                              P3OUT&=~R_FORWARD;
+   \   000090   F2C010002202 BIC.B   #0x10, &0x222
+     79          				}
+     80          			}
+     81          		}
+     82          		if(cycle_time>COMPLETE_STRAIGHT){
+   \                     ??STRAIGHT_Process_6:
+   \   000096   B2903D00.... CMP.W   #0x3d, &cycle_time
+   \   00009C   6E28         JNC     ??STRAIGHT_Process_7
+     83          			P3OUT&=~R_REVERSE;
+   \   00009E   F2C020002202 BIC.B   #0x20, &0x222
+     84                                  P3OUT&=~L_REVERSE;
+   \   0000A4   F2C080002202 BIC.B   #0x80, &0x222
+     85          			P3OUT&=~R_FORWARD;
+   \   0000AA   F2C010002202 BIC.B   #0x10, &0x222
+     86          			P3OUT&=~L_FORWARD;
+   \   0000B0   F2C040002202 BIC.B   #0x40, &0x222
+     87          			cycle_time=0;
+   \   0000B6   8243....     MOV.W   #0x0, &cycle_time
+   \   0000BA   0C3C         JMP     ??STRAIGHT_Process_8
+     88                                  while(cycle_time<10){
+     89          				if(count_time!=Time_Sequence){
+   \                     ??STRAIGHT_Process_0:
+   \   0000BC   5F42....     MOV.B   &count_time, R15
+   \   0000C0   4F4F         MOV.B   R15, R15
+   \   0000C2   1F92....     CMP.W   &Time_Sequence, R15
+   \   0000C6   0624         JEQ     ??STRAIGHT_Process_8
+     90          					count_time=Time_Sequence;
+   \   0000C8   1E42....     MOV.W   &Time_Sequence, R14
+   \   0000CC   C24E....     MOV.B   R14, &count_time
+     91          					cycle_time++;
+   \   0000D0   9253....     ADD.W   #0x1, &cycle_time
+     92                                          }
+     93          			}
+   \                     ??STRAIGHT_Process_8:
+   \   0000D4   B2900A00.... CMP.W   #0xa, &cycle_time
+   \   0000DA   F02B         JNC     ??STRAIGHT_Process_0
+     94          			cycle_time=0;
+   \   0000DC   8243....     MOV.W   #0x0, &cycle_time
+     95          			straight_direction=0;
+   \   0000E0   C243....     MOV.B   #0x0, &straight_direction
+   \   0000E4   1001         RETA
+     96          		}
+     97          
+     98          	}else{
+     99          		if(left_wheel_on++<LEFT_WHEEL_COUNT){
+   \                     ??STRAIGHT_Process_2:
+   \   0000E6   5E42....     MOV.B   &left_wheel_on, R14
+   \   0000EA   4F4E         MOV.B   R14, R15
+   \   0000EC   5F53         ADD.B   #0x1, R15
+   \   0000EE   C24F....     MOV.B   R15, &left_wheel_on
+   \   0000F2   7E901E00     CMP.B   #0x1e, R14
+   \   0000F6   072C         JC      ??STRAIGHT_Process_9
+    100          			if(!(P3IN&L_REVERSE)){
+   \   0000F8   C2932002     CMP.B   #0x0, &0x220
+   \   0000FC   1038         JL      ??STRAIGHT_Process_10
+    101          				P3OUT|=L_REVERSE;
+   \   0000FE   F2D080002202 BIS.B   #0x80, &0x222
+   \   000104   0C3C         JMP     ??STRAIGHT_Process_10
+    102          			}
+    103          		}else{
+    104          			if(left_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_Process_9:
+   \   000106   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   00010C   082C         JC      ??STRAIGHT_Process_10
+    105                                      left_wheel_on=0;
+   \   00010E   C243....     MOV.B   #0x0, &left_wheel_on
+    106                                      if(P3IN&L_REVERSE){
+   \   000112   C2932002     CMP.B   #0x0, &0x220
+   \   000116   0334         JGE     ??STRAIGHT_Process_10
+    107                                        P3OUT&=~L_REVERSE;
+   \   000118   F2C080002202 BIC.B   #0x80, &0x222
+    108                                      }
+    109          			}
+    110          		}
+    111          		if(right_wheel_on++<RIGHT_WHEEL_COUNT){
+   \                     ??STRAIGHT_Process_10:
+   \   00011E   5E42....     MOV.B   &right_wheel_on, R14
+   \   000122   4F4E         MOV.B   R14, R15
+   \   000124   5F53         ADD.B   #0x1, R15
+   \   000126   C24F....     MOV.B   R15, &right_wheel_on
+   \   00012A   7E901100     CMP.B   #0x11, R14
+   \   00012E   082C         JC      ??STRAIGHT_Process_11
+    112                            if(!(P3IN&R_REVERSE)){
+   \   000130   F2B020002002 BIT.B   #0x20, &0x220
+   \   000136   112C         JC      ??STRAIGHT_Process_12
+    113          			P3OUT|=R_REVERSE;
+   \   000138   F2D020002202 BIS.B   #0x20, &0x222
+   \   00013E   0D3C         JMP     ??STRAIGHT_Process_12
+    114                            }
+    115          		}else{
+    116                            if(right_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_Process_11:
+   \   000140   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000146   092C         JC      ??STRAIGHT_Process_12
+    117          			right_wheel_on=0;
+   \   000148   C243....     MOV.B   #0x0, &right_wheel_on
+    118                                  if(P3IN&R_REVERSE){
+   \   00014C   F2B020002002 BIT.B   #0x20, &0x220
+   \   000152   0328         JNC     ??STRAIGHT_Process_12
+    119                                    P3OUT&=~R_REVERSE;
+   \   000154   F2C020002202 BIC.B   #0x20, &0x222
+    120          			}
+    121                            }
+    122          		}
+    123          		if(cycle_time>COMPLETE_STRAIGHT){
+   \                     ??STRAIGHT_Process_12:
+   \   00015A   B2903D00.... CMP.W   #0x3d, &cycle_time
+   \   000160   0C28         JNC     ??STRAIGHT_Process_7
+    124                            cycle_time=0;
+   \   000162   8243....     MOV.W   #0x0, &cycle_time
+    125                            P3OUT&=~R_REVERSE;
+   \   000166   F2C020002202 BIC.B   #0x20, &0x222
+    126                            P3OUT&=~L_REVERSE;
+   \   00016C   F2C080002202 BIC.B   #0x80, &0x222
+    127                            shape_LED_STATE();
+   \   000172   ........     CALLA   #shape_LED_STATE
+    128                            what_to_do=LED_STATE;
+   \   000176   D243....     MOV.B   #0x1, &what_to_do
+    129          		}
+    130          	}
+    131          }
+   \                     ??STRAIGHT_Process_7:
+   \   00017A   1001         RETA
+   \   00017C                REQUIRE _A_PBIN_L
+   \   00017C                REQUIRE _A_PBOUT_L
+    132          
+    133          
+    134          
+    135          
+    136          
+
+   \                                 In  segment CODE, align 2
+    137          void CIRCLE_Process(void){
+   \                     CIRCLE_Process:
+    138          	if(count_time!=Time_Sequence){
+   \   000000   5F42....     MOV.B   &count_time, R15
+   \   000004   4F4F         MOV.B   R15, R15
+   \   000006   1F92....     CMP.W   &Time_Sequence, R15
+   \   00000A   0624         JEQ     ??CIRCLE_Process_1
+    139          		count_time=Time_Sequence;
+   \   00000C   1E42....     MOV.W   &Time_Sequence, R14
+   \   000010   C24E....     MOV.B   R14, &count_time
+    140          		cycle_time++;
+   \   000014   9253....     ADD.W   #0x1, &cycle_time
+    141          	}
+    142          	if(left_wheel_on++<left_wheel_count){
+   \                     ??CIRCLE_Process_1:
+   \   000018   5E42....     MOV.B   &left_wheel_on, R14
+   \   00001C   4F4E         MOV.B   R14, R15
+   \   00001E   5F53         ADD.B   #0x1, R15
+   \   000020   C24F....     MOV.B   R15, &left_wheel_on
+   \   000024   5E92....     CMP.B   &left_wheel_count, R14
+   \   000028   082C         JC      ??CIRCLE_Process_2
+    143          		if(!(P3IN&L_FORWARD)){
+   \   00002A   F2B040002002 BIT.B   #0x40, &0x220
+   \   000030   112C         JC      ??CIRCLE_Process_3
+    144          			P3OUT|=L_FORWARD;
+   \   000032   F2D040002202 BIS.B   #0x40, &0x222
+   \   000038   0D3C         JMP     ??CIRCLE_Process_3
+    145          		}
+    146          	}else{
+    147          		if(left_wheel_on<WHEEL_COUNT){
+   \                     ??CIRCLE_Process_2:
+   \   00003A   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   000040   092C         JC      ??CIRCLE_Process_3
+    148          			left_wheel_on=0;
+   \   000042   C243....     MOV.B   #0x0, &left_wheel_on
+    149          			if(P3IN&L_FORWARD){
+   \   000046   F2B040002002 BIT.B   #0x40, &0x220
+   \   00004C   0328         JNC     ??CIRCLE_Process_3
+    150          				P3OUT&=~L_FORWARD;
+   \   00004E   F2C040002202 BIC.B   #0x40, &0x222
+    151          			}
+    152          		}
+    153          	}
+    154          	if(right_wheel_on++<right_wheel_count){
+   \                     ??CIRCLE_Process_3:
+   \   000054   5E42....     MOV.B   &right_wheel_on, R14
+   \   000058   4F4E         MOV.B   R14, R15
+   \   00005A   5F53         ADD.B   #0x1, R15
+   \   00005C   C24F....     MOV.B   R15, &right_wheel_on
+   \   000060   5E92....     CMP.B   &right_wheel_count, R14
+   \   000064   082C         JC      ??CIRCLE_Process_4
+    155          		if(!(P3IN&R_FORWARD)){
+   \   000066   F2B010002002 BIT.B   #0x10, &0x220
+   \   00006C   112C         JC      ??CIRCLE_Process_5
+    156          			P3OUT|=R_FORWARD;
+   \   00006E   F2D010002202 BIS.B   #0x10, &0x222
+   \   000074   0D3C         JMP     ??CIRCLE_Process_5
+    157          		}
+    158          	}else{
+    159          		if(right_wheel_on<WHEEL_COUNT){
+   \                     ??CIRCLE_Process_4:
+   \   000076   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   00007C   092C         JC      ??CIRCLE_Process_5
+    160          			right_wheel_on=0;
+   \   00007E   C243....     MOV.B   #0x0, &right_wheel_on
+    161          			if(P3IN&R_FORWARD){
+   \   000082   F2B010002002 BIT.B   #0x10, &0x220
+   \   000088   0328         JNC     ??CIRCLE_Process_5
+    162          				P3OUT&=~R_FORWARD;
+   \   00008A   F2C010002202 BIC.B   #0x10, &0x222
+    163          			}
+    164          		}
+    165          	}
+    166          
+    167          	if(cycle_time>COMPLETE_CIRCLE){
+   \                     ??CIRCLE_Process_5:
+   \   000090   B2908503.... CMP.W   #0x385, &cycle_time
+   \   000096   1B28         JNC     ??CIRCLE_Process_6
+    168          		cycle_time=0;
+   \   000098   8243....     MOV.W   #0x0, &cycle_time
+    169          		P3OUT&=~R_FORWARD;
+   \   00009C   F2C010002202 BIC.B   #0x10, &0x222
+    170          		P3OUT&=~L_FORWARD;
+   \   0000A2   F2C040002202 BIC.B   #0x40, &0x222
+   \   0000A8   0C3C         JMP     ??CIRCLE_Process_7
+    171          		while(cycle_time<10){
+    172          			if(count_time!=Time_Sequence){
+   \                     ??CIRCLE_Process_0:
+   \   0000AA   5F42....     MOV.B   &count_time, R15
+   \   0000AE   4F4F         MOV.B   R15, R15
+   \   0000B0   1F92....     CMP.W   &Time_Sequence, R15
+   \   0000B4   0624         JEQ     ??CIRCLE_Process_7
+    173          				count_time=Time_Sequence;
+   \   0000B6   1E42....     MOV.W   &Time_Sequence, R14
+   \   0000BA   C24E....     MOV.B   R14, &count_time
+    174          				cycle_time++;
+   \   0000BE   9253....     ADD.W   #0x1, &cycle_time
+    175          			}
+    176          		}
+   \                     ??CIRCLE_Process_7:
+   \   0000C2   B2900A00.... CMP.W   #0xa, &cycle_time
+   \   0000C8   F02B         JNC     ??CIRCLE_Process_0
+    177          	what_to_do=LED_STATE;
+   \   0000CA   D243....     MOV.B   #0x1, &what_to_do
+    178          	}
+    179          }
+   \                     ??CIRCLE_Process_6:
+   \   0000CE   1001         RETA
+   \   0000D0                REQUIRE _A_PBIN_L
+   \   0000D0                REQUIRE _A_PBOUT_L
+    180          
+    181          
+
+   \                                 In  segment CODE, align 2
+    182          void TRIANGLE_Process(void){
+   \                     TRIANGLE_Process:
+    183          	if(count_time!=Time_Sequence){
+   \   000000   5F42....     MOV.B   &count_time, R15
+   \   000004   4F4F         MOV.B   R15, R15
+   \   000006   1F92....     CMP.W   &Time_Sequence, R15
+   \   00000A   0624         JEQ     ??TRIANGLE_Process_2
+    184          		count_time=Time_Sequence;
+   \   00000C   1E42....     MOV.W   &Time_Sequence, R14
+   \   000010   C24E....     MOV.B   R14, &count_time
+    185          		cycle_time++;
+   \   000014   9253....     ADD.W   #0x1, &cycle_time
+    186          	}
+    187                  
+    188                  if (!(next_move%2)){
+   \                     ??TRIANGLE_Process_2:
+   \   000018   5C42....     MOV.B   &next_move, R12
+   \   00001C   6E43         MOV.B   #0x2, R14
+   \   00001E   ........     CALLA   #?DivMod8u
+   \   000022   4E93         CMP.B   #0x0, R14
+   \   000024   6620         JNE     ??TRIANGLE_Process_3
+    189                    if(left_wheel_on++<LEFT_WHEEL_COUNT){
+   \   000026   5E42....     MOV.B   &left_wheel_on, R14
+   \   00002A   4F4E         MOV.B   R14, R15
+   \   00002C   5F53         ADD.B   #0x1, R15
+   \   00002E   C24F....     MOV.B   R15, &left_wheel_on
+   \   000032   7E901E00     CMP.B   #0x1e, R14
+   \   000036   082C         JC      ??TRIANGLE_Process_4
+    190                            if(!(P3IN&L_FORWARD)){
+   \   000038   F2B040002002 BIT.B   #0x40, &0x220
+   \   00003E   112C         JC      ??TRIANGLE_Process_5
+    191                                    P3OUT|=L_FORWARD;
+   \   000040   F2D040002202 BIS.B   #0x40, &0x222
+   \   000046   0D3C         JMP     ??TRIANGLE_Process_5
+    192                            }
+    193                    }else{
+    194                            if(left_wheel_on<WHEEL_COUNT){
+   \                     ??TRIANGLE_Process_4:
+   \   000048   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   00004E   092C         JC      ??TRIANGLE_Process_5
+    195                                    left_wheel_on=0;
+   \   000050   C243....     MOV.B   #0x0, &left_wheel_on
+    196                                    if(P3IN&L_FORWARD){
+   \   000054   F2B040002002 BIT.B   #0x40, &0x220
+   \   00005A   0328         JNC     ??TRIANGLE_Process_5
+    197                                            P3OUT&=~L_FORWARD;
+   \   00005C   F2C040002202 BIC.B   #0x40, &0x222
+    198                                    }
+    199                            }
+    200                    }
+    201                    if(right_wheel_on++<RIGHT_WHEEL_COUNT){
+   \                     ??TRIANGLE_Process_5:
+   \   000062   5E42....     MOV.B   &right_wheel_on, R14
+   \   000066   4F4E         MOV.B   R14, R15
+   \   000068   5F53         ADD.B   #0x1, R15
+   \   00006A   C24F....     MOV.B   R15, &right_wheel_on
+   \   00006E   7E901100     CMP.B   #0x11, R14
+   \   000072   082C         JC      ??TRIANGLE_Process_6
+    202                            if(!(P3IN&R_FORWARD)){
+   \   000074   F2B010002002 BIT.B   #0x10, &0x220
+   \   00007A   112C         JC      ??TRIANGLE_Process_7
+    203                                    P3OUT|=R_FORWARD;
+   \   00007C   F2D010002202 BIS.B   #0x10, &0x222
+   \   000082   0D3C         JMP     ??TRIANGLE_Process_7
+    204                            }
+    205                    }else{
+    206                            if(right_wheel_on<WHEEL_COUNT){
+   \                     ??TRIANGLE_Process_6:
+   \   000084   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   00008A   092C         JC      ??TRIANGLE_Process_7
+    207                                    right_wheel_on=0;
+   \   00008C   C243....     MOV.B   #0x0, &right_wheel_on
+    208                                    if(P3IN&R_FORWARD){
+   \   000090   F2B010002002 BIT.B   #0x10, &0x220
+   \   000096   0328         JNC     ??TRIANGLE_Process_7
+    209                                            P3OUT&=~R_FORWARD;
+   \   000098   F2C010002202 BIC.B   #0x10, &0x222
+    210                                    }
+    211                            }
+    212                    }
+    213          
+    214                    if(cycle_time>COMPLETE_STRAIGHT){
+   \                     ??TRIANGLE_Process_7:
+   \   00009E   B2903D00.... CMP.W   #0x3d, &cycle_time
+   \   0000A4   7328         JNC     ??TRIANGLE_Process_8
+    215                            cycle_time=0;
+   \   0000A6   8243....     MOV.W   #0x0, &cycle_time
+    216                            P3OUT&=~R_FORWARD;
+   \   0000AA   F2C010002202 BIC.B   #0x10, &0x222
+    217                            P3OUT&=~L_FORWARD;
+   \   0000B0   F2C040002202 BIC.B   #0x40, &0x222
+   \   0000B6   0C3C         JMP     ??TRIANGLE_Process_9
+    218                            while(cycle_time<10){
+    219                                    if(count_time!=Time_Sequence){
+   \                     ??TRIANGLE_Process_0:
+   \   0000B8   5F42....     MOV.B   &count_time, R15
+   \   0000BC   4F4F         MOV.B   R15, R15
+   \   0000BE   1F92....     CMP.W   &Time_Sequence, R15
+   \   0000C2   0624         JEQ     ??TRIANGLE_Process_9
+    220                                            count_time=Time_Sequence;
+   \   0000C4   1E42....     MOV.W   &Time_Sequence, R14
+   \   0000C8   C24E....     MOV.B   R14, &count_time
+    221                                            cycle_time++;
+   \   0000CC   9253....     ADD.W   #0x1, &cycle_time
+    222                                    }
+    223                            }
+   \                     ??TRIANGLE_Process_9:
+   \   0000D0   B2900A00.... CMP.W   #0xa, &cycle_time
+   \   0000D6   F02B         JNC     ??TRIANGLE_Process_0
+    224                            cycle_time = 0;
+   \   0000D8   8243....     MOV.W   #0x0, &cycle_time
+    225                            next_move++;
+   \   0000DC   D253....     ADD.B   #0x1, &next_move
+    226                            if (next_move > 9 ) {
+   \   0000E0   F2900A00.... CMP.B   #0xa, &next_move
+   \   0000E6   5228         JNC     ??TRIANGLE_Process_8
+    227                              what_to_do=LED_STATE;
+   \   0000E8   D243....     MOV.B   #0x1, &what_to_do
+    228                              next_move = SET_0;
+   \   0000EC   C243....     MOV.B   #0x0, &next_move
+   \   0000F0   1001         RETA
+    229                            }
+    230                    }
+    231                  } else {
+    232                      if(left_wheel_on++<LEFT_WHEEL_COUNT_CIRCLE){
+   \                     ??TRIANGLE_Process_3:
+   \   0000F2   5E42....     MOV.B   &left_wheel_on, R14
+   \   0000F6   4F4E         MOV.B   R14, R15
+   \   0000F8   5F53         ADD.B   #0x1, R15
+   \   0000FA   C24F....     MOV.B   R15, &left_wheel_on
+   \   0000FE   6E93         CMP.B   #0x2, R14
+   \   000100   082C         JC      ??TRIANGLE_Process_10
+    233                              if(!(P3IN&L_FORWARD)){
+   \   000102   F2B040002002 BIT.B   #0x40, &0x220
+   \   000108   112C         JC      ??TRIANGLE_Process_11
+    234                                      P3OUT|=L_FORWARD;
+   \   00010A   F2D040002202 BIS.B   #0x40, &0x222
+   \   000110   0D3C         JMP     ??TRIANGLE_Process_11
+    235                              }
+    236                      }else{
+    237                              if(left_wheel_on<WHEEL_COUNT){
+   \                     ??TRIANGLE_Process_10:
+   \   000112   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   000118   092C         JC      ??TRIANGLE_Process_11
+    238                                      left_wheel_on=0;
+   \   00011A   C243....     MOV.B   #0x0, &left_wheel_on
+    239                                      if(P3IN&L_FORWARD){
+   \   00011E   F2B040002002 BIT.B   #0x40, &0x220
+   \   000124   0328         JNC     ??TRIANGLE_Process_11
+    240                                              P3OUT&=~L_FORWARD;
+   \   000126   F2C040002202 BIC.B   #0x40, &0x222
+    241                                      }
+    242                              }
+    243                      }
+    244                      if(right_wheel_on++<SET_0){
+                                                ^
+Warning[Pe186]: pointless comparison of unsigned integer with zero
+   \                     ??TRIANGLE_Process_11:
+   \   00012C   D253....     ADD.B   #0x1, &right_wheel_on
+    245                              if(!(P3IN&R_FORWARD)){
+    246                                      P3OUT|=R_FORWARD;
+    247                              }
+    248                      }else{
+    249                              if(right_wheel_on<WHEEL_COUNT){
+   \   000130   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000136   092C         JC      ??TRIANGLE_Process_12
+    250                                      right_wheel_on=0;
+   \   000138   C243....     MOV.B   #0x0, &right_wheel_on
+    251                                      if(P3IN&R_FORWARD){
+   \   00013C   F2B010002002 BIT.B   #0x10, &0x220
+   \   000142   0328         JNC     ??TRIANGLE_Process_12
+    252                                              P3OUT&=~R_FORWARD;
+   \   000144   F2C010002202 BIC.B   #0x10, &0x222
+    253                                      }
+    254                              }
+    255                      }
+    256          
+    257                      if(cycle_time>SIXTY_DEGREES){
+   \                     ??TRIANGLE_Process_12:
+   \   00014A   B2908D00.... CMP.W   #0x8d, &cycle_time
+   \   000150   1D28         JNC     ??TRIANGLE_Process_8
+    258                              cycle_time=0;
+   \   000152   8243....     MOV.W   #0x0, &cycle_time
+    259                              P3OUT&=~R_FORWARD;
+   \   000156   F2C010002202 BIC.B   #0x10, &0x222
+    260                              P3OUT&=~L_FORWARD;
+   \   00015C   F2C040002202 BIC.B   #0x40, &0x222
+   \   000162   0C3C         JMP     ??TRIANGLE_Process_13
+    261                              while(cycle_time<10){
+    262                                      if(count_time!=Time_Sequence){
+   \                     ??TRIANGLE_Process_1:
+   \   000164   5F42....     MOV.B   &count_time, R15
+   \   000168   4F4F         MOV.B   R15, R15
+   \   00016A   1F92....     CMP.W   &Time_Sequence, R15
+   \   00016E   0624         JEQ     ??TRIANGLE_Process_13
+    263                                              count_time=Time_Sequence;
+   \   000170   1E42....     MOV.W   &Time_Sequence, R14
+   \   000174   C24E....     MOV.B   R14, &count_time
+    264                                              cycle_time++;
+   \   000178   9253....     ADD.W   #0x1, &cycle_time
+    265                                      }
+    266                              }
+   \                     ??TRIANGLE_Process_13:
+   \   00017C   B2900A00.... CMP.W   #0xa, &cycle_time
+   \   000182   F02B         JNC     ??TRIANGLE_Process_1
+    267                              cycle_time = 0;
+   \   000184   8243....     MOV.W   #0x0, &cycle_time
+    268                              next_move++;
+   \   000188   D253....     ADD.B   #0x1, &next_move
+    269          
+    270                      }
+    271                  }
+    272          }
+   \                     ??TRIANGLE_Process_8:
+   \   00018C   1001         RETA
+   \   00018E                REQUIRE _A_PBIN_L
+   \   00018E                REQUIRE _A_PBOUT_L
+    273          
+    274          
+
+   \                                 In  segment CODE, align 2
+    275          void FIGURE_8_Process(void){
+   \                     FIGURE_8_Process:
+    276            if (next_move==SET_0 || next_move==2) {
+   \   000000   C293....     CMP.B   #0x0, &next_move
+   \   000004   0324         JEQ     ??FIGURE_8_Process_0
+   \   000006   E293....     CMP.B   #0x2, &next_move
+   \   00000A   0A20         JNE     ??FIGURE_8_Process_1
+    277              left_wheel_count = LEFT_WHEEL_COUNT_CIRCLE;
+   \                     ??FIGURE_8_Process_0:
+   \   00000C   E243....     MOV.B   #0x2, &left_wheel_count
+    278              right_wheel_count = RIGHT_WHEEL_COUNT_CIRCLE;
+   \   000010   F2401600.... MOV.B   #0x16, &right_wheel_count
+    279              ONE_CIRCLE_Process(500);
+   \   000016   3C40F401     MOV.W   #0x1f4, R12
+   \   00001A   ........     CALLA   #ONE_CIRCLE_Process
+   \   00001E   093C         JMP     ??FIGURE_8_Process_2
+    280            } else {
+    281              left_wheel_count =  30;
+   \                     ??FIGURE_8_Process_1:
+   \   000020   F2401E00.... MOV.B   #0x1e, &left_wheel_count
+    282              right_wheel_count = 1;
+   \   000026   D243....     MOV.B   #0x1, &right_wheel_count
+    283              ONE_CIRCLE_Process(350);
+   \   00002A   3C405E01     MOV.W   #0x15e, R12
+   \   00002E   ........     CALLA   #ONE_CIRCLE_Process
+    284            }
+    285            if (next_move > 3 ) {
+   \                     ??FIGURE_8_Process_2:
+   \   000032   E292....     CMP.B   #0x4, &next_move
+   \   000036   0428         JNC     ??FIGURE_8_Process_3
+    286              what_to_do=LED_STATE;
+   \   000038   D243....     MOV.B   #0x1, &what_to_do
+    287              next_move = SET_0;
+   \   00003C   C243....     MOV.B   #0x0, &next_move
+    288            }
+    289          }
+   \                     ??FIGURE_8_Process_3:
+   \   000040   1001         RETA
+    290          
+    291          
+
+   \                                 In  segment CODE, align 2
+    292          void ONE_CIRCLE_Process(int complete){
+   \                     ONE_CIRCLE_Process:
+    293          	if(count_time!=Time_Sequence){
+   \   000000   5F42....     MOV.B   &count_time, R15
+   \   000004   4F4F         MOV.B   R15, R15
+   \   000006   1F92....     CMP.W   &Time_Sequence, R15
+   \   00000A   0624         JEQ     ??ONE_CIRCLE_Process_1
+    294          		count_time=Time_Sequence;
+   \   00000C   1E42....     MOV.W   &Time_Sequence, R14
+   \   000010   C24E....     MOV.B   R14, &count_time
+    295          		cycle_time++;
+   \   000014   9253....     ADD.W   #0x1, &cycle_time
+    296          	}
+    297          	if(left_wheel_on++<left_wheel_count){
+   \                     ??ONE_CIRCLE_Process_1:
+   \   000018   5E42....     MOV.B   &left_wheel_on, R14
+   \   00001C   4F4E         MOV.B   R14, R15
+   \   00001E   5F53         ADD.B   #0x1, R15
+   \   000020   C24F....     MOV.B   R15, &left_wheel_on
+   \   000024   5E92....     CMP.B   &left_wheel_count, R14
+   \   000028   082C         JC      ??ONE_CIRCLE_Process_2
+    298          		if(!(P3IN&L_FORWARD)){
+   \   00002A   F2B040002002 BIT.B   #0x40, &0x220
+   \   000030   112C         JC      ??ONE_CIRCLE_Process_3
+    299          			P3OUT|=L_FORWARD;
+   \   000032   F2D040002202 BIS.B   #0x40, &0x222
+   \   000038   0D3C         JMP     ??ONE_CIRCLE_Process_3
+    300          		}
+    301          	}else{
+    302          		if(left_wheel_on<WHEEL_COUNT){
+   \                     ??ONE_CIRCLE_Process_2:
+   \   00003A   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   000040   092C         JC      ??ONE_CIRCLE_Process_3
+    303          			left_wheel_on=SET_0;
+   \   000042   C243....     MOV.B   #0x0, &left_wheel_on
+    304          			if(P3IN&L_FORWARD){
+   \   000046   F2B040002002 BIT.B   #0x40, &0x220
+   \   00004C   0328         JNC     ??ONE_CIRCLE_Process_3
+    305          				P3OUT&=~L_FORWARD;
+   \   00004E   F2C040002202 BIC.B   #0x40, &0x222
+    306          			}
+    307          		}
+    308          	}
+    309          	if(right_wheel_on++<right_wheel_count){
+   \                     ??ONE_CIRCLE_Process_3:
+   \   000054   5E42....     MOV.B   &right_wheel_on, R14
+   \   000058   4F4E         MOV.B   R14, R15
+   \   00005A   5F53         ADD.B   #0x1, R15
+   \   00005C   C24F....     MOV.B   R15, &right_wheel_on
+   \   000060   5E92....     CMP.B   &right_wheel_count, R14
+   \   000064   082C         JC      ??ONE_CIRCLE_Process_4
+    310          		if(!(P3IN&R_FORWARD)){
+   \   000066   F2B010002002 BIT.B   #0x10, &0x220
+   \   00006C   112C         JC      ??ONE_CIRCLE_Process_5
+    311          			P3OUT|=R_FORWARD;
+   \   00006E   F2D010002202 BIS.B   #0x10, &0x222
+   \   000074   0D3C         JMP     ??ONE_CIRCLE_Process_5
+    312          		}
+    313          	}else{
+    314          		if(right_wheel_on<WHEEL_COUNT){
+   \                     ??ONE_CIRCLE_Process_4:
+   \   000076   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   00007C   092C         JC      ??ONE_CIRCLE_Process_5
+    315          			right_wheel_on=SET_0;
+   \   00007E   C243....     MOV.B   #0x0, &right_wheel_on
+    316          			if(P3IN&R_FORWARD){
+   \   000082   F2B010002002 BIT.B   #0x10, &0x220
+   \   000088   0328         JNC     ??ONE_CIRCLE_Process_5
+    317          				P3OUT&=~R_FORWARD;
+   \   00008A   F2C010002202 BIC.B   #0x10, &0x222
+    318          			}
+    319          		}
+    320          	}
+    321          
+    322          	if(cycle_time>complete){
+   \                     ??ONE_CIRCLE_Process_5:
+   \   000090   1C92....     CMP.W   &cycle_time, R12
+   \   000094   1B2C         JC      ??ONE_CIRCLE_Process_6
+    323          		cycle_time=0;
+   \   000096   8243....     MOV.W   #0x0, &cycle_time
+    324                          next_move++;
+   \   00009A   D253....     ADD.B   #0x1, &next_move
+    325          		P3OUT&=~R_FORWARD;
+   \   00009E   F2C010002202 BIC.B   #0x10, &0x222
+    326          		P3OUT&=~L_FORWARD;
+   \   0000A4   F2C040002202 BIC.B   #0x40, &0x222
+   \   0000AA   0C3C         JMP     ??ONE_CIRCLE_Process_7
+    327          		while(cycle_time<10){
+    328          			if(count_time!=Time_Sequence){
+   \                     ??ONE_CIRCLE_Process_0:
+   \   0000AC   5F42....     MOV.B   &count_time, R15
+   \   0000B0   4F4F         MOV.B   R15, R15
+   \   0000B2   1F92....     CMP.W   &Time_Sequence, R15
+   \   0000B6   0624         JEQ     ??ONE_CIRCLE_Process_7
+    329          				count_time=Time_Sequence;
+   \   0000B8   1E42....     MOV.W   &Time_Sequence, R14
+   \   0000BC   C24E....     MOV.B   R14, &count_time
+    330          				cycle_time++;
+   \   0000C0   9253....     ADD.W   #0x1, &cycle_time
+    331          			}
+    332          		}
+   \                     ??ONE_CIRCLE_Process_7:
+   \   0000C4   B2900A00.... CMP.W   #0xa, &cycle_time
+   \   0000CA   F02B         JNC     ??ONE_CIRCLE_Process_0
+    333          	}
+    334          }
+   \                     ??ONE_CIRCLE_Process_6:
+   \   0000CC   1001         RETA
+   \   0000CE                REQUIRE _A_PBIN_L
+   \   0000CE                REQUIRE _A_PBOUT_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  LEDs Blinking ">`:
+   \   000000   20204C454473 DC8 "  LEDs Blinking "
+   \            20426C696E6B
+   \            696E672000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "                ">`:
+   \   000000   202020202020 DC8 "                "
+   \            202020202020
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   CIRCLE_Process
+      4   FIGURE_8_Process
+        4   -> ONE_CIRCLE_Process
+      4   ONE_CIRCLE_Process
+      4   STRAIGHT_Process
+        4   -> shape_LED_STATE
+      4   TRIANGLE_Process
+      4   shape_Blank
+        4   -> lcd_out
+      4   shape_LED_STATE
+        4   -> lcd_out
+        4   -> shape_Blank
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "                ">
+      17  ?<Constant "  LEDs Blinking ">
+     208  CIRCLE_Process
+      66  FIGURE_8_Process
+     206  ONE_CIRCLE_Process
+     380  STRAIGHT_Process
+     398  TRIANGLE_Process
+       2  _A_PBIN_L
+       2  _A_PBOUT_L
+       2  complete
+       1  count_time
+       2  cycle_time
+       1  left_wheel_count
+       1  left_wheel_on
+       1  next_move
+       1  right_wheel_count
+       1  right_wheel_on
+      30  shape_Blank
+      34  shape_LED_STATE
+       1  straight_direction
+
+ 
+ 1 322 bytes in segment CODE
+     4 bytes in segment DATA16_AN
+    34 bytes in segment DATA16_C
+    11 bytes in segment DATA16_Z
+ 
+ 1 322 bytes of CODE  memory
+    34 bytes of CONST memory
+    11 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: 3

@@ -42,10 +42,16 @@ void Switch1_Process(void);
 void Switch2_Process(void);
 void Switches_Process(void);
 
-
+//Menu proto
+void select_menu(void);
+void shape_menu(void);
+void shape_STRAIGHT(void);
 
 // Shapes
 void select_menu(void);
 void shape_Blank(void);
 void STRAIGHT_Process(void);
 void CIRCLE_Process(void);
+void TRIANGLE_Process(void);
+void FIGURE_8_Process(void);
+void ONE_CIRCLE_Process(int complete);
