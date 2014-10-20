@@ -1,0 +1,703 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:37:40
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c" -lC
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\List\" -o
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\Obj\"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\List\shape.lst
+#    Object file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\Obj\shape.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
+      1          //------------------------------------------------------------------------------
+      2          //File Name: shape.c
+      3          //
+      4          //Description: This file contains the different preprogrammed shapes
+      5          //
+      6          //Mattia Muller
+      7          //Aug 2013
+      8          //Built with IAR Embedded Workbench Version:V4.10A/W32(5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",56  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+
+  #define FIGURE_8			(0x0E)
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
+     15          
+     16          
+     17          extern volatile unsigned char what_to_do;
+     18          extern char *display_1;
+     19          extern char *display_2;
+     20          extern volatile unsigned int Time_Sequence, five_msec_count_timer_A0, time;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          volatile unsigned int cycle_time, complete;
+   \                     cycle_time:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     complete:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          unsigned char current_step=SET_0, count_time,  left_wheel_on = SET_0, right_wheel_on = SET_0, left_wheel_count, right_wheel_count, next_move = SET_0;
+   \                     current_step:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     count_time:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     left_wheel_on:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     right_wheel_on:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     left_wheel_count:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     right_wheel_count:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     next_move:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          volatile unsigned char straight_direction = SET_0, stop = SET_0;
+   \                     straight_direction:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     stop:
+   \   000000                DS8 1
+     24          extern unsigned char black_space;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          unsigned int distance = SET_0;
+   \                     distance:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          extern volatile int time_limit = SET_0;
+   \                     time_limit:
+   \   000000                DS8 2
+     27          
+     28          
+     29          
+     30          //=========================================================================== 
+     31          // Function name: STRAIGHT_TIME_Process
+     32          //
+     33          // Description: This functions makes the car go forward or backwards
+     34          //
+     35          // Passed : no variables passed
+     36          // Locals: no variables declared
+     37          // Returned: no values returned
+     38          // Globals: stop, straight_direction, left_wheel_on, left_wheel_count, right_wheel_on, right_wheel_count
+     39          //
+     40          // Author: Mattia Muller
+     41          // Date: Oct 2013
+     42          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+     43          //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     44          void STRAIGHT_TIME_Process(void){
+   \                     STRAIGHT_TIME_Process:
+     45          	if(straight_direction){
+   \   000000   C293....     CMP.B   #0x0, &straight_direction
+   \   000004   5224         JEQ     ??STRAIGHT_TIME_Process_0
+     46          		if(left_wheel_on++<left_wheel_count){
+   \   000006   5E42....     MOV.B   &left_wheel_on, R14
+   \   00000A   4F4E         MOV.B   R14, R15
+   \   00000C   5F53         ADD.B   #0x1, R15
+   \   00000E   C24F....     MOV.B   R15, &left_wheel_on
+   \   000012   5E92....     CMP.B   &left_wheel_count, R14
+   \   000016   0B2C         JC      ??STRAIGHT_TIME_Process_1
+     47          			if(!(P3IN&L_FORWARD)){
+   \   000018   F2B040002002 BIT.B   #0x40, &0x220
+   \   00001E   142C         JC      ??STRAIGHT_TIME_Process_2
+     48                                          P3OUT&=~L_REVERSE;
+   \   000020   F2C080002202 BIC.B   #0x80, &0x222
+     49          				P3OUT|=L_FORWARD;
+   \   000026   F2D040002202 BIS.B   #0x40, &0x222
+   \   00002C   0D3C         JMP     ??STRAIGHT_TIME_Process_2
+     50          			}
+     51          		}else{
+     52          			if(left_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_TIME_Process_1:
+   \   00002E   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   000034   092C         JC      ??STRAIGHT_TIME_Process_2
+     53          				left_wheel_on=SET_0;
+   \   000036   C243....     MOV.B   #0x0, &left_wheel_on
+     54          				if(P3IN&L_FORWARD){
+   \   00003A   F2B040002002 BIT.B   #0x40, &0x220
+   \   000040   0328         JNC     ??STRAIGHT_TIME_Process_2
+     55          					P3OUT&=~L_FORWARD;
+   \   000042   F2C040002202 BIC.B   #0x40, &0x222
+     56          				}
+     57          			}
+     58          		}
+     59          		if(right_wheel_on++<right_wheel_count){
+   \                     ??STRAIGHT_TIME_Process_2:
+   \   000048   5E42....     MOV.B   &right_wheel_on, R14
+   \   00004C   4F4E         MOV.B   R14, R15
+   \   00004E   5F53         ADD.B   #0x1, R15
+   \   000050   C24F....     MOV.B   R15, &right_wheel_on
+   \   000054   5E92....     CMP.B   &right_wheel_count, R14
+   \   000058   0B2C         JC      ??STRAIGHT_TIME_Process_3
+     60          			if(!(P3IN&R_FORWARD)){
+   \   00005A   F2B010002002 BIT.B   #0x10, &0x220
+   \   000060   142C         JC      ??STRAIGHT_TIME_Process_4
+     61                                          P3OUT&=~R_REVERSE;
+   \   000062   F2C020002202 BIC.B   #0x20, &0x222
+     62          				P3OUT|=R_FORWARD;
+   \   000068   F2D010002202 BIS.B   #0x10, &0x222
+   \   00006E   0D3C         JMP     ??STRAIGHT_TIME_Process_4
+     63          			}
+     64          		}else{
+     65          			if(right_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_TIME_Process_3:
+   \   000070   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000076   092C         JC      ??STRAIGHT_TIME_Process_4
+     66          				right_wheel_on=SET_0;
+   \   000078   C243....     MOV.B   #0x0, &right_wheel_on
+     67                                          if(P3IN&R_FORWARD){
+   \   00007C   F2B010002002 BIT.B   #0x10, &0x220
+   \   000082   0328         JNC     ??STRAIGHT_TIME_Process_4
+     68                                              P3OUT&=~R_FORWARD;
+   \   000084   F2C010002202 BIC.B   #0x10, &0x222
+     69          				}
+     70          			}
+     71          		}
+     72          		if(stop == ON){
+   \                     ??STRAIGHT_TIME_Process_4:
+   \   00008A   D293....     CMP.B   #0x1, &stop
+   \   00008E   5C20         JNE     ??STRAIGHT_TIME_Process_5
+     73          			P3OUT&=~R_REVERSE;
+   \   000090   F2C020002202 BIC.B   #0x20, &0x222
+     74                                  P3OUT&=~L_REVERSE;
+   \   000096   F2C080002202 BIC.B   #0x80, &0x222
+     75          			P3OUT&=~R_FORWARD;
+   \   00009C   F2C010002202 BIC.B   #0x10, &0x222
+     76          			P3OUT&=~L_FORWARD;
+   \   0000A2   F2C040002202 BIC.B   #0x40, &0x222
+   \   0000A8   1001         RETA
+     77          		}
+     78          
+     79          	}else{
+     80          		if(left_wheel_on++<LEFT_WHEEL_COUNT){
+   \                     ??STRAIGHT_TIME_Process_0:
+   \   0000AA   5E42....     MOV.B   &left_wheel_on, R14
+   \   0000AE   4F4E         MOV.B   R14, R15
+   \   0000B0   5F53         ADD.B   #0x1, R15
+   \   0000B2   C24F....     MOV.B   R15, &left_wheel_on
+   \   0000B6   7E901E00     CMP.B   #0x1e, R14
+   \   0000BA   0A2C         JC      ??STRAIGHT_TIME_Process_6
+     81          			if(!(P3IN&L_REVERSE)){
+   \   0000BC   C2932002     CMP.B   #0x0, &0x220
+   \   0000C0   1338         JL      ??STRAIGHT_TIME_Process_7
+     82                                          P3OUT&=~L_FORWARD;
+   \   0000C2   F2C040002202 BIC.B   #0x40, &0x222
+     83          				P3OUT|=L_REVERSE;
+   \   0000C8   F2D080002202 BIS.B   #0x80, &0x222
+   \   0000CE   0C3C         JMP     ??STRAIGHT_TIME_Process_7
+     84          			}
+     85          		}else{
+     86          			if(left_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_TIME_Process_6:
+   \   0000D0   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   0000D6   082C         JC      ??STRAIGHT_TIME_Process_7
+     87                                      left_wheel_on=0;
+   \   0000D8   C243....     MOV.B   #0x0, &left_wheel_on
+     88                                      if(P3IN&L_REVERSE){
+   \   0000DC   C2932002     CMP.B   #0x0, &0x220
+   \   0000E0   0334         JGE     ??STRAIGHT_TIME_Process_7
+     89                                        P3OUT&=~L_REVERSE;
+   \   0000E2   F2C080002202 BIC.B   #0x80, &0x222
+     90                                      }
+     91          			}
+     92          		}
+     93          		if(right_wheel_on++<RIGHT_WHEEL_COUNT){
+   \                     ??STRAIGHT_TIME_Process_7:
+   \   0000E8   5E42....     MOV.B   &right_wheel_on, R14
+   \   0000EC   4F4E         MOV.B   R14, R15
+   \   0000EE   5F53         ADD.B   #0x1, R15
+   \   0000F0   C24F....     MOV.B   R15, &right_wheel_on
+   \   0000F4   7E901100     CMP.B   #0x11, R14
+   \   0000F8   0B2C         JC      ??STRAIGHT_TIME_Process_8
+     94                            if(!(P3IN&R_REVERSE)){
+   \   0000FA   F2B020002002 BIT.B   #0x20, &0x220
+   \   000100   142C         JC      ??STRAIGHT_TIME_Process_9
+     95                                  P3OUT&=~R_FORWARD;
+   \   000102   F2C010002202 BIC.B   #0x10, &0x222
+     96          			P3OUT|=R_REVERSE;
+   \   000108   F2D020002202 BIS.B   #0x20, &0x222
+   \   00010E   0D3C         JMP     ??STRAIGHT_TIME_Process_9
+     97                            }
+     98          		}else{
+     99                            if(right_wheel_on<WHEEL_COUNT){
+   \                     ??STRAIGHT_TIME_Process_8:
+   \   000110   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000116   092C         JC      ??STRAIGHT_TIME_Process_9
+    100          			right_wheel_on=0;
+   \   000118   C243....     MOV.B   #0x0, &right_wheel_on
+    101                                  if(P3IN&R_REVERSE){
+   \   00011C   F2B020002002 BIT.B   #0x20, &0x220
+   \   000122   0328         JNC     ??STRAIGHT_TIME_Process_9
+    102                                    P3OUT&=~R_REVERSE;
+   \   000124   F2C020002202 BIC.B   #0x20, &0x222
+    103          			}
+    104                            }
+    105          		}
+    106          		if(stop == ON){
+   \                     ??STRAIGHT_TIME_Process_9:
+   \   00012A   D293....     CMP.B   #0x1, &stop
+   \   00012E   0C20         JNE     ??STRAIGHT_TIME_Process_5
+    107                                  P3OUT&=~R_REVERSE;
+   \   000130   F2C020002202 BIC.B   #0x20, &0x222
+    108                                  P3OUT&=~L_REVERSE;
+   \   000136   F2C080002202 BIC.B   #0x80, &0x222
+    109          			P3OUT&=~R_FORWARD;
+   \   00013C   F2C010002202 BIC.B   #0x10, &0x222
+    110          			P3OUT&=~L_FORWARD;
+   \   000142   F2C040002202 BIC.B   #0x40, &0x222
+    111          		}
+    112          	}
+    113          }
+   \                     ??STRAIGHT_TIME_Process_5:
+   \   000148   1001         RETA
+   \   00014A                REQUIRE _A_PBIN_L
+   \   00014A                REQUIRE _A_PBOUT_L
+    114          
+    115          
+    116          //=========================================================================== 
+    117          // Function name: CLOCK_TIME_Process
+    118          //
+    119          // Description: This functions makes the car go CLOCKWISE OR COUNTER CLOCKWISE
+    120          //
+    121          // Passed : no variables passed
+    122          // Locals: no variables declared
+    123          // Returned: no values returned
+    124          // Globals: stop, straight_direction, left_wheel_on, left_wheel_count, right_wheel_on, right_wheel_count
+    125          //
+    126          // Author: Mattia Muller
+    127          // Date: Oct 2013
+    128          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+    129          //===========================================================================
+
+   \                                 In  segment CODE, align 2
+    130          void CLOCK_TIME_Process(void){
+   \                     CLOCK_TIME_Process:
+    131          
+    132            if(straight_direction){
+   \   000000   C293....     CMP.B   #0x0, &straight_direction
+   \   000004   5224         JEQ     ??CLOCK_TIME_Process_0
+    133          		if(left_wheel_on++<left_wheel_count){
+   \   000006   5E42....     MOV.B   &left_wheel_on, R14
+   \   00000A   4F4E         MOV.B   R14, R15
+   \   00000C   5F53         ADD.B   #0x1, R15
+   \   00000E   C24F....     MOV.B   R15, &left_wheel_on
+   \   000012   5E92....     CMP.B   &left_wheel_count, R14
+   \   000016   0B2C         JC      ??CLOCK_TIME_Process_1
+    134          			if(!(P3IN&L_FORWARD)){
+   \   000018   F2B040002002 BIT.B   #0x40, &0x220
+   \   00001E   142C         JC      ??CLOCK_TIME_Process_2
+    135                                          P3OUT&=~L_REVERSE;
+   \   000020   F2C080002202 BIC.B   #0x80, &0x222
+    136          				P3OUT|=L_FORWARD;
+   \   000026   F2D040002202 BIS.B   #0x40, &0x222
+   \   00002C   0D3C         JMP     ??CLOCK_TIME_Process_2
+    137          			}
+    138          		}else{
+    139          			if(left_wheel_on<WHEEL_COUNT){
+   \                     ??CLOCK_TIME_Process_1:
+   \   00002E   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   000034   092C         JC      ??CLOCK_TIME_Process_2
+    140          				left_wheel_on=SET_0;
+   \   000036   C243....     MOV.B   #0x0, &left_wheel_on
+    141          				if(P3IN&L_FORWARD){
+   \   00003A   F2B040002002 BIT.B   #0x40, &0x220
+   \   000040   0328         JNC     ??CLOCK_TIME_Process_2
+    142          					P3OUT&=~L_FORWARD;
+   \   000042   F2C040002202 BIC.B   #0x40, &0x222
+    143          				}
+    144          			}
+    145          		}
+    146          		if(right_wheel_on++<right_wheel_count){
+   \                     ??CLOCK_TIME_Process_2:
+   \   000048   5E42....     MOV.B   &right_wheel_on, R14
+   \   00004C   4F4E         MOV.B   R14, R15
+   \   00004E   5F53         ADD.B   #0x1, R15
+   \   000050   C24F....     MOV.B   R15, &right_wheel_on
+   \   000054   5E92....     CMP.B   &right_wheel_count, R14
+   \   000058   0B2C         JC      ??CLOCK_TIME_Process_3
+    147          			if(!(P3IN&R_REVERSE)){
+   \   00005A   F2B020002002 BIT.B   #0x20, &0x220
+   \   000060   142C         JC      ??CLOCK_TIME_Process_4
+    148                                          P3OUT&=~R_FORWARD;
+   \   000062   F2C010002202 BIC.B   #0x10, &0x222
+    149          				P3OUT|=R_REVERSE;
+   \   000068   F2D020002202 BIS.B   #0x20, &0x222
+   \   00006E   0D3C         JMP     ??CLOCK_TIME_Process_4
+    150          			}
+    151          		}else{
+    152          			if(right_wheel_on<WHEEL_COUNT){
+   \                     ??CLOCK_TIME_Process_3:
+   \   000070   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000076   092C         JC      ??CLOCK_TIME_Process_4
+    153          				right_wheel_on=SET_0;
+   \   000078   C243....     MOV.B   #0x0, &right_wheel_on
+    154                                          if(P3IN&R_REVERSE){
+   \   00007C   F2B020002002 BIT.B   #0x20, &0x220
+   \   000082   0328         JNC     ??CLOCK_TIME_Process_4
+    155                                              P3OUT&=~R_REVERSE;
+   \   000084   F2C020002202 BIC.B   #0x20, &0x222
+    156          				}
+    157          			}
+    158          		}
+    159          		if(stop == ON){
+   \                     ??CLOCK_TIME_Process_4:
+   \   00008A   D293....     CMP.B   #0x1, &stop
+   \   00008E   5C20         JNE     ??CLOCK_TIME_Process_5
+    160          			P3OUT&=~R_REVERSE;
+   \   000090   F2C020002202 BIC.B   #0x20, &0x222
+    161                                  P3OUT&=~L_REVERSE;
+   \   000096   F2C080002202 BIC.B   #0x80, &0x222
+    162          			P3OUT&=~R_FORWARD;
+   \   00009C   F2C010002202 BIC.B   #0x10, &0x222
+    163          			P3OUT&=~L_FORWARD;
+   \   0000A2   F2C040002202 BIC.B   #0x40, &0x222
+   \   0000A8   1001         RETA
+    164          		}
+    165          
+    166          	}else{
+    167          		if(left_wheel_on++<LEFT_WHEEL_COUNT){
+   \                     ??CLOCK_TIME_Process_0:
+   \   0000AA   5E42....     MOV.B   &left_wheel_on, R14
+   \   0000AE   4F4E         MOV.B   R14, R15
+   \   0000B0   5F53         ADD.B   #0x1, R15
+   \   0000B2   C24F....     MOV.B   R15, &left_wheel_on
+   \   0000B6   7E901E00     CMP.B   #0x1e, R14
+   \   0000BA   0A2C         JC      ??CLOCK_TIME_Process_6
+    168          			if(!(P3IN&L_REVERSE)){
+   \   0000BC   C2932002     CMP.B   #0x0, &0x220
+   \   0000C0   1338         JL      ??CLOCK_TIME_Process_7
+    169                                          P3OUT&=~L_FORWARD;
+   \   0000C2   F2C040002202 BIC.B   #0x40, &0x222
+    170          				P3OUT|=L_REVERSE;
+   \   0000C8   F2D080002202 BIS.B   #0x80, &0x222
+   \   0000CE   0C3C         JMP     ??CLOCK_TIME_Process_7
+    171          			}
+    172          		}else{
+    173          			if(left_wheel_on<WHEEL_COUNT){
+   \                     ??CLOCK_TIME_Process_6:
+   \   0000D0   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   0000D6   082C         JC      ??CLOCK_TIME_Process_7
+    174                                      left_wheel_on=0;
+   \   0000D8   C243....     MOV.B   #0x0, &left_wheel_on
+    175                                      if(P3IN&L_REVERSE){
+   \   0000DC   C2932002     CMP.B   #0x0, &0x220
+   \   0000E0   0334         JGE     ??CLOCK_TIME_Process_7
+    176                                        P3OUT&=~L_REVERSE;
+   \   0000E2   F2C080002202 BIC.B   #0x80, &0x222
+    177                                      }
+    178          			}
+    179          		}
+    180          		if(right_wheel_on++<RIGHT_WHEEL_COUNT){
+   \                     ??CLOCK_TIME_Process_7:
+   \   0000E8   5E42....     MOV.B   &right_wheel_on, R14
+   \   0000EC   4F4E         MOV.B   R14, R15
+   \   0000EE   5F53         ADD.B   #0x1, R15
+   \   0000F0   C24F....     MOV.B   R15, &right_wheel_on
+   \   0000F4   7E901100     CMP.B   #0x11, R14
+   \   0000F8   0B2C         JC      ??CLOCK_TIME_Process_8
+    181                            if(!(P3IN&R_FORWARD)){
+   \   0000FA   F2B010002002 BIT.B   #0x10, &0x220
+   \   000100   142C         JC      ??CLOCK_TIME_Process_9
+    182                                  P3OUT&=~R_REVERSE;
+   \   000102   F2C020002202 BIC.B   #0x20, &0x222
+    183          			P3OUT|=R_FORWARD;
+   \   000108   F2D010002202 BIS.B   #0x10, &0x222
+   \   00010E   0D3C         JMP     ??CLOCK_TIME_Process_9
+    184                            }
+    185          		}else{
+    186                            if(right_wheel_on<WHEEL_COUNT){
+   \                     ??CLOCK_TIME_Process_8:
+   \   000110   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000116   092C         JC      ??CLOCK_TIME_Process_9
+    187          			right_wheel_on=0;
+   \   000118   C243....     MOV.B   #0x0, &right_wheel_on
+    188                                  if(P3IN&R_FORWARD){
+   \   00011C   F2B010002002 BIT.B   #0x10, &0x220
+   \   000122   0328         JNC     ??CLOCK_TIME_Process_9
+    189                                    P3OUT&=~R_FORWARD;
+   \   000124   F2C010002202 BIC.B   #0x10, &0x222
+    190          			}
+    191                            }
+    192          		}
+    193          		if(stop == ON){
+   \                     ??CLOCK_TIME_Process_9:
+   \   00012A   D293....     CMP.B   #0x1, &stop
+   \   00012E   0C20         JNE     ??CLOCK_TIME_Process_5
+    194                                  P3OUT&=~R_REVERSE;
+   \   000130   F2C020002202 BIC.B   #0x20, &0x222
+    195                                  P3OUT&=~L_REVERSE;
+   \   000136   F2C080002202 BIC.B   #0x80, &0x222
+    196          			P3OUT&=~R_FORWARD;
+   \   00013C   F2C010002202 BIC.B   #0x10, &0x222
+    197          			P3OUT&=~L_FORWARD;
+   \   000142   F2C040002202 BIC.B   #0x40, &0x222
+    198          		}
+    199          	}
+    200          }
+   \                     ??CLOCK_TIME_Process_5:
+   \   000148   1001         RETA
+   \   00014A                REQUIRE _A_PBIN_L
+   \   00014A                REQUIRE _A_PBOUT_L
+    201          
+
+   \                                 In  segment CODE, align 2
+    202          void project_5_process(void){
+   \                     project_5_process:
+    203          	
+    204          	if(black_space == ON && stop == OFF && straight_direction == FORWARD && current_step == STEP_0)
+   \   000000   D293....     CMP.B   #0x1, &black_space
+   \   000004   2120         JNE     ??project_5_process_0
+   \   000006   C293....     CMP.B   #0x0, &stop
+   \   00000A   1E20         JNE     ??project_5_process_0
+   \   00000C   D293....     CMP.B   #0x1, &straight_direction
+   \   000010   1B20         JNE     ??project_5_process_0
+   \   000012   C293....     CMP.B   #0x0, &current_step
+   \   000016   1820         JNE     ??project_5_process_0
+    205                {
+    206            		
+    207              five_msec_count_timer_A0 = SET_0;//Start distance timer
+   \   000018   8243....     MOV.W   #0x0, &five_msec_count_timer_A0
+    208              distance = SET_0;
+   \   00001C   8243....     MOV.W   #0x0, &distance
+    209              five_msec_sleep(SET_100);	//Stop for .5 seconds
+   \   000020   3C406400     MOV.W   #0x64, R12
+   \   000024   ........     CALLA   #five_msec_sleep
+    210             	disableADC();    				//Disable ADC for .5 seconds
+   \   000028   ........     CALLA   #disableADC
+    211              
+    212              what_to_do = STRAIGHT;
+   \   00002C   F2400A00.... MOV.B   #0xa, &what_to_do
+    213              time_limit = SET_NEG_1;
+   \   000032   B243....     MOV.W   #0xffff, &time_limit
+    214              stop = OFF;
+   \   000036   C243....     MOV.B   #0x0, &stop
+    215              straight_direction = REVERSE;
+   \   00003A   C243....     MOV.B   #0x0, &straight_direction
+    216              black_space = OFF;
+   \   00003E   C243....     MOV.B   #0x0, &black_space
+    217              current_step++;
+   \   000042   D253....     ADD.B   #0x1, &current_step
+   \   000046   5F3C         JMP     ??project_5_process_1
+    218          }
+    219          
+    220          else if(black_space == ON && stop == OFF && straight_direction == REVERSE && current_step == STEP_1)
+   \                     ??project_5_process_0:
+   \   000048   D293....     CMP.B   #0x1, &black_space
+   \   00004C   2020         JNE     ??project_5_process_2
+   \   00004E   C293....     CMP.B   #0x0, &stop
+   \   000052   1D20         JNE     ??project_5_process_2
+   \   000054   C293....     CMP.B   #0x0, &straight_direction
+   \   000058   1A20         JNE     ??project_5_process_2
+   \   00005A   D293....     CMP.B   #0x1, &current_step
+   \   00005E   1720         JNE     ??project_5_process_2
+    221          {
+    222              five_msec_sleep(SET_100);
+   \   000060   3C406400     MOV.W   #0x64, R12
+   \   000064   ........     CALLA   #five_msec_sleep
+    223              what_to_do = STRAIGHT;
+   \   000068   F2400A00.... MOV.B   #0xa, &what_to_do
+    224              time_limit = five_msec_count_timer_A0 >> SET_1;	// distance time divided by 2
+   \   00006E   1F42....     MOV.W   &five_msec_count_timer_A0, R15
+   \   000072   5F03         RRUM.W  #0x1, R15
+   \   000074   824F....     MOV.W   R15, &time_limit
+    225              five_msec_count_timer_A0 = SET_0;
+   \   000078   8243....     MOV.W   #0x0, &five_msec_count_timer_A0
+    226              straight_direction = FORWARD;
+   \   00007C   D243....     MOV.B   #0x1, &straight_direction
+    227              black_space = OFF;
+   \   000080   C243....     MOV.B   #0x0, &black_space
+    228              stop = OFF;
+   \   000084   C243....     MOV.B   #0x0, &stop
+    229              current_step++;
+   \   000088   D253....     ADD.B   #0x1, &current_step
+   \   00008C   3C3C         JMP     ??project_5_process_1
+    230          }
+    231          else if(stop == ON && straight_direction == FORWARD && current_step == STEP_2)
+   \                     ??project_5_process_2:
+   \   00008E   D293....     CMP.B   #0x1, &stop
+   \   000092   1720         JNE     ??project_5_process_3
+   \   000094   D293....     CMP.B   #0x1, &straight_direction
+   \   000098   1420         JNE     ??project_5_process_3
+   \   00009A   E293....     CMP.B   #0x2, &current_step
+   \   00009E   1120         JNE     ??project_5_process_3
+    232          {
+    233              five_msec_sleep(SET_100);
+   \   0000A0   3C406400     MOV.W   #0x64, R12
+   \   0000A4   ........     CALLA   #five_msec_sleep
+    234              straight_direction = FORWARD;
+   \   0000A8   D243....     MOV.B   #0x1, &straight_direction
+    235              time = 25;
+   \   0000AC   B2401900.... MOV.W   #0x19, &time
+    236               stop = OFF;
+   \   0000B2   C243....     MOV.B   #0x0, &stop
+    237              what_to_do = THUMB_WHEEL;
+   \   0000B6   F2400D00.... MOV.B   #0xd, &what_to_do
+    238              current_step++;
+   \   0000BC   D253....     ADD.B   #0x1, &current_step
+   \   0000C0   223C         JMP     ??project_5_process_1
+    239          } else if(stop == ON && straight_direction == REVERSE && current_step == STEP_3) {
+   \                     ??project_5_process_3:
+   \   0000C2   D293....     CMP.B   #0x1, &stop
+   \   0000C6   1420         JNE     ??project_5_process_4
+   \   0000C8   C293....     CMP.B   #0x0, &straight_direction
+   \   0000CC   1120         JNE     ??project_5_process_4
+   \   0000CE   F2900300.... CMP.B   #0x3, &current_step
+   \   0000D4   0D20         JNE     ??project_5_process_4
+    240              straight_direction = REVERSE;
+   \   0000D6   C243....     MOV.B   #0x0, &straight_direction
+    241              time = 25;
+   \   0000DA   B2401900.... MOV.W   #0x19, &time
+    242               stop = OFF;
+   \   0000E0   C243....     MOV.B   #0x0, &stop
+    243              what_to_do = THUMB_WHEEL;
+   \   0000E4   F2400D00.... MOV.B   #0xd, &what_to_do
+    244              current_step++;
+   \   0000EA   D253....     ADD.B   #0x1, &current_step
+   \   0000EE   0B3C         JMP     ??project_5_process_1
+    245          } else if(stop == ON && straight_direction == REVERSE && current_step == STEP_4) {
+   \                     ??project_5_process_4:
+   \   0000F0   D293....     CMP.B   #0x1, &stop
+   \   0000F4   0820         JNE     ??project_5_process_1
+   \   0000F6   C293....     CMP.B   #0x0, &straight_direction
+   \   0000FA   0520         JNE     ??project_5_process_1
+   \   0000FC   E292....     CMP.B   #0x4, &current_step
+   \   000100   0220         JNE     ??project_5_process_1
+    246              stop = SET_1;
+   \   000102   D243....     MOV.B   #0x1, &stop
+    247          }
+    248          
+    249          STRAIGHT_TIME_Process();
+   \                     ??project_5_process_1:
+   \   000106   ........     CALLA   #STRAIGHT_TIME_Process
+    250          CLOCK_TIME_Process();
+   \   00010A   ........     BRA     #CLOCK_TIME_Process
+    251            
+    252          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   CLOCK_TIME_Process
+      4   STRAIGHT_TIME_Process
+      4   project_5_process
+        4   -> CLOCK_TIME_Process
+        4   -> STRAIGHT_TIME_Process
+        4   -> disableADC
+        4   -> five_msec_sleep
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     330  CLOCK_TIME_Process
+     330  STRAIGHT_TIME_Process
+       2  _A_PBIN_L
+       2  _A_PBOUT_L
+       2  complete
+       1  count_time
+       1  current_step
+       2  cycle_time
+       2  distance
+       1  left_wheel_count
+       1  left_wheel_on
+       1  next_move
+     270  project_5_process
+       1  right_wheel_count
+       1  right_wheel_on
+       1  stop
+       1  straight_direction
+       2  time_limit
+
+ 
+ 930 bytes in segment CODE
+   4 bytes in segment DATA16_AN
+  17 bytes in segment DATA16_Z
+ 
+ 930 bytes of CODE memory
+  17 bytes of DATA memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: 2

@@ -1,0 +1,295 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         14/Oct/2014  17:31:42
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\timer_interrupts.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\timer_interrupts.c" -lC "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Project 05\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\Debug\Obj\" --no_cse --no_unroll --no_inline --no_code_motion
+#        --no_tbaa --debug -D__MSP430FR5739__ -e --double=32 --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\430\lib\dlib\dl430xlsfn.h" --core=430X --data_model=small -Ol
+#        --multiplier=32 --multiplier_location=4C0 --hw_workaround=CPU40
+#        --hw_workaround=CPU39 --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\Debug\List\timer_interrupts.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\Debug\Obj\timer_interrupts.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 05\timer_interrupts.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name: timer_interupts.c
+      3          //
+      4          //  Description: This file contains the interupts for the timers
+      5          //
+      6          //  Mattia Muller
+      7          //  Oct 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          
+     12          #include "macros.h"
+
+  #define FIGURE_8			(0x0E)
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 05\macros.h",91  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 76)
+     13          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x352
+   \   unsigned short volatile TA0CCR0
+   \                     TA0CCR0:
+   \   000000                DS8 2
+     14          
+     15          //------------------------------------------------------------------------------
+     16          // Interrupt Configurations
+     17          // The following interrupt service routine shells are for the MSP430FR5739
+     18          // Other family members of the MSP430 may contain a different mix of timers.
+     19          //=============================================================================
+     20          // timerA0
+     21          // This block is generically refered to as timerA0 which contains 3 capture
+     22          // compare interrupts and 1 overflow interrupt. 
+     23          // timerA0-0 has its own interrupt.
+     24          // timerA0-1,2,overflow share an interrupt vector
+     25          // timerA0-0 Interrupt handler
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          volatile unsigned int time = SET_0;
+   \                     time:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     27          extern volatile unsigned char what_to_do, stop, straight_direction, state = SET_0;
+   \                     state:
+   \   000000                DS8 1
+     28          #pragma vector = TIMER0_A0_VECTOR      // Note the vector name is misleading
+     29          
+     30          
+     31          //=========================================================================== 
+     32          // Function name: Timer0_A0_ISR
+     33          //
+     34          // Description: This function handles the timer interupt for A0
+     35          //
+     36          // Passed : no variables passed
+     37          // Locals: no variables declared
+     38          // Returned: no values returned
+     39          // Globals: what_to_do, stop, straight_direction, state, time, vector
+     40          //
+     41          // Author: Mattia Muller
+     42          // Date: Oct 2013
+     43          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+     44          //===========================================================================
+
+   \                                 In  segment ISR_CODE, align 2
+     45          __interrupt void Timer0_A0_ISR(void){
+   \                     Timer0_A0_ISR:
+     46          // timerA0-0 interrupt service routine used ???
+     47          // *** add your code here *** 
+     48            time++;
+   \   000000   9253....     ADD.W   #0x1, &time
+     49            
+     50            if (time >TWOSEC)
+   \   000004   B2909101.... CMP.W   #0x191, &time
+   \   00000A   0228         JNC     ??Timer0_A0_ISR_0
+     51               time = SET_0;
+   \   00000C   8243....     MOV.W   #0x0, &time
+     52            
+     53            if (stop) {
+   \                     ??Timer0_A0_ISR_0:
+   \   000010   C293....     CMP.B   #0x0, &stop
+   \   000014   1524         JEQ     ??Timer0_A0_ISR_1
+     54              P3OUT&=~R_REVERSE;
+   \   000016   F2C020002202 BIC.B   #0x20, &0x222
+     55              P3OUT&=~L_REVERSE;
+   \   00001C   F2C080002202 BIC.B   #0x80, &0x222
+     56              P3OUT&=~R_FORWARD;
+   \   000022   F2C010002202 BIC.B   #0x10, &0x222
+     57              P3OUT&=~L_FORWARD;
+   \   000028   F2C040002202 BIC.B   #0x40, &0x222
+     58              if (time==HALFSEC) {
+   \   00002E   B2906400.... CMP.W   #0x64, &time
+   \   000034   8620         JNE     ??Timer0_A0_ISR_2
+     59                stop = SET_0;
+   \   000036   C243....     MOV.B   #0x0, &stop
+     60                time = SET_0;
+   \   00003A   8243....     MOV.W   #0x0, &time
+   \   00003E   813C         JMP     ??Timer0_A0_ISR_2
+     61              }  
+     62            } else {
+     63                if (time==TWOSEC && what_to_do == PROJECT_04){
+   \                     ??Timer0_A0_ISR_1:
+   \   000040   B2909001.... CMP.W   #0x190, &time
+   \   000046   1020         JNE     ??Timer0_A0_ISR_3
+   \   000048   F2900B00.... CMP.B   #0xb, &what_to_do
+   \   00004E   0C20         JNE     ??Timer0_A0_ISR_3
+     64                  what_to_do = STRAIGHT;
+   \   000050   F2400A00.... MOV.B   #0xa, &what_to_do
+     65                  straight_direction = SET_1;
+   \   000056   D243....     MOV.B   #0x1, &straight_direction
+     66                  stop = SET_1;
+   \   00005A   D243....     MOV.B   #0x1, &stop
+     67                  time = SET_0;
+   \   00005E   8243....     MOV.W   #0x0, &time
+     68                  state = SET_0;
+   \   000062   C243....     MOV.B   #0x0, &state
+   \   000066   6D3C         JMP     ??Timer0_A0_ISR_2
+     69                 } else if (time==ONESEC && what_to_do == STRAIGHT && straight_direction == SET_1 && state == SET_0){
+   \                     ??Timer0_A0_ISR_3:
+   \   000068   B290C800.... CMP.W   #0xc8, &time
+   \   00006E   1320         JNE     ??Timer0_A0_ISR_4
+   \   000070   F2900A00.... CMP.B   #0xa, &what_to_do
+   \   000076   0F20         JNE     ??Timer0_A0_ISR_4
+   \   000078   D293....     CMP.B   #0x1, &straight_direction
+   \   00007C   0C20         JNE     ??Timer0_A0_ISR_4
+   \   00007E   C293....     CMP.B   #0x0, &state
+   \   000082   0920         JNE     ??Timer0_A0_ISR_4
+     70                  straight_direction = SET_0;
+   \   000084   C243....     MOV.B   #0x0, &straight_direction
+     71                  stop = SET_1;
+   \   000088   D243....     MOV.B   #0x1, &stop
+     72                  time = SET_0;
+   \   00008C   8243....     MOV.W   #0x0, &time
+     73                  state = SET_1;
+   \   000090   D243....     MOV.B   #0x1, &state
+   \   000094   563C         JMP     ??Timer0_A0_ISR_2
+     74                } else if (time==TWOSEC && what_to_do == STRAIGHT && straight_direction == SET_0){
+   \                     ??Timer0_A0_ISR_4:
+   \   000096   B2909001.... CMP.W   #0x190, &time
+   \   00009C   1020         JNE     ??Timer0_A0_ISR_5
+   \   00009E   F2900A00.... CMP.B   #0xa, &what_to_do
+   \   0000A4   0C20         JNE     ??Timer0_A0_ISR_5
+   \   0000A6   C293....     CMP.B   #0x0, &straight_direction
+   \   0000AA   0920         JNE     ??Timer0_A0_ISR_5
+     75                  straight_direction = SET_1;
+   \   0000AC   D243....     MOV.B   #0x1, &straight_direction
+     76                  stop = SET_1;
+   \   0000B0   D243....     MOV.B   #0x1, &stop
+     77                  time = SET_0;
+   \   0000B4   8243....     MOV.W   #0x0, &time
+     78                  state = SET_1;
+   \   0000B8   D243....     MOV.B   #0x1, &state
+   \   0000BC   423C         JMP     ??Timer0_A0_ISR_2
+     79                } else if (time==ONESEC && what_to_do == STRAIGHT && straight_direction == SET_1  && state == SET_1){
+   \                     ??Timer0_A0_ISR_5:
+   \   0000BE   B290C800.... CMP.W   #0xc8, &time
+   \   0000C4   1620         JNE     ??Timer0_A0_ISR_6
+   \   0000C6   F2900A00.... CMP.B   #0xa, &what_to_do
+   \   0000CC   1220         JNE     ??Timer0_A0_ISR_6
+   \   0000CE   D293....     CMP.B   #0x1, &straight_direction
+   \   0000D2   0F20         JNE     ??Timer0_A0_ISR_6
+   \   0000D4   D293....     CMP.B   #0x1, &state
+   \   0000D8   0C20         JNE     ??Timer0_A0_ISR_6
+     80                  straight_direction = SET_0;
+   \   0000DA   C243....     MOV.B   #0x0, &straight_direction
+     81                  stop = SET_1;
+   \   0000DE   D243....     MOV.B   #0x1, &stop
+     82                  time = SET_0;
+   \   0000E2   8243....     MOV.W   #0x0, &time
+     83                  state = SET_1;
+   \   0000E6   D243....     MOV.B   #0x1, &state
+     84                  what_to_do = THUMB_WHEEL;
+   \   0000EA   F2400D00.... MOV.B   #0xd, &what_to_do
+   \   0000F0   283C         JMP     ??Timer0_A0_ISR_2
+     85                } else if (time==ONESEC && what_to_do == THUMB_WHEEL && straight_direction == SET_0){
+   \                     ??Timer0_A0_ISR_6:
+   \   0000F2   B290C800.... CMP.W   #0xc8, &time
+   \   0000F8   1120         JNE     ??Timer0_A0_ISR_7
+   \   0000FA   F2900D00.... CMP.B   #0xd, &what_to_do
+   \   000100   0D20         JNE     ??Timer0_A0_ISR_7
+   \   000102   C293....     CMP.B   #0x0, &straight_direction
+   \   000106   0A20         JNE     ??Timer0_A0_ISR_7
+     86                  straight_direction = SET_1;
+   \   000108   D243....     MOV.B   #0x1, &straight_direction
+     87                  stop = SET_1;
+   \   00010C   D243....     MOV.B   #0x1, &stop
+     88                  time = SET_0;
+   \   000110   8243....     MOV.W   #0x0, &time
+     89                  what_to_do = THUMB_WHEEL;
+   \   000114   F2400D00.... MOV.B   #0xd, &what_to_do
+   \   00011A   133C         JMP     ??Timer0_A0_ISR_2
+     90                } else if (time==ONESEC && what_to_do == THUMB_WHEEL && straight_direction == SET_1){
+   \                     ??Timer0_A0_ISR_7:
+   \   00011C   B290C800.... CMP.W   #0xc8, &time
+   \   000122   0F20         JNE     ??Timer0_A0_ISR_2
+   \   000124   F2900D00.... CMP.B   #0xd, &what_to_do
+   \   00012A   0B20         JNE     ??Timer0_A0_ISR_2
+   \   00012C   D293....     CMP.B   #0x1, &straight_direction
+   \   000130   0820         JNE     ??Timer0_A0_ISR_2
+     91                  straight_direction = SET_0;
+   \   000132   C243....     MOV.B   #0x0, &straight_direction
+     92                  stop = SET_1;
+   \   000136   D243....     MOV.B   #0x1, &stop
+     93                  time = SET_0;
+   \   00013A   8243....     MOV.W   #0x0, &time
+     94                  what_to_do = LED_STATE;
+   \   00013E   D243....     MOV.B   #0x1, &what_to_do
+     95                }
+     96            }
+     97            TA0CCR0 += TA0CCR0_INTERVAL;         // Add Offset to TACCR0 [continuous up mode]
+   \                     ??Timer0_A0_ISR_2:
+   \   000142   B250C4095203 ADD.W   #0x9c4, &0x352
+     98          }
+   \   000148   0013         RETI
+   \   00014A                REQUIRE _A_PBOUT_L
+   \   00014A                REQUIRE TA0CCR0
+
+   \                                 In  segment INTVEC, offset 0x5a, root
+   \                     `??Timer0_A0_ISR??INTVEC 90`:
+   \   00005A   ....         DC16    Timer0_A0_ISR
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Timer0_A0_ISR
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??Timer0_A0_ISR??INTVEC 90
+       2  TA0CCR0
+     330  Timer0_A0_ISR
+       2  _A_PBOUT_L
+       1  state
+       2  time
+
+ 
+   4 bytes in segment DATA16_AN
+   3 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+ 330 bytes in segment ISR_CODE
+ 
+ 330 bytes of CODE  memory
+   0 bytes of CONST memory (+ 2 bytes shared)
+   3 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: 1

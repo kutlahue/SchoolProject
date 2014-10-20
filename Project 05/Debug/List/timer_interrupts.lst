@@ -1,0 +1,461 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:30:44
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\timer_interrupts.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\timer_interrupts.c" -lC "E:\Fall 14\ECE
+#        306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\List\" -o "E:\Fall 14\ECE
+#        306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\Obj\" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\List\timer_interrupts.lst
+#    Object file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\Obj\timer_interrupts.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\timer_interrupts.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name: timer_interupts.c
+      3          //
+      4          //  Description: This file contains the interupts for the timers
+      5          //
+      6          //  Mattia Muller
+      7          //  Oct 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          
+     12          #include "macros.h"
+
+  #define FIGURE_8			(0x0E)
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
+     13          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x71a
+   \   union <unnamed> _A_ADC10IE_L
+   \                     _A_ADC10IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x352
+   \   unsigned short volatile TA0CCR0
+   \                     TA0CCR0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x354
+   \   unsigned short volatile TA0CCR1
+   \                     TA0CCR1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x356
+   \   unsigned short volatile TA0CCR2
+   \                     TA0CCR2:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x36e
+   \   unsigned short volatile TA0IV
+   \                     TA0IV:
+   \   000000                DS8 2
+     14          #include "functions.h"
+     15          
+     16          //------------------------------------------------------------------------------
+     17          // Interrupt Configurations
+     18          // The following interrupt service routine shells are for the MSP430FR5739
+     19          // Other family members of the MSP430 may contain a different mix of timers.
+     20          //=============================================================================
+     21          // timerA0
+     22          // This block is generically refered to as timerA0 which contains 3 capture
+     23          // compare interrupts and 1 overflow interrupt. 
+     24          // timerA0-0 has its own interrupt.
+     25          // timerA0-1,2,overflow share an interrupt vector
+     26          // timerA0-0 Interrupt handler
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     27          volatile unsigned int time = SET_0;
+   \                     time:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     28          extern volatile unsigned char okay_to_look_at_switch1, okay_to_look_at_switch2, what_to_do, stop, straight_direction, state = SET_0, sw1_position, sw2_position;
+   \                     state:
+   \   000000                DS8 1
+     29          extern volatile unsigned int five_msec_count_timer_A0, fifty_msec_count_timer_A1, count_debounce_SW1, count_debounce_SW2;
+     30          extern volatile int time_limit;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     31          volatile unsigned char ten_msec_count_timer_A2;
+   \                     ten_msec_count_timer_A2:
+   \   000000                DS8 1
+     32          
+     33          #pragma vector = TIMER0_A0_VECTOR      // Note the vector name is misleading
+     34          //=========================================================================== 
+     35          // Function name: Timer0_A0_ISR
+     36          //
+     37          // Description: This function handles the timer interupt for A0
+     38          //
+     39          // Passed : no variables passed
+     40          // Locals: no variables declared
+     41          // Returned: no values returned
+     42          // Globals: what_to_do, stop, straight_direction, state, time, vector
+     43          //
+     44          // Author: Mattia Muller
+     45          // Date: Oct 2013
+     46          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+     47          //===========================================================================
+
+   \                                 In  segment ISR_CODE, align 2
+     48          __interrupt void Timer0_A0_ISR(void){
+   \                     Timer0_A0_ISR:
+   \   000000   0F12         PUSH.W  R15
+     49          // timerA0-0 interrupt service routine used ???
+     50          // *** add your code here *** 
+     51            time++;
+   \   000002   9253....     ADD.W   #0x1, &time
+     52            five_msec_count_timer_A0++;
+   \   000006   9253....     ADD.W   #0x1, &five_msec_count_timer_A0
+     53            
+     54            
+     55            if (stop) {
+   \   00000A   C293....     CMP.B   #0x0, &stop
+   \   00000E   0C24         JEQ     ??Timer0_A0_ISR_0
+     56              P3OUT&=~R_REVERSE;
+   \   000010   F2C020002202 BIC.B   #0x20, &0x222
+     57              P3OUT&=~L_REVERSE;
+   \   000016   F2C080002202 BIC.B   #0x80, &0x222
+     58              P3OUT&=~R_FORWARD;
+   \   00001C   F2C010002202 BIC.B   #0x10, &0x222
+     59              P3OUT&=~L_FORWARD;
+   \   000022   F2C040002202 BIC.B   #0x40, &0x222
+     60            }
+     61            
+     62            if (time > time_limit && time_limit != SET_NEG_1) {
+                   ^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \                     ??Timer0_A0_ISR_0:
+   \   000028   1F42....     MOV.W   &time_limit, R15
+   \   00002C   1F92....     CMP.W   &time, R15
+   \   000030   052C         JC      ??Timer0_A0_ISR_1
+   \   000032   B293....     CMP.W   #0xffff, &time_limit
+   \   000036   0224         JEQ     ??Timer0_A0_ISR_1
+     63            	
+     64            	stop = SET_1;	
+   \   000038   D243....     MOV.B   #0x1, &stop
+     65            	
+     66            }
+     67            
+     68            
+     69          //    if (time==HALFSEC) {
+     70          //      stop = SET_0;
+     71          //      time = SET_0;
+     72          //    }  
+     73          //  } else {
+     74          //      if (time==TWOSEC && what_to_do == PROJECT_04){
+     75          //        what_to_do = STRAIGHT;
+     76          //        straight_direction = SET_1;
+     77          //        stop = SET_1;
+     78          //        time = SET_0;
+     79          //        state = SET_0;
+     80          //       } else if (time==ONESEC && what_to_do == STRAIGHT && straight_direction == SET_1 && state == SET_0){
+     81          //        straight_direction = SET_0;
+     82          //        stop = SET_1;
+     83          //        time = SET_0;
+     84          //        state = SET_1;
+     85          //      } else if (time==TWOSEC && what_to_do == STRAIGHT && straight_direction == SET_0){
+     86          //        straight_direction = SET_1;
+     87          //        stop = SET_1;
+     88          //        time = SET_0;
+     89          //        state = SET_1;
+     90          //      } else if (time==ONESEC && what_to_do == STRAIGHT && straight_direction == SET_1  && state == SET_1){
+     91          //        straight_direction = SET_0;
+     92          //        stop = SET_1;
+     93          //        time = SET_0;
+     94          //        state = SET_1;
+     95          //        what_to_do = THUMB_WHEEL;
+     96          //      } else if (time==ONESEC && what_to_do == THUMB_WHEEL && straight_direction == SET_0){
+     97          //        straight_direction = SET_1;
+     98          //        stop = SET_1;
+     99          //        time = SET_0;
+    100          //        what_to_do = THUMB_WHEEL;
+    101          //      } else if (time==ONESEC && what_to_do == THUMB_WHEEL && straight_direction == SET_1){
+    102          //        straight_direction = SET_0;
+    103          //        stop = SET_1;
+    104          //        time = SET_0;
+    105          //        what_to_do = LED_STATE;
+    106          //      }
+    107          //  }
+    108            TA0CCR0 += TA0CCR0_INTERVAL;         // Add Offset to TACCR0 [continuous up mode]
+   \                     ??Timer0_A0_ISR_1:
+   \   00003C   B250C4095203 ADD.W   #0x9c4, &0x352
+    109          }
+   \   000042   3F41         POP.W   R15
+   \   000044   0013         RETI
+   \   000046                REQUIRE _A_PBOUT_L
+   \   000046                REQUIRE TA0CCR0
+    110          
+    111          
+    112          // timerA0-1,2,overflow Interrupt Vector (TAIV) handler
+    113          #pragma vector=TIMER0_A1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    114          __interrupt void TIMER0_A1_ISR(void){
+   \                     TIMER0_A1_ISR:
+   \   000000   3F15         PUSHM.W #0x4, R15
+    115            switch(__even_in_range(TA0IV,14)){
+   \   000002   1F426E03     MOV.W   &0x36e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for TIMER0_A1_ISR>_0`:
+   \   000008   343C         JMP     ??TIMER0_A1_ISR_1
+   \   00000A   063C         JMP     ??TIMER0_A1_ISR_4
+   \   00000C   2B3C         JMP     ??TIMER0_A1_ISR_5
+   \   00000E   313C         JMP     ??TIMER0_A1_ISR_1
+   \   000010   303C         JMP     ??TIMER0_A1_ISR_1
+   \   000012   2F3C         JMP     ??TIMER0_A1_ISR_1
+   \   000014   2E3C         JMP     ??TIMER0_A1_ISR_1
+   \   000016   2D3C         JMP     ??TIMER0_A1_ISR_1
+    116              case  0: break;                    // No interrupt
+    117              case  2:                           // CCR1 used for fifity msec
+    118                fifty_msec_count_timer_A1++;
+   \                     ??TIMER0_A1_ISR_4:
+   \   000018   9253....     ADD.W   #0x1, &fifty_msec_count_timer_A1
+    119                count_debounce_SW1++;
+   \   00001C   9253....     ADD.W   #0x1, &count_debounce_SW1
+    120                count_debounce_SW2++;
+   \   000020   9253....     ADD.W   #0x1, &count_debounce_SW2
+    121                
+    122                if (count_debounce_SW1 > SET_10 && okay_to_look_at_switch1) {
+   \   000024   B2900B00.... CMP.W   #0xb, &count_debounce_SW1
+   \   00002A   0928         JNC     ??TIMER0_A1_ISR_2
+   \   00002C   C293....     CMP.B   #0x0, &okay_to_look_at_switch1
+   \   000030   0624         JEQ     ??TIMER0_A1_ISR_2
+    123                        sw1_position = PRESSED;
+   \   000032   C243....     MOV.B   #0x0, &sw1_position
+    124                        PJOUT &=~LED3;
+   \   000036   A2C22203     BIC.W   #0x4, &0x322
+    125                        enableInput();
+   \   00003A   ........     CALLA   #enableInput
+    126                }
+    127                if (count_debounce_SW2 > SET_10 && okay_to_look_at_switch2) {
+   \                     ??TIMER0_A1_ISR_2:
+   \   00003E   B2900B00.... CMP.W   #0xb, &count_debounce_SW2
+   \   000044   0928         JNC     ??TIMER0_A1_ISR_3
+   \   000046   C293....     CMP.B   #0x0, &okay_to_look_at_switch2
+   \   00004A   0624         JEQ     ??TIMER0_A1_ISR_3
+    128                        sw2_position = PRESSED;
+   \   00004C   C243....     MOV.B   #0x0, &sw2_position
+    129                        PJOUT &=~LED3;
+   \   000050   A2C22203     BIC.W   #0x4, &0x322
+    130                        enableInput();
+   \   000054   ........     CALLA   #enableInput
+    131                }
+    132                
+    133                if (fifty_msec_count_timer_A1%DEBOUNCE_TIME  == SET_0){
+   \                     ??TIMER0_A1_ISR_3:
+   \   000058   1F42....     MOV.W   &fifty_msec_count_timer_A1, R15
+    134                  //P3OUT ^= TEST_PROBE;
+    135                }
+    136                TA0CCR1 += TA0CCR1_INTERVAL;     // Add Offset to TACCR1
+   \   00005C   B250A8615403 ADD.W   #0x61a8, &0x354
+    137                break;
+   \   000062   073C         JMP     ??TIMER0_A1_ISR_1
+    138              case  4:                           // CCR2 used for ???
+    139              ten_msec_count_timer_A2++;
+   \                     ??TIMER0_A1_ISR_5:
+   \   000064   D253....     ADD.B   #0x1, &ten_msec_count_timer_A2
+    140              ten_msec_timer_code_switch();
+   \   000068   ........     CALLA   #ten_msec_timer_code_switch
+    141              TA0CCR2 += TA0CCR2_INTERVAL;     // Add Offset to TACCR2
+   \   00006C   B25088135603 ADD.W   #0x1388, &0x356
+    142                break;
+    143              case  6: break;                    // reserved
+    144              case  8: break;                    // reserved
+    145              case 10: break;                    // reserved
+    146              case 12: break;                    // reserved
+    147              case 14:                           // overflow used for ???
+    148          // *** add your code here *** 
+    149               break;
+    150              default: break; 
+    151            }
+    152          }
+   \                     ??TIMER0_A1_ISR_1:
+   \   000072   3C17         POPM.W  #0x4, R15
+   \   000074   0013         RETI
+   \   000076                REQUIRE _A_PJOUT_L
+   \   000076                REQUIRE TA0CCR1
+   \   000076                REQUIRE TA0CCR2
+   \   000076                REQUIRE TA0IV
+    153          // timerA0
+    154          //=============================================================================
+    155          
+    156          
+    157          
+    158          
+
+   \                                 In  segment CODE, align 2
+    159          void ten_msec_timer_code_switch(void){
+   \                     ten_msec_timer_code_switch:
+    160          	
+    161          	switch (ten_msec_count_timer_A2){
+   \   000000   5E42....     MOV.B   &ten_msec_count_timer_A2, R14
+   \   000004   8E11         SXT     R14
+   \   000006   3E901500     CMP.W   #0x15, R14
+   \   00000A   332C         JC      ??ten_msec_timer_code_switch_2
+   \   00000C   5E06         RLAM.W  #0x2, R14
+   \   00000E   ....504E.... MOVX.A  `?<Jumptable for ten_msec_timer_code_switch>_0`(R14), PC
+   \                     `?<Jumptable for ten_msec_timer_code_switch>_0`:
+   \   000014   ........     DC32    ??ten_msec_timer_code_switch_2
+   \   000018   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   00001C   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000020   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000024   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000028   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   00002C   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000030   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000034   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000038   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   00003C   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000040   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000044   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000048   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   00004C   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000050   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000054   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000058   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   00005C   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000060   ........     DC32    ??ten_msec_timer_code_switch_1
+   \   000064   ........     DC32    ??ten_msec_timer_code_switch_3
+    162          		case 20:
+    163          		  	// Do the 200 msec stuff
+    164                            if (!(ADC10IE & ADC10IE0)) { // if ADC is disabled
+   \                     ??ten_msec_timer_code_switch_3:
+   \   000068   92B31A07     BIT.W   #0x1, &0x71a
+   \   00006C   042C         JC      ??ten_msec_timer_code_switch_1
+    165          				enableADC();
+   \   00006E   ........     BRA     #enableADC
+    166          			}
+    167                            break;
+    168          		case 19: break;
+    169          		case 18: break;
+    170          		case 17: break;
+    171          		case 16: break;
+    172          		case 15:
+    173          			
+    174                                  break;
+    175          		case 14:
+    176          		case 13:
+    177          		case 12:
+    178          		case 11:
+    179          		case 10:
+    180          			// Do the 100 msec stuff
+    181          		case  9:
+    182          		case  8:
+    183          		case  7:
+    184          		case  6:
+    185                          case  5:
+    186          		case  4:
+    187          		case  3:
+    188          		case  2:
+    189          		case  1:
+    190          		  // Do the 10 msec stuff
+    191          		  break;
+    192          		default:
+    193          			ten_msec_count_timer_A2 = SET_0;
+   \                     ??ten_msec_timer_code_switch_2:
+   \   000072   C243....     MOV.B   #0x0, &ten_msec_count_timer_A2
+    194          		  break;
+    195          	}	
+    196          
+    197          }
+   \                     ??ten_msec_timer_code_switch_1:
+   \   000076   1001         RETA
+   \   000078                REQUIRE _A_ADC10IE_L
+
+   \                                 In  segment INTVEC, offset 0x58, root
+   \                     `??TIMER0_A1_ISR??INTVEC 88`:
+   \   000058   ....         DC16    TIMER0_A1_ISR
+
+   \                                 In  segment INTVEC, offset 0x5a, root
+   \                     `??Timer0_A0_ISR??INTVEC 90`:
+   \   00005A   ....         DC16    Timer0_A0_ISR
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   TIMER0_A1_ISR
+       12   -> enableInput
+       12   -> ten_msec_timer_code_switch
+      6   Timer0_A0_ISR
+      4   ten_msec_timer_code_switch
+        4   -> enableADC
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??TIMER0_A1_ISR??INTVEC 88
+       2  ??Timer0_A0_ISR??INTVEC 90
+       2  TA0CCR0
+       2  TA0CCR1
+       2  TA0CCR2
+       2  TA0IV
+     118  TIMER0_A1_ISR
+      70  Timer0_A0_ISR
+       2  _A_ADC10IE_L
+       2  _A_PBOUT_L
+       2  _A_PJOUT_L
+       1  state
+       1  ten_msec_count_timer_A2
+     120  ten_msec_timer_code_switch
+       2  time
+
+ 
+ 120 bytes in segment CODE
+  14 bytes in segment DATA16_AN
+   4 bytes in segment DATA16_Z
+   4 bytes in segment INTVEC
+ 188 bytes in segment ISR_CODE
+ 
+ 308 bytes of CODE  memory
+   0 bytes of CONST memory (+  4 bytes shared)
+   4 bytes of DATA  memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: 2

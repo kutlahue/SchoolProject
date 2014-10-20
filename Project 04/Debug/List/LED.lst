@@ -1,0 +1,222 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         29/Sep/2014  19:16:03
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\LED.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\LED.c" -lC "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Project 03\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\" --no_cse --no_unroll --no_inline --no_code_motion
+#        --no_tbaa --debug -D__MSP430FR5739__ -e --double=32 --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\430\lib\dlib\dl430xlsfn.h" --core=430X --data_model=small -Ol
+#        --multiplier=32 --multiplier_location=4C0 --hw_workaround=CPU40
+#        --hw_workaround=CPU39 --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\List\LED.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        03\Debug\Obj\LED.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\LED.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name : LED.c
+      3          // 
+      4          //  Description: This file contains the LED related functions after Initialization 
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\macros.h",55  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+
+  #define FIGURE_8			(0x0E)
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 03\macros.h",91  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 76)
+     14          
+     15          extern volatile char one_time;
+     16          extern volatile unsigned int Time_Sequence;
+     17          
+     18          
+
+   \                                 In  segment CODE, align 2
+     19          void Default_Process(){
+   \                     Default_Process:
+     20            switch(Time_Sequence){
+   \   000000   1F42....     MOV.W   &Time_Sequence, R15
+   \   000004   3F803200     SUB.W   #0x32, R15
+   \   000008   2A24         JEQ     ??Default_Process_3
+   \   00000A   3F803200     SUB.W   #0x32, R15
+   \   00000E   2024         JEQ     ??Default_Process_4
+   \   000010   3F803200     SUB.W   #0x32, R15
+   \   000014   1624         JEQ     ??Default_Process_5
+   \   000016   3F803200     SUB.W   #0x32, R15
+   \   00001A   0C24         JEQ     ??Default_Process_6
+   \   00001C   3F803200     SUB.W   #0x32, R15
+   \   000020   2520         JNE     ??Default_Process_2
+     21          
+     22           case 250: // 1250 msec 
+     23           if(one_time){
+   \   000022   C293....     CMP.B   #0x0, &one_time
+   \   000026   0424         JEQ     ??Default_Process_7
+     24           Init_LEDs(); // Initialize LEDs
+   \   000028   ........     CALLA   #Init_LEDs
+     25           one_time = 0;
+   \   00002C   C243....     MOV.B   #0x0, &one_time
+     26          }
+     27           Time_Sequence = 0; // 
+   \                     ??Default_Process_7:
+   \   000030   8243....     MOV.W   #0x0, &Time_Sequence
+     28           case 200: // 1000 msec 
+     29           if(one_time){
+   \                     ??Default_Process_6:
+   \   000034   C293....     CMP.B   #0x0, &one_time
+   \   000038   0424         JEQ     ??Default_Process_5
+     30          
+     31           PJOUT |= LED4; // Change State of LED 4
+   \   00003A   B2D22203     BIS.W   #0x8, &0x322
+     32          
+     33          // P3OUT |= LED5; // Change State of LED 5
+     34          
+     35           one_time = 0;
+   \   00003E   C243....     MOV.B   #0x0, &one_time
+     36          
+     37           
+     38          
+     39          }
+     40          
+     41           case 150: // 750 msec 
+     42          
+     43           if(one_time){
+   \                     ??Default_Process_5:
+   \   000042   C293....     CMP.B   #0x0, &one_time
+   \   000046   0424         JEQ     ??Default_Process_4
+     44          
+     45           PJOUT |= LED3; // Change State of LED 3
+   \   000048   A2D22203     BIS.W   #0x4, &0x322
+     46          
+     47          // P3OUT |= LED6; // Change State of LED 6
+     48          
+     49           one_time = 0;
+   \   00004C   C243....     MOV.B   #0x0, &one_time
+     50          
+     51           
+     52          
+     53          }
+     54          
+     55           case 100: // 500 msec 
+     56          
+     57           if(one_time){
+   \                     ??Default_Process_4:
+   \   000050   C293....     CMP.B   #0x0, &one_time
+   \   000054   0424         JEQ     ??Default_Process_3
+     58          
+     59           PJOUT |= LED2; // Change State of LED 2
+   \   000056   A2D32203     BIS.W   #0x2, &0x322
+     60          
+     61          // P3OUT |= LED7; // Change State of LED 7
+     62          
+     63           one_time = 0;
+   \   00005A   C243....     MOV.B   #0x0, &one_time
+     64          
+     65           
+     66          
+     67          }
+     68          
+     69           case 50: // 250 msec 
+     70          
+     71           if(one_time){
+   \                     ??Default_Process_3:
+   \   00005E   C293....     CMP.B   #0x0, &one_time
+   \   000062   0424         JEQ     ??Default_Process_2
+     72          
+     73           PJOUT |= LED1; // Change State of LED 1
+   \   000064   92D32203     BIS.W   #0x1, &0x322
+     74          
+     75          // P3OUT |= LED8; // Change State of LED 8
+     76          
+     77           one_time = 0;
+   \   000068   C243....     MOV.B   #0x0, &one_time
+     78          
+     79           
+     80          
+     81          }
+     82          
+     83           break; // 
+     84          
+     85           default: break; 
+     86          
+     87           
+     88          
+     89          }
+     90          
+     91           if(Time_Sequence > 250){
+   \                     ??Default_Process_2:
+   \   00006C   B290FB00.... CMP.W   #0xfb, &Time_Sequence
+   \   000072   0228         JNC     ??Default_Process_8
+     92          
+     93           Time_Sequence = 0;
+   \   000074   8243....     MOV.W   #0x0, &Time_Sequence
+     94          }
+     95          }
+   \                     ??Default_Process_8:
+   \   000078   1001         RETA
+   \   00007A                REQUIRE _A_PJOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Default_Process
+        4   -> Init_LEDs
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     122  Default_Process
+       2  _A_PJOUT_L
+
+ 
+ 122 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+ 
+ 122 bytes of CODE memory
+   0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: 2

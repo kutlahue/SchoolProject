@@ -1,0 +1,529 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:26:41
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c" -lC
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\List\" -o
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\Obj\"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\List\switch.lst
+#    Object file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\Obj\switch.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name : switch.c
+      3          //
+      4          //  Description: This file contains the switch control functions
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          
+     12          #include "macros.h"
+
+  #define FIGURE_8			(0x0E)
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
+     13          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x23a
+   \   union <unnamed> _A_PBIE_L
+   \                     _A_PBIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23e
+   \   unsigned short volatile P4IV
+   \                     P4IV:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     14          #include "functions.h"
+     15          
+     16          extern char *display_1, current_step;
+     17          extern char *display_2;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile char okay_to_look_at_switch1 = NOT_OKAY;
+   \                     okay_to_look_at_switch1:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          volatile char okay_to_look_at_switch2 = NOT_OKAY;
+   \                     okay_to_look_at_switch2:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     20          volatile char sw1_position = RELEASED;
+   \                     sw1_position:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for sw1_position>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     21          volatile char sw2_position = RELEASED;
+   \                     sw2_position:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for sw2_position>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          volatile int count_debounce_SW1 = SET_0;
+   \                     count_debounce_SW1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          volatile int count_debounce_SW2 = SET_0;
+   \                     count_debounce_SW2:
+   \   000000                DS8 2
+     24          extern char current_step, what_to_do;
+     25          extern volatile unsigned char stop, straight_direction;
+     26          extern volatile int time_limit;
+     27          
+     28          //=========================================================================== 
+     29          // Function name: Switch1_Process
+     30          //
+     31          // Description: This function handles the detection of SW1
+     32          //
+     33          // Passed : no variables passed
+     34          // Locals: no variables declared
+     35          // Returned: no values returned
+     36          // Globals: none
+     37          //
+     38          // Author: Mattia Muller
+     39          // Date: Sept 2013
+     40          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     41          void Switch1_Process(void){
+   \                     Switch1_Process:
+     42          	if (!sw1_position){
+   \   000000   C293....     CMP.B   #0x0, &sw1_position
+   \   000004   0A20         JNE     ??Switch1_Process_0
+     43                      sw1_position = RELEASED;
+   \   000006   D243....     MOV.B   #0x1, &sw1_position
+     44                       okay_to_look_at_switch1 = NOT_OKAY;
+   \   00000A   C243....     MOV.B   #0x0, &okay_to_look_at_switch1
+     45                       PJOUT &=~LED3;
+   \   00000E   A2C22203     BIC.W   #0x4, &0x322
+     46                                              current_step = SET_0;
+   \   000012   C243....     MOV.B   #0x0, &current_step
+     47          
+     48                      do_stuff();              
+   \   000016   ........     CALLA   #do_stuff
+     49           	}
+     50          }
+   \                     ??Switch1_Process_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_PJOUT_L
+     51          
+     52          
+     53          //=========================================================================== 
+     54          // Function name: Switch2_Process
+     55          //
+     56          // Description: This function handles the detection of SW2
+     57          //
+     58          // Passed : no variables passed
+     59          // Locals: no variables declared
+     60          // Returned: no values returned
+     61          // Globals: none
+     62          //
+     63          // Author: Mattia Muller
+     64          // Date: Sept 2013
+     65          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     66          void Switch2_Process(void){
+   \                     Switch2_Process:
+     67          		if (!sw2_position){
+   \   000000   C293....     CMP.B   #0x0, &sw2_position
+   \   000004   0A20         JNE     ??Switch2_Process_0
+     68                      sw2_position = RELEASED;
+   \   000006   D243....     MOV.B   #0x1, &sw2_position
+     69                       okay_to_look_at_switch2 = NOT_OKAY;
+   \   00000A   C243....     MOV.B   #0x0, &okay_to_look_at_switch2
+     70                       PJOUT &=~LED3;
+   \   00000E   A2C22203     BIC.W   #0x4, &0x322
+     71                       current_step++;   
+   \   000012   D253....     ADD.B   #0x1, &current_step
+     72                      do_stuff();              
+   \   000016   ........     CALLA   #do_stuff
+     73                       
+     74           	}
+     75          }
+   \                     ??Switch2_Process_0:
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_PJOUT_L
+     76          
+     77          //=========================================================================== 
+     78          // Function name: Switches_Process
+     79          //
+     80          // Description: This function handles the detection of SW1 and SW2
+     81          //
+     82          // Passed : no variables passed
+     83          // Locals: no variables declared
+     84          // Returned: no values returned
+     85          // Globals: none
+     86          //
+     87          // Author: Mattia Muller
+     88          // Date: Sept 2013
+     89          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+     90          //******************************************************************************
+     91          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     92          void Switches_Process(void){
+   \                     Switches_Process:
+     93           Switch1_Process();
+   \   000000   ........     CALLA   #Switch1_Process
+     94           Switch2_Process();
+   \   000004   ........     BRA     #Switch2_Process
+     95          } 
+     96          //------------------------------------------------------------------------------
+     97          //******************************************************************************
+     98          
+     99          
+    100          // timerA0-1,2,overflow Interrupt Vector (TAIV) handler
+    101          #pragma vector=PORT4_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    102          __interrupt void PORT4_VECTOR_ISR(void){
+   \                     PORT4_VECTOR_ISR:
+   \   000000   0F12         PUSH.W  R15
+    103          
+    104            switch(P4IV)
+   \   000002   1F423E02     MOV.W   &0x23e, R15
+   \   000006   2F83         SUB.W   #0x2, R15
+   \   000008   0324         JEQ     ??PORT4_VECTOR_ISR_1
+   \   00000A   2F83         SUB.W   #0x2, R15
+   \   00000C   0C24         JEQ     ??PORT4_VECTOR_ISR_2
+   \   00000E   153C         JMP     ??PORT4_VECTOR_ISR_0
+    105              {
+    106                case P4IV_P4IFG0:        
+    107                  disableInput();               
+   \                     ??PORT4_VECTOR_ISR_1:
+   \   000010   ........     CALLA   #disableInput
+    108                  sw1_position = RELEASED;
+   \   000014   D243....     MOV.B   #0x1, &sw1_position
+    109                  okay_to_look_at_switch1 = OKAY;
+   \   000018   D243....     MOV.B   #0x1, &okay_to_look_at_switch1
+    110                  count_debounce_SW1 = SET_0;
+   \   00001C   8243....     MOV.W   #0x0, &count_debounce_SW1
+    111                  PJOUT |=LED3;
+   \   000020   A2D22203     BIS.W   #0x4, &0x322
+    112                  break;
+   \   000024   0A3C         JMP     ??PORT4_VECTOR_ISR_0
+    113                    
+    114                case P4IV_P4IFG1:
+    115                  disableInput();               
+   \                     ??PORT4_VECTOR_ISR_2:
+   \   000026   ........     CALLA   #disableInput
+    116                  sw2_position = RELEASED;
+   \   00002A   D243....     MOV.B   #0x1, &sw2_position
+    117                  okay_to_look_at_switch2 = OKAY;
+   \   00002E   D243....     MOV.B   #0x1, &okay_to_look_at_switch2
+    118                  count_debounce_SW2 = SET_0;
+   \   000032   8243....     MOV.W   #0x0, &count_debounce_SW2
+    119                  PJOUT |=LED3;
+   \   000036   A2D22203     BIS.W   #0x4, &0x322
+    120                default:
+    121                  break;
+    122              }  
+    123            
+    124          
+    125          }
+   \                     ??PORT4_VECTOR_ISR_0:
+   \   00003A   3F41         POP.W   R15
+   \   00003C   0013         RETI
+   \   00003E                REQUIRE _A_PJOUT_L
+   \   00003E                REQUIRE P4IV
+    126          // timerA0
+    127          //=============================================================================
+    128          
+    129          
+    130          //=========================================================================== 
+    131          // Function name: disableInput
+    132          //
+    133          // Description: This function disables of SW1 and SW2
+    134          //
+    135          // Passed : no variables passed
+    136          // Locals: no variables declared
+    137          // Returned: no values returned
+    138          // Globals: none
+    139          //
+    140          // Author: Mattia Muller
+    141          // Date: Sept 2013
+    142          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    143          //******************************************************************************
+    144          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    145          void disableInput(void)
+   \                     disableInput:
+    146          {
+    147          
+    148            P4IE &= ~(SW1 | SW2);                     // P4.0 interrupt disabled
+   \   000000   F2F0FC003B02 AND.B   #0xfc, &0x23b
+    149            P4IFG = SET_0;                            // P4 IFG cleared  
+   \   000006   C2433D02     MOV.B   #0x0, &0x23d
+    150          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PBIE_L
+   \   00000C                REQUIRE _A_PBIFG_L
+    151          
+    152          //=========================================================================== 
+    153          // Function name: enableInput
+    154          //
+    155          // Description: This function enables SW1 and SW2
+    156          //
+    157          // Passed : no variables passed
+    158          // Locals: no variables declared
+    159          // Returned: no values returned
+    160          // Globals: none
+    161          //
+    162          // Author: Mattia Muller
+    163          // Date: Sept 2013
+    164          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    165          //******************************************************************************
+    166          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    167          void enableInput(void)
+   \                     enableInput:
+    168          {
+    169          
+    170            P4IE |= (SW1 | SW2);                     // P4.0 interrupt disabled
+   \   000000   F2D003003B02 BIS.B   #0x3, &0x23b
+    171            P4IFG = SET_0;                           // P4 IFG cleared  
+   \   000006   C2433D02     MOV.B   #0x0, &0x23d
+    172          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PBIE_L
+   \   00000C                REQUIRE _A_PBIFG_L
+    173          
+    174          
+    175          
+
+   \                                 In  segment CODE, align 2
+    176          void do_stuff(void){
+   \                     do_stuff:
+   \   000000   0A12         PUSH.W  R10
+    177            switch(what_to_do){
+   \   000002   5E42....     MOV.B   &what_to_do, R14
+   \   000006   7E82         SUB.B   #0x8, R14
+   \   000008   0C24         JEQ     ??do_stuff_4
+   \   00000A   5E83         SUB.B   #0x1, R14
+   \   00000C   2324         JEQ     ??do_stuff_5
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   1E24         JEQ     ??do_stuff_6
+   \   000012   6E83         SUB.B   #0x2, R14
+   \   000014   3124         JEQ     ??do_stuff_3
+   \   000016   5E83         SUB.B   #0x1, R14
+   \   000018   2D24         JEQ     ??do_stuff_7
+   \   00001A   5E83         SUB.B   #0x1, R14
+   \   00001C   2D24         JEQ     ??do_stuff_3
+   \   00001E   5E83         SUB.B   #0x1, R14
+   \   000020   2B3C         JMP     ??do_stuff_3
+    178          		case CALIBRATE:
+    179                                 IR_calibration(current_step);
+   \                     ??do_stuff_4:
+   \   000022   5C42....     MOV.B   &current_step, R12
+   \   000026   ........     CALLA   #IR_calibration
+    180                                 char* ascii_value = itoa(current_step);            
+   \   00002A   5C42....     MOV.B   &current_step, R12
+   \   00002E   4C4C         MOV.B   R12, R12
+   \   000030   ........     CALLA   #itoa
+   \   000034   0A4C         MOV.W   R12, R10
+    181                                 lcd_out("              ", LCD_LINE_2);   
+   \   000036   7D40C000     MOV.B   #0xc0, R13
+   \   00003A   3C40....     MOV.W   #`?<Constant "              ">`, R12
+   \   00003E   ........     CALLA   #lcd_out
+    182                                 lcd_out(ascii_value, LCD_LINE_2);     
+   \   000042   7D40C000     MOV.B   #0xc0, R13
+   \   000046   0C4A         MOV.W   R10, R12
+   \   000048   ........     CALLA   #lcd_out
+    183                          break;
+   \   00004C   153C         JMP     ??do_stuff_3
+    184          		case STRAIGHT: // 1250 msec 
+    185          			STRAIGHT_TIME_Process();
+                 			^
+Warning[Pe223]: function "STRAIGHT_TIME_Process" declared implicitly
+   \                     ??do_stuff_6:
+   \   00004E   ........     CALLA   #STRAIGHT_TIME_Process
+    186          		break;
+   \   000052   123C         JMP     ??do_stuff_3
+    187                          case PROJECT_05: // 1250 msec 
+    188                                  fifty_msec_sleep_A1(SET_10);
+                                         ^
+Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
+   \                     ??do_stuff_5:
+   \   000054   3C400A00     MOV.W   #0xa, R12
+   \   000058   ........     CALLA   #fifty_msec_sleep_A1
+    189                                  stop = OFF;
+   \   00005C   C243....     MOV.B   #0x0, &stop
+    190                                  straight_direction = FORWARD;
+   \   000060   D243....     MOV.B   #0x1, &straight_direction
+    191                                  current_step = SET_0;
+   \   000064   C243....     MOV.B   #0x0, &current_step
+    192                                  time_limit = SET_NEG_1;
+   \   000068   B243....     MOV.W   #0xffff, &time_limit
+    193          			what_to_do = PROJECT_05;
+   \   00006C   F2400900.... MOV.B   #0x9, &what_to_do
+    194          		break;
+   \   000072   023C         JMP     ??do_stuff_3
+    195                          case THUMB_WHEEL: // 1250 msec 
+    196          			CLOCK_TIME_Process();
+                 			^
+Warning[Pe223]: function "CLOCK_TIME_Process" declared implicitly
+
+    switch(what_to_do){
+    ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c",177  Warning[Pe546]: 
+          transfer of control bypasses initialization of:
+            variable "ascii_value" (declared at line 180 of "E:\Fall 14\ECE
+                      306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c")
+   \                     ??do_stuff_7:
+   \   000074   ........     CALLA   #CLOCK_TIME_Process
+    197          		break;
+    198          		case CIRCLE: // 1250 msec 
+    199          			//CIRCLE_Process();
+    200          		break;
+    201          		case FIGURE_8: // 1250 msec 
+    202          		 	//FIGURE_8_Process();
+    203          		break;
+    204          		case TRIANGLE: // 1250 msec 
+    205          			//TRIANGLE_Process();
+    206          		break;
+    207          		default: 
+    208          		 	//Default_Process();
+    209          		break;
+    210          		}
+    211            
+    212            
+    213          }
+   \                     ??do_stuff_3:
+   \   000078   3A41         POP.W   R10
+   \   00007A   1001         RETA
+
+   \                                 In  segment INTVEC, offset 0x40, root
+   \                     `??PORT4_VECTOR_ISR??INTVEC 64`:
+   \   000040   ....         DC16    PORT4_VECTOR_ISR
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for sw1_position>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for sw2_position>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "              ">`:
+   \   000000   202020202020 DC8 "              "
+   \            202020202020
+   \            202000      
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   PORT4_VECTOR_ISR
+        6   -> disableInput
+      4   Switch1_Process
+        4   -> do_stuff
+      4   Switch2_Process
+        4   -> do_stuff
+      4   Switches_Process
+        4   -> Switch1_Process
+        4   -> Switch2_Process
+      4   disableInput
+      6   do_stuff
+        6   -> CLOCK_TIME_Process
+        6   -> IR_calibration
+        6   -> STRAIGHT_TIME_Process
+        6   -> fifty_msec_sleep_A1
+        6   -> itoa
+        6   -> lcd_out
+      4   enableInput
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      15  ?<Constant "              ">
+       1  ?<Initializer for sw1_position>
+       1  ?<Initializer for sw2_position>
+       2  ??PORT4_VECTOR_ISR??INTVEC 64
+       2  P4IV
+      62  PORT4_VECTOR_ISR
+      28  Switch1_Process
+      28  Switch2_Process
+       8  Switches_Process
+       2  _A_PBIE_L
+       2  _A_PBIFG_L
+       2  _A_PJOUT_L
+       2  count_debounce_SW1
+       2  count_debounce_SW2
+      12  disableInput
+     124  do_stuff
+      12  enableInput
+       1  okay_to_look_at_switch1
+       1  okay_to_look_at_switch2
+       1  sw1_position
+       1  sw2_position
+
+ 
+ 212 bytes in segment CODE
+   8 bytes in segment DATA16_AN
+  15 bytes in segment DATA16_C
+   2 bytes in segment DATA16_I
+   2 bytes in segment DATA16_ID
+   6 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+  62 bytes in segment ISR_CODE
+ 
+ 274 bytes of CODE  memory
+  17 bytes of CONST memory (+ 2 bytes shared)
+   8 bytes of DATA  memory (+ 8 bytes shared)
+
+Errors: none
+Warnings: 5

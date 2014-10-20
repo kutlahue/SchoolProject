@@ -1,0 +1,617 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:26:39
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c" -lC
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\List\" -o
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\Debug\Obj\"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\List\adc.lst
+#    Object file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT
+#        05\Debug\Obj\adc.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name: adc.c
+      3          //
+      4          //  Description: This file contains the adc converters
+      5          //
+      6          //  Mattia Muller
+      7          //  Oct 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x700
+   \   union <unnamed> _A_ADC10CTL0_L
+   \                     _A_ADC10CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x702
+   \   union <unnamed> _A_ADC10CTL1_L
+   \                     _A_ADC10CTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x704
+   \   union <unnamed> _A_ADC10CTL2_L
+   \                     _A_ADC10CTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x70a
+   \   union <unnamed> _A_ADC10MCTL0_L
+   \                     _A_ADC10MCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x712
+   \   union <unnamed> _A_ADC10MEM0_L
+   \                     _A_ADC10MEM0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71a
+   \   union <unnamed> _A_ADC10IE_L
+   \                     _A_ADC10IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71e
+   \   union <unnamed> _A_ADC10IV_L
+   \                     _A_ADC10IV_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",56  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+
+  #define FIGURE_8			(0x0E)
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
+     15          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile unsigned int ADC_Thumb, ADC_Right_Detector, ADC_Left_Detector;
+   \                     ADC_Thumb:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ADC_Right_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ADC_Left_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          volatile unsigned char ADC_Channel, sample;
+   \                     ADC_Channel:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     sample:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          unsigned char black_space = SET_0;
+   \                     black_space:
+   \   000000                DS8 1
+     19          extern volatile unsigned char ten_msec_count_timer_A2;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          unsigned int tresholds[3];
+   \                     tresholds:
+   \   000000                DS8 6
+     21          
+     22          
+     23          //------------------------------------------------------------------------------ // Configure ADC10_B
+
+   \                                 In  segment CODE, align 2
+     24          void Init_ADC(void){
+   \                     Init_ADC:
+     25          ADC10CTL0 = RESET_STATE; // Clear ADC10CTL0
+   \   000000   82430007     MOV.W   #0x0, &0x700
+     26          ADC10CTL0 |= ADC10SHT_2; // 16 ADC clocks
+   \   000004   B2D000020007 BIS.W   #0x200, &0x700
+     27          ADC10CTL0 &= ~ADC10MSC; // Single Sequence
+   \   00000A   B2C080000007 BIC.W   #0x80, &0x700
+     28          ADC10CTL0 |= ADC10ON; // ADC ON - Core Enabled
+   \   000010   B2D010000007 BIS.W   #0x10, &0x700
+     29          
+     30          ADC10CTL1 = RESET_STATE; // Clear ADC10CTL1
+   \   000016   82430207     MOV.W   #0x0, &0x702
+     31          ADC10CTL1 |= ADC10SHS_0; // ADC10SC bit
+   \   00001A   924202070207 MOV.W   &0x702, &0x702
+     32          ADC10CTL1 |= ADC10SHP; // SAMPCON signal sourced from sampling timer 
+   \   000020   B2D000020207 BIS.W   #0x200, &0x702
+     33          ADC10CTL1 &= ~ADC10ISSH; // The sample-input signal is not inverted.
+   \   000026   B2C000010207 BIC.W   #0x100, &0x702
+     34          ADC10CTL1 |= ADC10DIV_0; // ADC10_B clock divider – Divide by 1.
+   \   00002C   924202070207 MOV.W   &0x702, &0x702
+     35          ADC10CTL1 |= ADC10SSEL_0; // MODCLK
+   \   000032   924202070207 MOV.W   &0x702, &0x702
+     36          ADC10CTL1 |= ADC10CONSEQ_0; // Single-channel, single-conversion
+   \   000038   924202070207 MOV.W   &0x702, &0x702
+     37          
+     38          ADC10CTL2 = RESET_STATE; // Clear ADC10CTL2
+   \   00003E   82430407     MOV.W   #0x0, &0x704
+     39          ADC10CTL2 |= ADC10DIV_0; // Pre-divide by 1
+   \   000042   924204070407 MOV.W   &0x704, &0x704
+     40          ADC10CTL2 |= ADC10RES; // 10-bit resolution
+   \   000048   B2D010000407 BIS.W   #0x10, &0x704
+     41          ADC10CTL2 &= ~ADC10DF; // Binary unsigned
+   \   00004E   B2C20407     BIC.W   #0x8, &0x704
+     42          ADC10CTL2 &= ~ADC10SR; // supports up to approximately 200 ksps
+   \   000052   A2C20407     BIC.W   #0x4, &0x704
+     43          
+     44          ADC10MCTL0 = RESET_STATE; // Clear ADC10MCTL0
+   \   000056   82430A07     MOV.W   #0x0, &0x70a
+     45          ADC10MCTL0 |= ADC10SREF_0; // V(R+) = AVCC and V(R-) = AVSS
+   \   00005A   92420A070A07 MOV.W   &0x70a, &0x70a
+     46          ADC10MCTL0 |= ADC10INCH_3; // Channel A3 Thumb Wheel
+   \   000060   B2D003000A07 BIS.W   #0x3, &0x70a
+     47          
+     48          ADC10IE |= ADC10IE0; // Enable ADC conversion complete interrupt
+   \   000066   92D31A07     BIS.W   #0x1, &0x71a
+     49          } //------------------------------------------------------------------------------
+   \   00006A   1001         RETA
+   \   00006C                REQUIRE _A_ADC10CTL0_L
+   \   00006C                REQUIRE _A_ADC10CTL1_L
+   \   00006C                REQUIRE _A_ADC10CTL2_L
+   \   00006C                REQUIRE _A_ADC10MCTL0_L
+   \   00006C                REQUIRE _A_ADC10IE_L
+     50          
+     51          //------------------------------------------------------------------------------ 
+     52          // ADC10 interrupt service routine
+     53          // ADC_Right_Detector;   // A00 ADC10INCH_0 - P1.0 - Righ
+     54          // ADC_Left_Detector;    // A01 ADC10INCH_1 - P1.1 - Left
+     55          // ADC_Thumb;            // A03 ADC10INCH_3 - P1.3 - Thumb Wheel
+     56          // ADC_Temp;             // A10 ADC10INCH_10 – Temperature REF module 
+     57          // ADC_Bat;              // A11 ADC10INCH_11 - Internal
+     58          #pragma vector=ADC10_VECTOR 
+
+   \                                 In  segment ISR_CODE, align 2
+     59          __interrupt void ADC10_ISR(void){
+   \                     ADC10_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     60          	switch(__even_in_range(ADC10IV,12)) {
+   \   000002   1F421E07     MOV.W   &0x71e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for ADC10_ISR>_0`:
+   \   000008   2C3C         JMP     ??ADC10_ISR_1
+   \   00000A   2B3C         JMP     ??ADC10_ISR_1
+   \   00000C   2A3C         JMP     ??ADC10_ISR_1
+   \   00000E   293C         JMP     ??ADC10_ISR_1
+   \   000010   283C         JMP     ??ADC10_ISR_1
+   \   000012   273C         JMP     ??ADC10_ISR_1
+   \   000014   003C         JMP     ??ADC10_ISR_5
+     61          		case 0:  break;    // No interrupt
+     62          		case 2:  break;    // conversion result overflow
+     63          		case 4:  break;    // conversion time overflow
+     64          		case 6:  break;    // ADC10HI
+     65          		case 8:  break;    // ADC10LO
+     66          		case 10: break;    // ADC10IN
+     67          		case 12:
+     68                         // Need this to change the ADC10INCH_x value.
+     69                              ADC10CTL0 &= ~ADC10ENC;             // Toggle ENC bit.
+   \                     ??ADC10_ISR_5:
+   \   000016   A2C30007     BIC.W   #0x2, &0x700
+     70                              switch (ADC_Channel++){ 
+   \   00001A   5E42....     MOV.B   &ADC_Channel, R14
+   \   00001E   4F4E         MOV.B   R14, R15
+   \   000020   5F53         ADD.B   #0x1, R15
+   \   000022   C24F....     MOV.B   R15, &ADC_Channel
+   \   000026   4E83         SUB.B   #0x0, R14
+   \   000028   0524         JEQ     ??ADC10_ISR_2
+   \   00002A   5E83         SUB.B   #0x1, R14
+   \   00002C   0924         JEQ     ??ADC10_ISR_3
+   \   00002E   5E83         SUB.B   #0x1, R14
+   \   000030   0E24         JEQ     ??ADC10_ISR_4
+   \   000032   143C         JMP     ??ADC10_ISR_0
+     71                                case Right_Detector:
+     72                                   ADC10MCTL0 = ADC10INCH_0; // Next channel A1 
+   \                     ??ADC10_ISR_2:
+   \   000034   82430A07     MOV.W   #0x0, &0x70a
+     73                                   ADC_Right_Detector = ADC10MEM0; // Read Channel A0 
+   \   000038   92421207.... MOV.W   &0x712, &ADC_Right_Detector
+     74                                break;
+   \   00003E   0E3C         JMP     ??ADC10_ISR_0
+     75                                case Left_Detector:
+     76                                   ADC10MCTL0 = ADC10INCH_3; // Next channel A3 
+   \                     ??ADC10_ISR_3:
+   \   000040   B24003000A07 MOV.W   #0x3, &0x70a
+     77                                   ADC_Left_Detector = ADC10MEM0; // Read Channel A1 
+   \   000046   92421207.... MOV.W   &0x712, &ADC_Left_Detector
+     78                                break;
+   \   00004C   073C         JMP     ??ADC10_ISR_0
+     79                                case Thumbwheel:
+     80                                  ADC10MCTL0 = ADC10INCH_1;
+   \                     ??ADC10_ISR_4:
+   \   00004E   92430A07     MOV.W   #0x1, &0x70a
+     81                                  ADC_Thumb = ADC10MEM0;
+   \   000052   92421207.... MOV.W   &0x712, &ADC_Thumb
+     82                                  ADC_Channel=SET_0;
+   \   000058   C243....     MOV.B   #0x0, &ADC_Channel
+     83                                  break;
+     84                              default:
+     85                              break; 
+     86                          }
+     87                          ADC10CTL0 |= ADC10ENC | ADC10SC;
+   \                     ??ADC10_ISR_0:
+   \   00005C   B2D003000007 BIS.W   #0x3, &0x700
+     88                          break;                    
+     89          		default: break;
+     90          	} 
+     91          }
+   \                     ??ADC10_ISR_1:
+   \   000062   1E17         POPM.W  #0x2, R15
+   \   000064   0013         RETI
+   \   000066                REQUIRE _A_ADC10CTL0_L
+   \   000066                REQUIRE _A_ADC10MCTL0_L
+   \   000066                REQUIRE _A_ADC10MEM0_L
+   \   000066                REQUIRE _A_ADC10IV_L
+     92          //------------------------------------------------------------------------------
+     93          
+     94          
+     95          
+     96          //------------------------------------------------------------------------------ 
+
+   \                                 In  segment CODE, align 2
+     97          void ADC_Process(void){
+   \                     ADC_Process:
+   \                     ??ADC_Process_0:
+     98            while (ADC10CTL1 & BUSY); // Wait if ADC10 core is active
+   \   000000   92B30207     BIT.W   #0x1, &0x702
+   \   000004   FD2F         JC      ??ADC_Process_0
+     99              ADC10CTL0 |= ADC10ENC + ADC10SC; // Sampling and conversion start 
+   \   000006   B2D003000007 BIS.W   #0x3, &0x700
+    100          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_ADC10CTL1_L
+   \   00000E                REQUIRE _A_ADC10CTL0_L
+    101          //------------------------------------------------------------------------------
+    102          
+    103          
+    104          
+    105          
+    106          // Function taken from stdlib.h
+
+   \                                 In  segment CODE, align 2
+    107          char* itoa(int val){
+   \                     itoa:
+   \   000000   1B15         PUSHM.W #0x2, R11
+   \   000002   0A4C         MOV.W   R12, R10
+    108              register char *ptr;
+    109              static char buffer[16];	/* result is built here */
+    110              				/* 16 is sufficient since the largest number
+    111          				   we will ever convert will be 2^32-1,
+    112          				   which is 10 digits. */
+    113              ptr = buffer + sizeof(buffer);
+   \   000004   3B40....     MOV.W   #??buffer + 16, R11
+    114              *--ptr = '\0';
+   \   000008   3B53         ADD.W   #0xffff, R11
+   \   00000A   CB430000     MOV.B   #0x0, 0(R11)
+    115              if (val == 0){
+   \   00000E   0A93         CMP.W   #0x0, R10
+   \   000010   1520         JNE     ??itoa_1
+    116          	*--ptr = '0';
+   \   000012   3B53         ADD.W   #0xffff, R11
+   \   000014   FB4030000000 MOV.B   #0x30, 0(R11)
+   \   00001A   123C         JMP     ??itoa_2
+    117              } else while (val != 0) {
+    118          	*--ptr = (val % 10) + '0';
+   \                     ??itoa_0:
+   \   00001C   3B53         ADD.W   #0xffff, R11
+   \   00001E   0C4A         MOV.W   R10, R12
+   \   000020   3E400A00     MOV.W   #0xa, R14
+   \   000024   ........     CALLA   #?DivMod16s
+   \   000028   7E503000     ADD.B   #0x30, R14
+   \   00002C   CB4E0000     MOV.B   R14, 0(R11)
+    119          	val /= 10;
+   \   000030   0C4A         MOV.W   R10, R12
+   \   000032   3E400A00     MOV.W   #0xa, R14
+   \   000036   ........     CALLA   #?DivMod16s
+   \   00003A   0A4C         MOV.W   R12, R10
+    120              }
+   \                     ??itoa_1:
+   \   00003C   0A93         CMP.W   #0x0, R10
+   \   00003E   EE23         JNE     ??itoa_0
+    121              return(ptr);
+   \                     ??itoa_2:
+   \   000040   0C4B         MOV.W   R11, R12
+   \   000042   1A17         POPM.W  #0x2, R11
+   \   000044   1001         RETA
+    122          }
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     ??buffer:
+   \   000000                DS8 16
+    123          
+    124          
+    125          
+
+   \                                 In  segment CODE, align 2
+    126          void sample_process(void){
+   \                     sample_process:
+    127            
+    128            if (sample == ON) {
+   \   000000   D293....     CMP.B   #0x1, &sample
+   \   000004   0320         JNE     ??sample_process_0
+    129              P1OUT |= IR_LED;
+   \   000006   E2D20202     BIS.B   #0x4, &0x202
+   \   00000A   1001         RETA
+    130              
+    131            } else {
+    132              P1OUT &= ~IR_LED;
+   \                     ??sample_process_0:
+   \   00000C   E2C20202     BIC.B   #0x4, &0x202
+    133          
+    134            }
+    135          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_PAOUT_L
+    136          
+
+   \                                 In  segment CODE, align 2
+    137          void black_line_detect(void) {
+   \                     black_line_detect:
+    138          	int ADC_detect_average = (ADC_Right_Detector + ADC_Left_Detector) >> SET_1;
+   \   000000   1F42....     MOV.W   &ADC_Right_Detector, R15
+   \   000004   1F52....     ADD.W   &ADC_Left_Detector, R15
+   \   000008   5F03         RRUM.W  #0x1, R15
+    139          	
+    140          	if(ADC_detect_average < tresholds[SET_0]) {
+   \   00000A   1F92....     CMP.W   &tresholds, R15
+   \   00000E   032C         JC      ??black_line_detect_0
+    141          	    black_space = SET_0;
+   \   000010   C243....     MOV.B   #0x0, &black_space
+   \   000014   1001         RETA
+    142          	} else {
+    143          	    black_space = SET_1;
+   \                     ??black_line_detect_0:
+   \   000016   D243....     MOV.B   #0x1, &black_space
+    144          	}		
+    145          }
+   \   00001A   1001         RETA
+    146          
+    147          
+    148          
+    149          
+    150          
+    151          //=========================================================================== 
+    152          // Function name: disableADC
+    153          //
+    154          // Description: This function disables the ADC
+    155          //
+    156          // Passed : no variables passed
+    157          // Locals: no variables declared
+    158          // Returned: no values returned
+    159          // Globals: none
+    160          //
+    161          // Author: Mattia Muller
+    162          // Date: Sept 2013
+    163          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    164          //******************************************************************************
+    165          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    166          void disableADC(void)
+   \                     disableADC:
+    167          {
+    168          
+    169            ADC10IE &= ~ADC10IE0;  
+   \   000000   92C31A07     BIC.W   #0x1, &0x71a
+    170            ten_msec_count_timer_A2=SET_0;   
+   \   000004   C243....     MOV.B   #0x0, &ten_msec_count_timer_A2
+    171          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE _A_ADC10IE_L
+    172          
+    173          
+    174          //=========================================================================== 
+    175          // Function name: enableADC
+    176          //
+    177          // Description: This function enables the ADC
+    178          //
+    179          // Passed : no variables passed
+    180          // Locals: no variables declared
+    181          // Returned: no values returned
+    182          // Globals: none
+    183          //
+    184          // Author: Mattia Muller
+    185          // Date: Sept 2013
+    186          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    187          //******************************************************************************
+    188          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    189          void enableADC(void)
+   \                     enableADC:
+    190          {
+    191          
+    192          ADC10IE |= ADC10IE0; 
+   \   000000   92D31A07     BIS.W   #0x1, &0x71a
+    193          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_ADC10IE_L
+    194          
+    195          
+
+   \                                 In  segment CODE, align 2
+    196          void IR_calibration(unsigned char state){
+   \                     IR_calibration:
+   \   000000   0A12         PUSH.W  R10
+   \   000002   4A4C         MOV.B   R12, R10
+    197            
+    198            unsigned int base_value_right, base_value_left;
+    199          
+    200            sample = ON;
+   \   000004   D243....     MOV.B   #0x1, &sample
+    201            
+    202            if (state == SET_0)
+   \   000008   4A93         CMP.B   #0x0, R10
+   \   00000A   0220         JNE     ??IR_calibration_0
+    203              sample = OFF;
+   \   00000C   C243....     MOV.B   #0x0, &sample
+    204            
+    205            sample_process();
+   \                     ??IR_calibration_0:
+   \   000010   ........     CALLA   #sample_process
+    206            ADC_Process();
+   \   000014   ........     CALLA   #ADC_Process
+    207            fifty_msec_sleep_A1(SET_1);
+                   ^
+Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
+
+  	int ADC_detect_average = (ADC_Right_Detector + ADC_Left_Detector) >> SET_1;
+  	    ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c",138  Warning[Pa082]: 
+          undefined behavior: the order of volatile accesses is undefined in
+          this statement
+   \   000018   1C43         MOV.W   #0x1, R12
+   \   00001A   ........     CALLA   #fifty_msec_sleep_A1
+    208            base_value_right = ADC_Right_Detector;
+   \   00001E   1F42....     MOV.W   &ADC_Right_Detector, R15
+    209            base_value_left = ADC_Left_Detector;
+   \   000022   1E42....     MOV.W   &ADC_Left_Detector, R14
+    210            
+    211            
+    212            tresholds[state] = (base_value_left +  base_value_right) >> SET_1; 
+   \   000026   0E5F         ADD.W   R15, R14
+   \   000028   5E03         RRUM.W  #0x1, R14
+   \   00002A   4F4A         MOV.B   R10, R15
+   \   00002C   0F5F         RLA.W   R15
+   \   00002E   8F4E....     MOV.W   R14, tresholds(R15)
+    213            
+    214            if (state == STEP_2)
+   \   000032   6A93         CMP.B   #0x2, R10
+   \   000034   0220         JNE     ??IR_calibration_1
+    215              set_treshold();
+   \   000036   ........     CALLA   #set_treshold
+    216          }
+   \                     ??IR_calibration_1:
+   \   00003A   3A41         POP.W   R10
+   \   00003C   1001         RETA
+    217          
+
+   \                                 In  segment CODE, align 2
+    218          void set_treshold(void){
+   \                     set_treshold:
+    219            
+    220            tresholds[SET_0]= (tresholds[STEP_2]+tresholds[SET_1])>>SET_1;
+   \   000000   1F42....     MOV.W   &tresholds + 4, R15
+   \   000004   1F52....     ADD.W   &tresholds + 2, R15
+   \   000008   5F03         RRUM.W  #0x1, R15
+   \   00000A   824F....     MOV.W   R15, &tresholds
+    221          }
+   \   00000E   1001         RETA
+
+   \                                 In  segment INTVEC, offset 0x5c, root
+   \                     `??ADC10_ISR??INTVEC 92`:
+   \   00005C   ....         DC16    ADC10_ISR
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      8   ADC10_ISR
+      4   ADC_Process
+      6   IR_calibration
+        6   -> ADC_Process
+        6   -> fifty_msec_sleep_A1
+        6   -> sample_process
+        6   -> set_treshold
+      4   Init_ADC
+      4   black_line_detect
+      4   disableADC
+      4   enableADC
+      8   itoa
+      4   sample_process
+      4   set_treshold
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??ADC10_ISR??INTVEC 92
+     102  ADC10_ISR
+       1  ADC_Channel
+       2  ADC_Left_Detector
+      14  ADC_Process
+       2  ADC_Right_Detector
+       2  ADC_Thumb
+      62  IR_calibration
+     108  Init_ADC
+       2  _A_ADC10CTL0_L
+       2  _A_ADC10CTL1_L
+       2  _A_ADC10CTL2_L
+       2  _A_ADC10IE_L
+       2  _A_ADC10IV_L
+       2  _A_ADC10MCTL0_L
+       2  _A_ADC10MEM0_L
+       2  _A_PAOUT_L
+      28  black_line_detect
+       1  black_space
+      16  buffer
+      10  disableADC
+       6  enableADC
+      70  itoa
+       1  sample
+      18  sample_process
+      16  set_treshold
+       6  tresholds
+
+ 
+ 332 bytes in segment CODE
+  16 bytes in segment DATA16_AN
+  31 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+ 102 bytes in segment ISR_CODE
+ 
+ 434 bytes of CODE  memory
+   0 bytes of CONST memory (+  2 bytes shared)
+  31 bytes of DATA  memory (+ 16 bytes shared)
+
+Errors: none
+Warnings: 4

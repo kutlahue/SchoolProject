@@ -44,8 +44,7 @@ void main(void){
   Init_LCD();                               // Initialize LCD
   five_msec_sleep(INIT_TIMER);              // 375 msec delay for the clock to settle
   Init_LEDs();                              // Initialize LEDs
-   
-    
+  
 //------------------------------------------------------------------------------
 // Begining of the "While" Operating System
 //------------------------------------------------------------------------------
@@ -103,7 +102,7 @@ void main(void){
 			}
 	 	break;
 		case STRAIGHT: // 1250 msec 
-			STRAIGHT_Process();
+			STRAIGHT_TIME_Process();
 		break;
 		case CIRCLE: // 1250 msec 
 			CIRCLE_Process();

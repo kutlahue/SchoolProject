@@ -1,0 +1,363 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         14/Oct/2014  17:05:17
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\main.c
+#    Command line  =  
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\main.c" -lC "\\VBOXSVR\ncsu\Fall 14\ECE
+#        306\Workspace\SchoolProject\Project 05\Debug\List\" -o
+#        "\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\Debug\Obj\" --no_cse --no_unroll --no_inline --no_code_motion
+#        --no_tbaa --debug -D__MSP430FR5739__ -e --double=32 --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\430\lib\dlib\dl430xlsfn.h" --core=430X --data_model=small -Ol
+#        --multiplier=32 --multiplier_location=4C0 --hw_workaround=CPU40
+#        --hw_workaround=CPU39 --code_model=large
+#    List file     =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\Debug\List\main.lst
+#    Object file   =  
+#        \\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        05\Debug\Obj\main.r43
+#
+###############################################################################
+
+\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 05\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name: main.c
+      3          //
+      4          //  Description: This file contains the Main Routine - "While" Operating System
+      5          //
+      6          //  Mattia Muller
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 05\macros.h",55  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+
+  #define FIGURE_8			(0x0E)
+          ^
+"\\VBOXSVR\ncsu\Fall 14\ECE 306\Workspace\SchoolProject\Project 05\macros.h",91  Warning[Pe047]: 
+          incompatible redefinition of macro "FIGURE_8" (declared at line 76)
+     15          
+     16          
+     17          // Global Variables
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile unsigned char control_state[CNTL_STATE_INDEX];
+   \                     control_state:
+   \   000000                DS8 3
+     19          extern volatile unsigned char what_to_do;
+     20          extern volatile unsigned int Time_Sequence;
+     21          
+     22          //=========================================================================== 
+     23          // Function name: Main
+     24          //
+     25          // Description: This function contains the while loop that runs continuously
+     26          // to act for the operating system. It also calls all the functions to // initialize the system.
+     27          //
+     28          // Passed : no variables passed
+     29          // Locals: no variables declared
+     30          // Returned: no values returned
+     31          // Globals: control_state[CNTL_STATE_INDEX]
+     32          //
+     33          // Author: Mattia Muller
+     34          // Date: Sept 2013
+     35          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+     36          //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     37          void main(void){
+   \                     main:
+     38            Init_Ports();                             // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+     39            Init_Clocks();                            // Initialize Clock System 
+   \   000004   ........     CALLA   #Init_Clocks
+     40            Init_Conditions();
+   \   000008   ........     CALLA   #Init_Conditions
+     41            PJOUT |= LED1;                            // Turn LED 1 on to indicate boot
+   \   00000C   92D32203     BIS.W   #0x1, &0x322
+     42            Init_Timers();                            // Initialize Timers
+   \   000010   ........     CALLA   #Init_Timers
+     43            five_msec_sleep(INIT_TIMER);              // 375 msec delay for the clock to settle
+   \   000014   3C404B00     MOV.W   #0x4b, R12
+   \   000018   ........     CALLA   #five_msec_sleep
+     44            Init_LCD();                               // Initialize LCD
+   \   00001C   ........     CALLA   #Init_LCD
+     45            five_msec_sleep(INIT_TIMER);              // 375 msec delay for the clock to settle
+   \   000020   3C404B00     MOV.W   #0x4b, R12
+   \   000024   ........     CALLA   #five_msec_sleep
+     46            Init_LEDs();                              // Initialize LEDs
+   \   000028   ........     CALLA   #Init_LEDs
+     47            
+     48            P3OUT |= R_REVERSE;
+   \   00002C   F2D020002202 BIS.B   #0x20, &0x222
+     49            P3OUT &= ~R_REVERSE;
+   \   000032   F2C020002202 BIC.B   #0x20, &0x222
+   \   000038   063C         JMP     ??main_14
+     50            
+     51          //------------------------------------------------------------------------------
+     52          // Begining of the "While" Operating System
+     53          //------------------------------------------------------------------------------
+     54           while(ALWAYS) {                            // Can the Operating system run
+     55          	 Switches_Process(); 
+     56          	 switch(what_to_do){
+     57          		 case LED_STATE:
+     58                                  //Default_Process();
+     59                                  
+     60          			break;
+     61          	 	case RW_FOR_ON:
+     62          			if(!(P3IN & R_FORWARD)){
+     63          			P3OUT &= ~R_REVERSE;
+     64          			P3OUT |= R_FORWARD;
+     65          			}
+     66          	 		break;
+     67          	 	case RW_FOR_OFF:
+     68          			if(P3IN & R_FORWARD){
+     69          			P3OUT &= ~R_REVERSE;
+     70          			P3OUT &= ~R_FORWARD; 
+     71          			}
+     72          	 	break;
+     73          	 	case LW_FOR_ON:
+     74          			if(!(P3IN & L_FORWARD)){
+     75          			P3OUT &= ~L_REVERSE;
+     76          			P3OUT |= L_FORWARD;
+     77          			}
+     78          	 	break;
+     79          	 	case LW_FOR_OFF:
+     80          			if(P3IN & L_FORWARD){
+     81          			P3OUT &= ~L_REVERSE;
+     82          			P3OUT &= ~L_FORWARD;
+     83          			}
+     84          	 	break;
+     85          	 	case RW_REV_ON:
+     86          			if(!(P3IN & R_REVERSE)){
+     87          			P3OUT &= ~R_FORWARD;
+     88          			P3OUT |= R_REVERSE; 
+     89          			}
+     90          	 	break;
+     91          	 	case RW_REV_OFF:
+     92          			if(P3IN & R_REVERSE){
+     93          			P3OUT &= ~R_REVERSE;
+     94          			P3OUT &= ~R_FORWARD; 
+     95          			}
+     96          	 	case LW_REV_ON:
+     97          			if(!(P3IN & L_REVERSE)){
+     98          			P3OUT &= ~L_FORWARD;
+     99          			P3OUT |= L_REVERSE; 
+    100          			}
+    101          	 	break;
+    102          	 	case LW_REV_OFF:
+    103          			if(P3IN & L_REVERSE){
+    104          			P3OUT &= ~L_FORWARD;
+    105          			P3OUT &= ~L_REVERSE;
+    106          			}
+    107          	 	break;
+    108          		case STRAIGHT: // 1250 msec 
+    109          			STRAIGHT_TIME_Process();
+                 			^
+Warning[Pe223]: function "STRAIGHT_TIME_Process" declared implicitly
+    110          		break;
+    111                          case PROJECT_04: // 1250 msec 
+    112          			//STRAIGHT_TIME_Process();
+    113          		break;
+    114                          case THUMB_WHEEL: // 1250 msec 
+    115          			CLOCK_TIME_Process();
+                 			^
+Warning[Pe223]: function "CLOCK_TIME_Process" declared implicitly
+    116          		break;
+    117          		case CIRCLE: // 1250 msec 
+    118          			//CIRCLE_Process();
+    119          		break;
+    120          		case FIGURE_8: // 1250 msec 
+    121          		 	//FIGURE_8_Process();
+    122          		break;
+    123          		case TRIANGLE: // 1250 msec 
+    124          			//TRIANGLE_Process();
+    125          		break;
+    126          		default: 
+    127          		 	//Default_Process();
+    128          		break;
+    129          		}
+    130                   if(Time_Sequence > 250){
+   \                     ??main_0:
+   \   00003A   B290FB00.... CMP.W   #0xfb, &Time_Sequence
+   \   000040   0228         JNC     ??main_14
+    131                      Time_Sequence = 0;
+   \   000042   8243....     MOV.W   #0x0, &Time_Sequence
+    132                   }
+   \                     ??main_14:
+   \   000046   ........     CALLA   #Switches_Process
+   \   00004A   5E42....     MOV.B   &what_to_do, R14
+   \   00004E   5E83         SUB.B   #0x1, R14
+   \   000050   F427         JEQ     ??main_0
+   \   000052   5E83         SUB.B   #0x1, R14
+   \   000054   1A24         JEQ     ??main_15
+   \   000056   5E83         SUB.B   #0x1, R14
+   \   000058   2324         JEQ     ??main_16
+   \   00005A   5E83         SUB.B   #0x1, R14
+   \   00005C   2C24         JEQ     ??main_17
+   \   00005E   5E83         SUB.B   #0x1, R14
+   \   000060   3524         JEQ     ??main_18
+   \   000062   5E83         SUB.B   #0x1, R14
+   \   000064   3E24         JEQ     ??main_19
+   \   000066   5E83         SUB.B   #0x1, R14
+   \   000068   4724         JEQ     ??main_20
+   \   00006A   5E83         SUB.B   #0x1, R14
+   \   00006C   4F24         JEQ     ??main_21
+   \   00006E   5E83         SUB.B   #0x1, R14
+   \   000070   5724         JEQ     ??main_22
+   \   000072   5E83         SUB.B   #0x1, R14
+   \   000074   5F24         JEQ     ??main_23
+   \   000076   5E83         SUB.B   #0x1, R14
+   \   000078   E027         JEQ     ??main_0
+   \   00007A   5E83         SUB.B   #0x1, R14
+   \   00007C   DE27         JEQ     ??main_0
+   \   00007E   5E83         SUB.B   #0x1, R14
+   \   000080   5C24         JEQ     ??main_24
+   \   000082   5E83         SUB.B   #0x1, R14
+   \   000084   DA27         JEQ     ??main_0
+   \   000086   5E83         SUB.B   #0x1, R14
+   \   000088   D83F         JMP     ??main_0
+   \                     ??main_15:
+   \   00008A   F2B010002002 BIT.B   #0x10, &0x220
+   \   000090   D42F         JC      ??main_0
+   \   000092   F2C020002202 BIC.B   #0x20, &0x222
+   \   000098   F2D010002202 BIS.B   #0x10, &0x222
+   \   00009E   CD3F         JMP     ??main_0
+   \                     ??main_16:
+   \   0000A0   F2B010002002 BIT.B   #0x10, &0x220
+   \   0000A6   C92B         JNC     ??main_0
+   \   0000A8   F2C020002202 BIC.B   #0x20, &0x222
+   \   0000AE   F2C010002202 BIC.B   #0x10, &0x222
+   \   0000B4   C23F         JMP     ??main_0
+   \                     ??main_17:
+   \   0000B6   F2B040002002 BIT.B   #0x40, &0x220
+   \   0000BC   BE2F         JC      ??main_0
+   \   0000BE   F2C080002202 BIC.B   #0x80, &0x222
+   \   0000C4   F2D040002202 BIS.B   #0x40, &0x222
+   \   0000CA   B73F         JMP     ??main_0
+   \                     ??main_18:
+   \   0000CC   F2B040002002 BIT.B   #0x40, &0x220
+   \   0000D2   B32B         JNC     ??main_0
+   \   0000D4   F2C080002202 BIC.B   #0x80, &0x222
+   \   0000DA   F2C040002202 BIC.B   #0x40, &0x222
+   \   0000E0   AC3F         JMP     ??main_0
+   \                     ??main_19:
+   \   0000E2   F2B020002002 BIT.B   #0x20, &0x220
+   \   0000E8   A82F         JC      ??main_0
+   \   0000EA   F2C010002202 BIC.B   #0x10, &0x222
+   \   0000F0   F2D020002202 BIS.B   #0x20, &0x222
+   \   0000F6   A13F         JMP     ??main_0
+   \                     ??main_20:
+   \   0000F8   F2B020002002 BIT.B   #0x20, &0x220
+   \   0000FE   0628         JNC     ??main_21
+   \   000100   F2C020002202 BIC.B   #0x20, &0x222
+   \   000106   F2C010002202 BIC.B   #0x10, &0x222
+   \                     ??main_21:
+   \   00010C   C2932002     CMP.B   #0x0, &0x220
+   \   000110   943B         JL      ??main_0
+   \   000112   F2C040002202 BIC.B   #0x40, &0x222
+   \   000118   F2D080002202 BIS.B   #0x80, &0x222
+   \   00011E   8D3F         JMP     ??main_0
+   \                     ??main_22:
+   \   000120   C2932002     CMP.B   #0x0, &0x220
+   \   000124   8A37         JGE     ??main_0
+   \   000126   F2C040002202 BIC.B   #0x40, &0x222
+   \   00012C   F2C080002202 BIC.B   #0x80, &0x222
+   \   000132   833F         JMP     ??main_0
+   \                     ??main_23:
+   \   000134   ........     CALLA   #STRAIGHT_TIME_Process
+   \   000138   803F         JMP     ??main_0
+   \                     ??main_24:
+   \   00013A   ........     CALLA   #CLOCK_TIME_Process
+   \   00013E   7D3F         JMP     ??main_0
+   \   000140   0343         NOP
+   \   000142                REQUIRE _A_PJOUT_L
+   \   000142                REQUIRE _A_PBOUT_L
+   \   000142                REQUIRE _A_PBIN_L
+    133                	}
+    134          //------------------------------------------------------------------------------
+    135          }
+    136          
+    137          
+    138          
+    139          
+    140          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> CLOCK_TIME_Process
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_Ports
+        4   -> Init_Timers
+        4   -> STRAIGHT_TIME_Process
+        4   -> Switches_Process
+        4   -> five_msec_sleep
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PBIN_L
+       2  _A_PBOUT_L
+       2  _A_PJOUT_L
+       3  control_state
+     322  main
+
+ 
+ 322 bytes in segment CODE
+   6 bytes in segment DATA16_AN
+   3 bytes in segment DATA16_Z
+ 
+ 322 bytes of CODE memory
+   3 bytes of DATA memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: 4

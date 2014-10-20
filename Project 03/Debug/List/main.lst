@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         29/Sep/2014  19:16:03
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         13/Oct/2014  16:47:59
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -129,91 +129,90 @@
      46            Init_LEDs();                              // Initialize LEDs
    \   000028   ........     CALLA   #Init_LEDs
    \   00002C   083C         JMP     ??main_9
-     47             
-     48              
-     49          //------------------------------------------------------------------------------
-     50          // Begining of the "While" Operating System
-     51          //------------------------------------------------------------------------------
-     52           while(ALWAYS) {                            // Can the Operating system run
-     53          	 Switches_Process(); 
-     54          	 switch(what_to_do){
-     55          		 case LED_STATE:
-     56                                  Default_Process();
+     47            
+     48          //------------------------------------------------------------------------------
+     49          // Begining of the "While" Operating System
+     50          //------------------------------------------------------------------------------
+     51           while(ALWAYS) {                            // Can the Operating system run
+     52          	 Switches_Process(); 
+     53          	 switch(what_to_do){
+     54          		 case LED_STATE:
+     55                                  Default_Process();
                                          ^
 Warning[Pe223]: function "Default_Process" declared implicitly
-     57          			break;
-     58          	 	case RW_FOR_ON:
-     59          			if(!(P3IN & R_FORWARD)){
-     60          			P3OUT &= ~R_REVERSE;
-     61          			P3OUT |= R_FORWARD;
-     62          			}
-     63          	 		break;
-     64          	 	case RW_FOR_OFF:
-     65          			if(P3IN & R_FORWARD){
-     66          			P3OUT &= ~R_REVERSE;
-     67          			P3OUT &= ~R_FORWARD; 
-     68          			}
-     69          	 	break;
-     70          	 	case LW_FOR_ON:
-     71          			if(!(P3IN & L_FORWARD)){
-     72          			P3OUT &= ~L_REVERSE;
-     73          			P3OUT |= L_FORWARD;
-     74          			}
-     75          	 	break;
-     76          	 	case LW_FOR_OFF:
-     77          			if(P3IN & L_FORWARD){
-     78          			P3OUT &= ~L_REVERSE;
-     79          			P3OUT &= ~L_FORWARD;
-     80          			}
-     81          	 	break;
-     82          	 	case RW_REV_ON:
-     83          			if(!(P3IN & R_REVERSE)){
-     84          			P3OUT &= ~R_FORWARD;
-     85          			P3OUT |= R_REVERSE; 
-     86          			}
-     87          	 	break;
-     88          	 	case RW_REV_OFF:
-     89          			if(P3IN & R_REVERSE){
-     90          			P3OUT &= ~R_REVERSE;
-     91          			P3OUT &= ~R_FORWARD; 
-     92          			}
-     93          	 	case LW_REV_ON:
-     94          			if(!(P3IN & L_REVERSE)){
-     95          			P3OUT &= ~L_FORWARD;
-     96          			P3OUT |= L_REVERSE; 
-     97          			}
-     98          	 	break;
-     99          	 	case LW_REV_OFF:
-    100          			if(P3IN & L_REVERSE){
-    101          			P3OUT &= ~L_FORWARD;
-    102          			P3OUT &= ~L_REVERSE;
-    103          			}
-    104          	 	break;
-    105          		case STRAIGHT: // 1250 msec 
-    106          			STRAIGHT_Process();
-    107          		break;
-    108          		case CIRCLE: // 1250 msec 
-    109          			CIRCLE_Process();
-    110          		break;
-    111          		case FIGURE_8: // 1250 msec 
-    112          		 	FIGURE_8_Process();
-    113          		break;
-    114          		case TRIANGLE: // 1250 msec 
-    115          			TRIANGLE_Process();
-    116          		break;
-    117          		default: 
-    118          		 	Default_Process();
+     56          			break;
+     57          	 	case RW_FOR_ON:
+     58          			if(!(P3IN & R_FORWARD)){
+     59          			P3OUT &= ~R_REVERSE;
+     60          			P3OUT |= R_FORWARD;
+     61          			}
+     62          	 		break;
+     63          	 	case RW_FOR_OFF:
+     64          			if(P3IN & R_FORWARD){
+     65          			P3OUT &= ~R_REVERSE;
+     66          			P3OUT &= ~R_FORWARD; 
+     67          			}
+     68          	 	break;
+     69          	 	case LW_FOR_ON:
+     70          			if(!(P3IN & L_FORWARD)){
+     71          			P3OUT &= ~L_REVERSE;
+     72          			P3OUT |= L_FORWARD;
+     73          			}
+     74          	 	break;
+     75          	 	case LW_FOR_OFF:
+     76          			if(P3IN & L_FORWARD){
+     77          			P3OUT &= ~L_REVERSE;
+     78          			P3OUT &= ~L_FORWARD;
+     79          			}
+     80          	 	break;
+     81          	 	case RW_REV_ON:
+     82          			if(!(P3IN & R_REVERSE)){
+     83          			P3OUT &= ~R_FORWARD;
+     84          			P3OUT |= R_REVERSE; 
+     85          			}
+     86          	 	break;
+     87          	 	case RW_REV_OFF:
+     88          			if(P3IN & R_REVERSE){
+     89          			P3OUT &= ~R_REVERSE;
+     90          			P3OUT &= ~R_FORWARD; 
+     91          			}
+     92          	 	case LW_REV_ON:
+     93          			if(!(P3IN & L_REVERSE)){
+     94          			P3OUT &= ~L_FORWARD;
+     95          			P3OUT |= L_REVERSE; 
+     96          			}
+     97          	 	break;
+     98          	 	case LW_REV_OFF:
+     99          			if(P3IN & L_REVERSE){
+    100          			P3OUT &= ~L_FORWARD;
+    101          			P3OUT &= ~L_REVERSE;
+    102          			}
+    103          	 	break;
+    104          		case STRAIGHT: // 1250 msec 
+    105          			STRAIGHT_Process();
+    106          		break;
+    107          		case CIRCLE: // 1250 msec 
+    108          			CIRCLE_Process();
+    109          		break;
+    110          		case FIGURE_8: // 1250 msec 
+    111          		 	FIGURE_8_Process();
+    112          		break;
+    113          		case TRIANGLE: // 1250 msec 
+    114          			TRIANGLE_Process();
+    115          		break;
+    116          		default: 
+    117          		 	Default_Process();
    \                     ??main_0:
    \   00002E   ........     CALLA   #Default_Process
-    119          		break;
-    120          		}
-    121                   if(Time_Sequence > 250){
+    118          		break;
+    119          		}
+    120                   if(Time_Sequence > 250){
    \                     ??main_1:
    \   000032   B290FB00.... CMP.W   #0xfb, &Time_Sequence
    \   000038   0228         JNC     ??main_9
-    122                      Time_Sequence = 0;
+    121                      Time_Sequence = 0;
    \   00003A   8243....     MOV.W   #0x0, &Time_Sequence
-    123                   }
+    122                   }
    \                     ??main_9:
    \   00003E   ........     CALLA   #Switches_Process
    \   000042   5E42....     MOV.B   &what_to_do, R14
@@ -310,14 +309,14 @@ Warning[Pe223]: function "Default_Process" declared implicitly
    \   000146                REQUIRE _A_PJOUT_L
    \   000146                REQUIRE _A_PBIN_L
    \   000146                REQUIRE _A_PBOUT_L
-    124                	}
-    125          //------------------------------------------------------------------------------
-    126          }
+    123                	}
+    124          //------------------------------------------------------------------------------
+    125          }
+    126          
     127          
     128          
     129          
     130          
-    131          
 
    Maximum stack usage in bytes:
 
