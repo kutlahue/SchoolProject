@@ -39,18 +39,18 @@ void select_menu(void){
  			what_to_do = CIRCLE;
  			left_wheel_count = LEFT_WHEEL_COUNT_CIRCLE;
  			right_wheel_count = RIGHT_WHEEL_COUNT_CIRCLE;
- 			cycle_time = 0;
+ 			cycle_time = SET_0;
  			break;
  		case THUMB_WHEEL:
  			what_to_do = THUMB_WHEEL;
  			break;
                 case TRIANGLE:
                         what_to_do = TRIANGLE;
-                        cycle_time = 0;
+                        cycle_time = SET_0;
  			break;
                 case FIGURE_8:
                         what_to_do = FIGURE_8; 
-			cycle_time = 0;
+			cycle_time = SET_0;
                         break;
 	}
 } 
@@ -89,16 +89,16 @@ struct {  // let's define our menu structure
         char* description;
         unsigned char action;
     } menu_list[] = {
-        { 250, "   Project 4   ",  PROJECT_04},
-        { 500, "   Project 5   ",  PROJECT_05},
-        { 750, "    Calibrate   ",  CALIBRATE},
-        { 1024, "    Menu 4     ", STRAIGHT }
+        { MENU1, "   Project 4   ",  PROJECT_04},
+        { MENU2, "   Project 5   ",  PROJECT_05},
+        { MENU3, "    Calibrate   ",  CALIBRATE},
+        { MENU4, "    Menu 4     ", STRAIGHT }
     };
 
 void menu_process(int adc_value){
   unsigned char i;
   char* display;
-  for ( i=SET_0; i<4 && adc_value>=menu_list[i].value; i++) ;
+  for ( i=SET_0; i<SET_4 && adc_value>=menu_list[i].value; i++) ;
   what_to_do =  menu_list[i].action;
   display = menu_list[i].description;
   lcd_out(display, LCD_LINE_1);

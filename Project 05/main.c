@@ -70,8 +70,8 @@ void main(void){
          }
          old_value = ADC_Thumb;
 	 
-         if(Time_Sequence > 250){
-            Time_Sequence = 0;
+         if(Time_Sequence > SET_250){
+            Time_Sequence = SET_0;
             
          }
          

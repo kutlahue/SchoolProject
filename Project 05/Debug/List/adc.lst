@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:55
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:48:13
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -96,7 +96,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
 
   #define Z                    (0x04) // Port 3 Pin 2 offset
           ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",57  Warning[Pe047]: 
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",58  Warning[Pe047]: 
           incompatible redefinition of macro "Z" (declared at line 149 of
           "C:\Program Files (x86)\IAR Systems\Embedded Workbench
           7.0\430\inc\msp430fr5739.h")
@@ -330,15 +330,15 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
     114              *--ptr = '\0';
    \   000008   3B53         ADD.W   #0xffff, R11
    \   00000A   CB430000     MOV.B   #0x0, 0(R11)
-    115              if (val == 0){
+    115              if (val == SET_0){
    \   00000E   0A93         CMP.W   #0x0, R10
    \   000010   1520         JNE     ??itoa_1
     116          	*--ptr = '0';
    \   000012   3B53         ADD.W   #0xffff, R11
    \   000014   FB4030000000 MOV.B   #0x30, 0(R11)
    \   00001A   123C         JMP     ??itoa_2
-    117              } else while (val != 0) {
-    118          	*--ptr = (val % 10) + '0';
+    117              } else while (val != SET_0) {
+    118          	*--ptr = (val % SET_10) + '0';
    \                     ??itoa_0:
    \   00001C   3B53         ADD.W   #0xffff, R11
    \   00001E   0C4A         MOV.W   R10, R12
@@ -346,7 +346,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
    \   000024   ........     CALLA   #?DivMod16s
    \   000028   7E503000     ADD.B   #0x30, R14
    \   00002C   CB4E0000     MOV.B   R14, 0(R11)
-    119          	val /= 10;
+    119          	val /= SET_10;
    \   000030   0C4A         MOV.W   R10, R12
    \   000032   3E400A00     MOV.W   #0xa, R14
    \   000036   ........     CALLA   #?DivMod16s
@@ -557,12 +557,12 @@ Warning[Pe550]: variable "base_value_right" was set but never used
     228          void set_treshold(void){
    \                     set_treshold:
     229            
-    230            tresholds[SET_0]= tresholds[SET_1]+((tresholds[STEP_2]-tresholds[SET_1])>>SET_1) + SET_100;// - 100;
+    230            tresholds[SET_0]= tresholds[SET_1]+((tresholds[STEP_2]-tresholds[SET_1])>>SET_1) - SET_100;// - 100;
    \   000000   1F42....     MOV.W   &tresholds + 4, R15
    \   000004   1F82....     SUB.W   &tresholds + 2, R15
    \   000008   5F03         RRUM.W  #0x1, R15
    \   00000A   1F52....     ADD.W   &tresholds + 2, R15
-   \   00000E   3F506400     ADD.W   #0x64, R15
+   \   00000E   3F509CFF     ADD.W   #0xff9c, R15
    \   000012   824F....     MOV.W   R15, &tresholds
     231          }
    \   000016   1001         RETA

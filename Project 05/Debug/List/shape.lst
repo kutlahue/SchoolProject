@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:57
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:48:15
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -61,7 +61,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
 
   #define Z                    (0x04) // Port 3 Pin 2 offset
           ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",57  Warning[Pe047]: 
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",58  Warning[Pe047]: 
           incompatible redefinition of macro "Z" (declared at line 149 of
           "C:\Program Files (x86)\IAR Systems\Embedded Workbench
           7.0\430\inc\msp430fr5739.h")
@@ -453,7 +453,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
    \                     ??CLOCK_TIME_Process_6:
    \   0000D0   F2902300.... CMP.B   #0x23, &left_wheel_on
    \   0000D6   082C         JC      ??CLOCK_TIME_Process_7
-    174                                      left_wheel_on=0;
+    174                                      left_wheel_on=SET_0;
    \   0000D8   C243....     MOV.B   #0x0, &left_wheel_on
     175                                      if(P3IN&L_REVERSE){
    \   0000DC   C2932002     CMP.B   #0x0, &0x220
@@ -485,7 +485,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
    \                     ??CLOCK_TIME_Process_8:
    \   000110   F2902300.... CMP.B   #0x23, &right_wheel_on
    \   000116   092C         JC      ??CLOCK_TIME_Process_9
-    187          			right_wheel_on=0;
+    187          			right_wheel_on=SET_0;
    \   000118   C243....     MOV.B   #0x0, &right_wheel_on
     188                                  if(P3IN&R_FORWARD){
    \   00011C   F2B010002002 BIT.B   #0x10, &0x220
@@ -593,7 +593,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
    \   000094   ........     CALLA   #five_msec_sleep
     236              what_to_do_movement = STRAIGHT;
    \   000098   F2400A00.... MOV.B   #0xa, &what_to_do_movement
-    237              time_limit = five_msec_count_timer_A0 >> SET_2;	// distance time divided by 2
+    237              time_limit = five_msec_count_timer_A0 >> SET_2;	// distance time divided by 4
    \   00009E   1F42....     MOV.W   &five_msec_count_timer_A0, R15
    \   0000A2   5F07         RRUM.W  #0x2, R15
    \   0000A4   824F....     MOV.W   R15, &time_limit
@@ -637,7 +637,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
    \   0000F4   ........     CALLA   #five_msec_sleep
     255              straight_direction = FORWARD;
    \   0000F8   D243....     MOV.B   #0x1, &straight_direction
-    256              time_limit = 800; // 800 
+    256              time_limit = SET_800; // 800 
    \   0000FC   B2402003.... MOV.W   #0x320, &time_limit
     257              time = SET_0;
    \   000102   8243....     MOV.W   #0x0, &time
@@ -669,7 +669,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
     268              straight_direction = REVERSE;
    \   000142   C243....     MOV.B   #0x0, &straight_direction
     269              
-    270              time_limit = 1300; // 1300
+    270              time_limit = SET_1300; // 1300
    \   000146   B2401405.... MOV.W   #0x514, &time_limit
     271              time = SET_0;
    \   00014C   8243....     MOV.W   #0x0, &time

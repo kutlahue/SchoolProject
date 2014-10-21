@@ -171,7 +171,7 @@ void CLOCK_TIME_Process(void){
 			}
 		}else{
 			if(left_wheel_on<WHEEL_COUNT){
-                            left_wheel_on=0;
+                            left_wheel_on=SET_0;
                             if(P3IN&L_REVERSE){
                               P3OUT&=~L_REVERSE;
                             }
@@ -184,7 +184,7 @@ void CLOCK_TIME_Process(void){
                   }
 		}else{
                   if(right_wheel_on<WHEEL_COUNT){
-			right_wheel_on=0;
+			right_wheel_on=SET_0;
                         if(P3IN&R_FORWARD){
                           P3OUT&=~R_FORWARD;
 			}
@@ -234,7 +234,7 @@ else if(black_space == ON && stop == OFF && straight_direction == REVERSE && cur
   
     five_msec_sleep(SET_100);
     what_to_do_movement = STRAIGHT;
-    time_limit = five_msec_count_timer_A0 >> SET_2;	// distance time divided by 2
+    time_limit = five_msec_count_timer_A0 >> SET_2;	// distance time divided by 4
     five_msec_count_timer_A0 = SET_0;
     time = SET_0;
     straight_direction = FORWARD;
@@ -253,7 +253,7 @@ else if(stop == ON && straight_direction == FORWARD && current_step == STEP_2)
   
     five_msec_sleep(SET_100);
     straight_direction = FORWARD;
-    time_limit = 800; // 800 
+    time_limit = SET_800; // 800 
     time = SET_0;
      stop = OFF;
     what_to_do_movement = THUMB_WHEEL;
@@ -267,7 +267,7 @@ else if(stop == ON && straight_direction == FORWARD && current_step == STEP_2)
   
     straight_direction = REVERSE;
     
-    time_limit = 1300; // 1300
+    time_limit = SET_1300; // 1300
     time = SET_0;
      stop = OFF;
     what_to_do_movement = THUMB_WHEEL;

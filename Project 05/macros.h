@@ -38,6 +38,7 @@
 #define SET_1                   (1) // Set the state to 1
 #define SET_NEG_1               (-1)
 #define SET_2                   (2)
+#define SET_4                   (4)
 #define ERROR                   (1) // Return an error
 #define V_DETECT_R           (0x01) // Port 1 Pin 0 offset
 #define V_DETECT_L           (0x02) // Port 1 Pin 1 offset
@@ -128,3 +129,11 @@
 #define STEP_4                          (0x04)
 
 #define SET_100                         (100)
+#define SET_250                         (250)
+#define SET_10                          (10)
+#define SET_800                         (800)
+#define SET_1300                        (1300)
+#define MENU1                           (250)
+#define MENU2                           (500)
+#define MENU3                           (750)
+#define MENU4                           (1024)

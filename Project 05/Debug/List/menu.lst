@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:56
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:48:14
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -126,7 +126,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
    \   000058   E243....     MOV.B   #0x2, &left_wheel_count
      41           			right_wheel_count = RIGHT_WHEEL_COUNT_CIRCLE;
    \   00005C   F2401600.... MOV.B   #0x16, &right_wheel_count
-     42           			cycle_time = 0;
+     42           			cycle_time = SET_0;
    \   000062   8243....     MOV.W   #0x0, &cycle_time
      43           			break;
    \   000066   1001         RETA
@@ -140,7 +140,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
      48                                  what_to_do = TRIANGLE;
    \                     ??select_menu_6:
    \   000070   F2400F00.... MOV.B   #0xf, &what_to_do
-     49                                  cycle_time = 0;
+     49                                  cycle_time = SET_0;
    \   000076   8243....     MOV.W   #0x0, &cycle_time
      50           			break;
    \   00007A   1001         RETA
@@ -148,7 +148,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
      52                                  what_to_do = FIGURE_8; 
    \                     ??select_menu_5:
    \   00007C   F2400E00.... MOV.B   #0xe, &what_to_do
-     53          			cycle_time = 0;
+     53          			cycle_time = SET_0;
    \   000082   8243....     MOV.W   #0x0, &cycle_time
      54                                  break;
      55          	}
@@ -239,10 +239,10 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
    \                     menu_list:
    \   000000                DS8 24
    \   000018                REQUIRE `?<Initializer for menu_list>`
-     92                  { 250, "   Project 4   ",  PROJECT_04},
-     93                  { 500, "   Project 5   ",  PROJECT_05},
-     94                  { 750, "    Calibrate   ",  CALIBRATE},
-     95                  { 1024, "    Menu 4     ", STRAIGHT }
+     92                  { MENU1, "   Project 4   ",  PROJECT_04},
+     93                  { MENU2, "   Project 5   ",  PROJECT_05},
+     94                  { MENU3, "    Calibrate   ",  CALIBRATE},
+     95                  { MENU4, "    Menu 4     ", STRAIGHT }
      96              };
      97          
 
@@ -251,7 +251,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
    \                     menu_process:
      99            unsigned char i;
     100            char* display;
-    101            for ( i=SET_0; i<4 && adc_value>=menu_list[i].value; i++) ;
+    101            for ( i=SET_0; i<SET_4 && adc_value>=menu_list[i].value; i++) ;
    \   000000   4F43         MOV.B   #0x0, R15
    \   000002   013C         JMP     ??menu_process_1
    \                     ??menu_process_0:

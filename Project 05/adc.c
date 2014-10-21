@@ -112,11 +112,11 @@ char* itoa(int val){
 				   which is 10 digits. */
     ptr = buffer + sizeof(buffer);
     *--ptr = '\0';
-    if (val == 0){
+    if (val == SET_0){
 	*--ptr = '0';
-    } else while (val != 0) {
-	*--ptr = (val % 10) + '0';
-	val /= 10;
+    } else while (val != SET_0) {
+	*--ptr = (val % SET_10) + '0';
+	val /= SET_10;
     }
     return(ptr);
 }
