@@ -137,10 +137,12 @@ void sample_process(void){
 void black_line_detect(void) {
 	int ADC_detect_average = (ADC_Right_Detector + ADC_Left_Detector) >> SET_1;
 	
-	if(ADC_detect_average < tresholds[SET_0]) {
-	    black_space = SET_0;
-	} else {
-	    black_space = SET_1;
+	if(ADC_Left_Detector > tresholds[SET_0]) {
+	    black_space = ON;
+            P3OUT |= TEST_PROBE;
+	} else if (ADC_Left_Detector < tresholds[SET_0]) {
+	    //black_space = OFF;
+            P3OUT &= ~TEST_PROBE;
 	}		
 }
 
@@ -199,23 +201,31 @@ void IR_calibration(unsigned char state){
 
   sample = ON;
   
-  if (state == SET_0)
+  if (state == SET_0) {
     sample = OFF;
+  }
   
   sample_process();
   ADC_Process();
-  fifty_msec_sleep_A1(SET_1);
+  five_msec_sleep(SET_10);
   base_value_right = ADC_Right_Detector;
   base_value_left = ADC_Left_Detector;
   
   
-  tresholds[state] = (base_value_left +  base_value_right) >> SET_1; 
+  //tresholds[state] = (base_value_left +  base_value_right) >> SET_1; 
   
+  tresholds[state] = base_value_left;
+  
+   char* ascii_value = itoa(tresholds[state]);
+   lcd_out(ascii_value,LCD_LINE_2);
+           
+           
+           
   if (state == STEP_2)
     set_treshold();
 }
 
 void set_treshold(void){
   
-  tresholds[SET_0]= (tresholds[STEP_2]+tresholds[SET_1])>>SET_1;
+  tresholds[SET_0]= tresholds[SET_1]+((tresholds[STEP_2]-tresholds[SET_1])>>SET_1) + SET_100;// - 100;
 }

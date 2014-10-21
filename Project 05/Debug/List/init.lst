@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:26:40
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:56
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -45,11 +45,6 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\init.c
       9          //------------------------------------------------------------------------------
      10          
      11          #include "macros.h"
-
-  #define FIGURE_8			(0x0E)
-          ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
-          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
      12          #include "functions.h"
      13          #include "msp430.h"
 
@@ -172,45 +167,41 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\init.c
    \   000022   F2C080002202 BIC.B   #0x80, &0x222
      67          //------------------------------------------------------------------------------
      68          }
-                 ^
-Warning[Pa050]: non-native end of line sequence detected (this diagnostic is
-          only issued once)
    \   000028   1001         RETA
    \   00002A                REQUIRE _A_PJOUT_L
    \   00002A                REQUIRE _A_PBOUT_L
      69          
      70          
-     71          
 
    \                                 In  segment CODE, align 2
-     72          void Init_Clocks(void){
+     71          void Init_Clocks(void){
    \                     Init_Clocks:
-     73          //------------------------------------------------------------------------------
-     74          // Clock Configurtaions
-     75          // This is the clock initialization for the program.
-     76          //
-     77          // Initial clock configuration, runs immediately after boot.
-     78          // Disables 1ms watchdog timer, 
-     79          //      configure MCLK to 8MHz
-     80          //      configure SMCLK to 8MHz.  
-     81          // Since the X1 oscillator is not currently connected, 
-     82          // X1CLK is an unknown speed (probably ~10kHz).
-     83          //------------------------------------------------------------------------------
-     84            WDTCTL = WDTPW | WDTHOLD;            // Disable watchdog
+     72          //------------------------------------------------------------------------------
+     73          // Clock Configurtaions
+     74          // This is the clock initialization for the program.
+     75          //
+     76          // Initial clock configuration, runs immediately after boot.
+     77          // Disables 1ms watchdog timer, 
+     78          //      configure MCLK to 8MHz
+     79          //      configure SMCLK to 8MHz.  
+     80          // Since the X1 oscillator is not currently connected, 
+     81          // X1CLK is an unknown speed (probably ~10kHz).
+     82          //------------------------------------------------------------------------------
+     83            WDTCTL = WDTPW | WDTHOLD;            // Disable watchdog
    \   000000   B240805A5C01 MOV.W   #0x5a80, &0x15c
-     85          // Clocks:
-     86            CSCTL0 = CSKEY;                      // Unlock register
+     84          // Clocks:
+     85            CSCTL0 = CSKEY;                      // Unlock register
    \   000006   B24000A56001 MOV.W   #0xa500, &0x160
-     87            CSCTL1 |= DCOFSEL0 + DCOFSEL1;       // Set max. DCO setting [8MHz]
+     86            CSCTL1 |= DCOFSEL0 + DCOFSEL1;       // Set max. DCO setting [8MHz]
    \   00000C   B2D006006201 BIS.W   #0x6, &0x162
-     88            CSCTL2 = SELA_1 + SELS_3 + SELM_3;   // set ACLK = vlo; SMCLK = DCO; MCLK = DCO
+     87            CSCTL2 = SELA_1 + SELS_3 + SELM_3;   // set ACLK = vlo; SMCLK = DCO; MCLK = DCO
    \   000012   B24033016401 MOV.W   #0x133, &0x164
-     89            CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;   // set all dividers /1
+     88            CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;   // set all dividers /1
    \   000018   82436601     MOV.W   #0x0, &0x166
-     90            CSCTL0_H = CSLOCK;                   // Lock registers
+     89            CSCTL0_H = CSLOCK;                   // Lock registers
    \   00001C   D2436101     MOV.B   #0x1, &0x161
-     91          //------------------------------------------------------------------------------
-     92          }
+     90          //------------------------------------------------------------------------------
+     91          }
    \   000020   1001         RETA
    \   000022                REQUIRE _A_WDTCTL_L
    \   000022                REQUIRE _A_CSCTL0_L
@@ -262,4 +253,4 @@ Warning[Pa050]: non-native end of line sequence detected (this diagnostic is
    0 bytes of DATA memory (+ 14 bytes shared)
 
 Errors: none
-Warnings: 2
+Warnings: none

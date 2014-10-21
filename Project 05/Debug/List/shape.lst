@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:37:40
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:57
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -61,18 +61,13 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
 
   #define Z                    (0x04) // Port 3 Pin 2 offset
           ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",56  Warning[Pe047]: 
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",57  Warning[Pe047]: 
           incompatible redefinition of macro "Z" (declared at line 149 of
           "C:\Program Files (x86)\IAR Systems\Embedded Workbench
           7.0\430\inc\msp430fr5739.h")
-
-  #define FIGURE_8			(0x0E)
-          ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
-          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
      15          
      16          
-     17          extern volatile unsigned char what_to_do;
+     17          extern volatile unsigned char what_to_do, what_to_do_movement, sample;
      18          extern char *display_1;
      19          extern char *display_2;
      20          extern volatile unsigned int Time_Sequence, five_msec_count_timer_A0, time;
@@ -190,7 +185,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
      51          		}else{
      52          			if(left_wheel_on<WHEEL_COUNT){
    \                     ??STRAIGHT_TIME_Process_1:
-   \   00002E   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   00002E   F2902300.... CMP.B   #0x23, &left_wheel_on
    \   000034   092C         JC      ??STRAIGHT_TIME_Process_2
      53          				left_wheel_on=SET_0;
    \   000036   C243....     MOV.B   #0x0, &left_wheel_on
@@ -222,7 +217,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
      64          		}else{
      65          			if(right_wheel_on<WHEEL_COUNT){
    \                     ??STRAIGHT_TIME_Process_3:
-   \   000070   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000070   F2902300.... CMP.B   #0x23, &right_wheel_on
    \   000076   092C         JC      ??STRAIGHT_TIME_Process_4
      66          				right_wheel_on=SET_0;
    \   000078   C243....     MOV.B   #0x0, &right_wheel_on
@@ -270,7 +265,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
      85          		}else{
      86          			if(left_wheel_on<WHEEL_COUNT){
    \                     ??STRAIGHT_TIME_Process_6:
-   \   0000D0   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   0000D0   F2902300.... CMP.B   #0x23, &left_wheel_on
    \   0000D6   082C         JC      ??STRAIGHT_TIME_Process_7
      87                                      left_wheel_on=0;
    \   0000D8   C243....     MOV.B   #0x0, &left_wheel_on
@@ -302,7 +297,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
      98          		}else{
      99                            if(right_wheel_on<WHEEL_COUNT){
    \                     ??STRAIGHT_TIME_Process_8:
-   \   000110   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000110   F2902300.... CMP.B   #0x23, &right_wheel_on
    \   000116   092C         JC      ??STRAIGHT_TIME_Process_9
     100          			right_wheel_on=0;
    \   000118   C243....     MOV.B   #0x0, &right_wheel_on
@@ -376,7 +371,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
     138          		}else{
     139          			if(left_wheel_on<WHEEL_COUNT){
    \                     ??CLOCK_TIME_Process_1:
-   \   00002E   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   00002E   F2902300.... CMP.B   #0x23, &left_wheel_on
    \   000034   092C         JC      ??CLOCK_TIME_Process_2
     140          				left_wheel_on=SET_0;
    \   000036   C243....     MOV.B   #0x0, &left_wheel_on
@@ -408,7 +403,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
     151          		}else{
     152          			if(right_wheel_on<WHEEL_COUNT){
    \                     ??CLOCK_TIME_Process_3:
-   \   000070   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000070   F2902300.... CMP.B   #0x23, &right_wheel_on
    \   000076   092C         JC      ??CLOCK_TIME_Process_4
     153          				right_wheel_on=SET_0;
    \   000078   C243....     MOV.B   #0x0, &right_wheel_on
@@ -456,7 +451,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
     172          		}else{
     173          			if(left_wheel_on<WHEEL_COUNT){
    \                     ??CLOCK_TIME_Process_6:
-   \   0000D0   F2901400.... CMP.B   #0x14, &left_wheel_on
+   \   0000D0   F2902300.... CMP.B   #0x23, &left_wheel_on
    \   0000D6   082C         JC      ??CLOCK_TIME_Process_7
     174                                      left_wheel_on=0;
    \   0000D8   C243....     MOV.B   #0x0, &left_wheel_on
@@ -488,7 +483,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
     185          		}else{
     186                            if(right_wheel_on<WHEEL_COUNT){
    \                     ??CLOCK_TIME_Process_8:
-   \   000110   F2901400.... CMP.B   #0x14, &right_wheel_on
+   \   000110   F2902300.... CMP.B   #0x23, &right_wheel_on
    \   000116   092C         JC      ??CLOCK_TIME_Process_9
     187          			right_wheel_on=0;
    \   000118   C243....     MOV.B   #0x0, &right_wheel_on
@@ -527,133 +522,180 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
     203          	
     204          	if(black_space == ON && stop == OFF && straight_direction == FORWARD && current_step == STEP_0)
    \   000000   D293....     CMP.B   #0x1, &black_space
-   \   000004   2120         JNE     ??project_5_process_0
+   \   000004   2D20         JNE     ??project_5_process_0
    \   000006   C293....     CMP.B   #0x0, &stop
-   \   00000A   1E20         JNE     ??project_5_process_0
+   \   00000A   2A20         JNE     ??project_5_process_0
    \   00000C   D293....     CMP.B   #0x1, &straight_direction
-   \   000010   1B20         JNE     ??project_5_process_0
+   \   000010   2720         JNE     ??project_5_process_0
    \   000012   C293....     CMP.B   #0x0, &current_step
-   \   000016   1820         JNE     ??project_5_process_0
+   \   000016   2420         JNE     ??project_5_process_0
     205                {
-    206            		
-    207              five_msec_count_timer_A0 = SET_0;//Start distance timer
-   \   000018   8243....     MOV.W   #0x0, &five_msec_count_timer_A0
-    208              distance = SET_0;
-   \   00001C   8243....     MOV.W   #0x0, &distance
-    209              five_msec_sleep(SET_100);	//Stop for .5 seconds
-   \   000020   3C406400     MOV.W   #0x64, R12
-   \   000024   ........     CALLA   #five_msec_sleep
-    210             	disableADC();    				//Disable ADC for .5 seconds
-   \   000028   ........     CALLA   #disableADC
-    211              
-    212              what_to_do = STRAIGHT;
-   \   00002C   F2400A00.... MOV.B   #0xa, &what_to_do
-    213              time_limit = SET_NEG_1;
-   \   000032   B243....     MOV.W   #0xffff, &time_limit
-    214              stop = OFF;
-   \   000036   C243....     MOV.B   #0x0, &stop
-    215              straight_direction = REVERSE;
-   \   00003A   C243....     MOV.B   #0x0, &straight_direction
-    216              black_space = OFF;
-   \   00003E   C243....     MOV.B   #0x0, &black_space
-    217              current_step++;
-   \   000042   D253....     ADD.B   #0x1, &current_step
-   \   000046   5F3C         JMP     ??project_5_process_1
-    218          }
-    219          
-    220          else if(black_space == ON && stop == OFF && straight_direction == REVERSE && current_step == STEP_1)
+    206            
+    207              
+    208                  P3OUT&=~R_REVERSE;
+   \   000018   F2C020002202 BIC.B   #0x20, &0x222
+    209              P3OUT&=~L_REVERSE;
+   \   00001E   F2C080002202 BIC.B   #0x80, &0x222
+    210              P3OUT&=~R_FORWARD;
+   \   000024   F2C010002202 BIC.B   #0x10, &0x222
+    211              P3OUT&=~L_FORWARD;
+   \   00002A   F2C040002202 BIC.B   #0x40, &0x222
+    212                  
+    213              five_msec_count_timer_A0 = SET_0;//Start distance timer
+   \   000030   8243....     MOV.W   #0x0, &five_msec_count_timer_A0
+    214              distance = SET_0;
+   \   000034   8243....     MOV.W   #0x0, &distance
+    215              five_msec_sleep(SET_100);	//Stop for .5 seconds
+   \   000038   3C406400     MOV.W   #0x64, R12
+   \   00003C   ........     CALLA   #five_msec_sleep
+    216              disableADC();    				//Disable ADC for .5 seconds
+   \   000040   ........     CALLA   #disableADC
+    217              
+    218              what_to_do_movement = STRAIGHT;
+   \   000044   F2400A00.... MOV.B   #0xa, &what_to_do_movement
+    219              time_limit = SET_NEG_1;
+   \   00004A   B243....     MOV.W   #0xffff, &time_limit
+    220              stop = OFF;
+   \   00004E   C243....     MOV.B   #0x0, &stop
+    221              straight_direction = REVERSE;
+   \   000052   C243....     MOV.B   #0x0, &straight_direction
+    222              black_space = OFF;
+   \   000056   C243....     MOV.B   #0x0, &black_space
+    223              current_step++;
+   \   00005A   D253....     ADD.B   #0x1, &current_step
+   \   00005E   1001         RETA
+    224          }
+    225          
+    226          else if(black_space == ON && stop == OFF && straight_direction == REVERSE && current_step == STEP_1)
    \                     ??project_5_process_0:
-   \   000048   D293....     CMP.B   #0x1, &black_space
-   \   00004C   2020         JNE     ??project_5_process_2
-   \   00004E   C293....     CMP.B   #0x0, &stop
-   \   000052   1D20         JNE     ??project_5_process_2
-   \   000054   C293....     CMP.B   #0x0, &straight_direction
-   \   000058   1A20         JNE     ??project_5_process_2
-   \   00005A   D293....     CMP.B   #0x1, &current_step
-   \   00005E   1720         JNE     ??project_5_process_2
-    221          {
-    222              five_msec_sleep(SET_100);
-   \   000060   3C406400     MOV.W   #0x64, R12
-   \   000064   ........     CALLA   #five_msec_sleep
-    223              what_to_do = STRAIGHT;
-   \   000068   F2400A00.... MOV.B   #0xa, &what_to_do
-    224              time_limit = five_msec_count_timer_A0 >> SET_1;	// distance time divided by 2
-   \   00006E   1F42....     MOV.W   &five_msec_count_timer_A0, R15
-   \   000072   5F03         RRUM.W  #0x1, R15
-   \   000074   824F....     MOV.W   R15, &time_limit
-    225              five_msec_count_timer_A0 = SET_0;
-   \   000078   8243....     MOV.W   #0x0, &five_msec_count_timer_A0
-    226              straight_direction = FORWARD;
-   \   00007C   D243....     MOV.B   #0x1, &straight_direction
-    227              black_space = OFF;
-   \   000080   C243....     MOV.B   #0x0, &black_space
-    228              stop = OFF;
-   \   000084   C243....     MOV.B   #0x0, &stop
-    229              current_step++;
-   \   000088   D253....     ADD.B   #0x1, &current_step
-   \   00008C   3C3C         JMP     ??project_5_process_1
-    230          }
-    231          else if(stop == ON && straight_direction == FORWARD && current_step == STEP_2)
-   \                     ??project_5_process_2:
-   \   00008E   D293....     CMP.B   #0x1, &stop
-   \   000092   1720         JNE     ??project_5_process_3
-   \   000094   D293....     CMP.B   #0x1, &straight_direction
-   \   000098   1420         JNE     ??project_5_process_3
-   \   00009A   E293....     CMP.B   #0x2, &current_step
-   \   00009E   1120         JNE     ??project_5_process_3
-    232          {
-    233              five_msec_sleep(SET_100);
-   \   0000A0   3C406400     MOV.W   #0x64, R12
-   \   0000A4   ........     CALLA   #five_msec_sleep
-    234              straight_direction = FORWARD;
-   \   0000A8   D243....     MOV.B   #0x1, &straight_direction
-    235              time = 25;
-   \   0000AC   B2401900.... MOV.W   #0x19, &time
-    236               stop = OFF;
-   \   0000B2   C243....     MOV.B   #0x0, &stop
-    237              what_to_do = THUMB_WHEEL;
-   \   0000B6   F2400D00.... MOV.B   #0xd, &what_to_do
-    238              current_step++;
+   \   000060   D293....     CMP.B   #0x1, &black_space
+   \   000064   3020         JNE     ??project_5_process_1
+   \   000066   C293....     CMP.B   #0x0, &stop
+   \   00006A   2D20         JNE     ??project_5_process_1
+   \   00006C   C293....     CMP.B   #0x0, &straight_direction
+   \   000070   2A20         JNE     ??project_5_process_1
+   \   000072   D293....     CMP.B   #0x1, &current_step
+   \   000076   2720         JNE     ??project_5_process_1
+    227          {
+    228            
+    229            
+    230            P3OUT&=~R_REVERSE;
+   \   000078   F2C020002202 BIC.B   #0x20, &0x222
+    231              P3OUT&=~L_REVERSE;
+   \   00007E   F2C080002202 BIC.B   #0x80, &0x222
+    232              P3OUT&=~R_FORWARD;
+   \   000084   F2C010002202 BIC.B   #0x10, &0x222
+    233              P3OUT&=~L_FORWARD;
+   \   00008A   F2C040002202 BIC.B   #0x40, &0x222
+    234            
+    235              five_msec_sleep(SET_100);
+   \   000090   3C406400     MOV.W   #0x64, R12
+   \   000094   ........     CALLA   #five_msec_sleep
+    236              what_to_do_movement = STRAIGHT;
+   \   000098   F2400A00.... MOV.B   #0xa, &what_to_do_movement
+    237              time_limit = five_msec_count_timer_A0 >> SET_2;	// distance time divided by 2
+   \   00009E   1F42....     MOV.W   &five_msec_count_timer_A0, R15
+   \   0000A2   5F07         RRUM.W  #0x2, R15
+   \   0000A4   824F....     MOV.W   R15, &time_limit
+    238              five_msec_count_timer_A0 = SET_0;
+   \   0000A8   8243....     MOV.W   #0x0, &five_msec_count_timer_A0
+    239              time = SET_0;
+   \   0000AC   8243....     MOV.W   #0x0, &time
+    240              straight_direction = FORWARD;
+   \   0000B0   D243....     MOV.B   #0x1, &straight_direction
+    241              black_space = OFF;
+   \   0000B4   C243....     MOV.B   #0x0, &black_space
+    242              stop = OFF;
+   \   0000B8   C243....     MOV.B   #0x0, &stop
+    243              current_step++;
    \   0000BC   D253....     ADD.B   #0x1, &current_step
-   \   0000C0   223C         JMP     ??project_5_process_1
-    239          } else if(stop == ON && straight_direction == REVERSE && current_step == STEP_3) {
-   \                     ??project_5_process_3:
-   \   0000C2   D293....     CMP.B   #0x1, &stop
-   \   0000C6   1420         JNE     ??project_5_process_4
-   \   0000C8   C293....     CMP.B   #0x0, &straight_direction
-   \   0000CC   1120         JNE     ??project_5_process_4
-   \   0000CE   F2900300.... CMP.B   #0x3, &current_step
-   \   0000D4   0D20         JNE     ??project_5_process_4
-    240              straight_direction = REVERSE;
-   \   0000D6   C243....     MOV.B   #0x0, &straight_direction
-    241              time = 25;
-   \   0000DA   B2401900.... MOV.W   #0x19, &time
-    242               stop = OFF;
-   \   0000E0   C243....     MOV.B   #0x0, &stop
-    243              what_to_do = THUMB_WHEEL;
-   \   0000E4   F2400D00.... MOV.B   #0xd, &what_to_do
-    244              current_step++;
-   \   0000EA   D253....     ADD.B   #0x1, &current_step
-   \   0000EE   0B3C         JMP     ??project_5_process_1
-    245          } else if(stop == ON && straight_direction == REVERSE && current_step == STEP_4) {
-   \                     ??project_5_process_4:
-   \   0000F0   D293....     CMP.B   #0x1, &stop
-   \   0000F4   0820         JNE     ??project_5_process_1
-   \   0000F6   C293....     CMP.B   #0x0, &straight_direction
-   \   0000FA   0520         JNE     ??project_5_process_1
-   \   0000FC   E292....     CMP.B   #0x4, &current_step
-   \   000100   0220         JNE     ??project_5_process_1
-    246              stop = SET_1;
-   \   000102   D243....     MOV.B   #0x1, &stop
-    247          }
-    248          
-    249          STRAIGHT_TIME_Process();
+    244              sample = OFF;
+   \   0000C0   C243....     MOV.B   #0x0, &sample
+   \   0000C4   1001         RETA
+    245          }
+    246          else if(stop == ON && straight_direction == FORWARD && current_step == STEP_2)
    \                     ??project_5_process_1:
-   \   000106   ........     CALLA   #STRAIGHT_TIME_Process
-    250          CLOCK_TIME_Process();
-   \   00010A   ........     BRA     #CLOCK_TIME_Process
-    251            
-    252          }
+   \   0000C6   D293....     CMP.B   #0x1, &stop
+   \   0000CA   2520         JNE     ??project_5_process_2
+   \   0000CC   D293....     CMP.B   #0x1, &straight_direction
+   \   0000D0   2220         JNE     ??project_5_process_2
+   \   0000D2   E293....     CMP.B   #0x2, &current_step
+   \   0000D6   1F20         JNE     ??project_5_process_2
+    247          {
+    248            
+    249            P3OUT&=~R_REVERSE;
+   \   0000D8   F2C020002202 BIC.B   #0x20, &0x222
+    250              P3OUT&=~L_REVERSE;
+   \   0000DE   F2C080002202 BIC.B   #0x80, &0x222
+    251              P3OUT&=~R_FORWARD;
+   \   0000E4   F2C010002202 BIC.B   #0x10, &0x222
+    252              P3OUT&=~L_FORWARD;
+   \   0000EA   F2C040002202 BIC.B   #0x40, &0x222
+    253            
+    254              five_msec_sleep(SET_100);
+   \   0000F0   3C406400     MOV.W   #0x64, R12
+   \   0000F4   ........     CALLA   #five_msec_sleep
+    255              straight_direction = FORWARD;
+   \   0000F8   D243....     MOV.B   #0x1, &straight_direction
+    256              time_limit = 800; // 800 
+   \   0000FC   B2402003.... MOV.W   #0x320, &time_limit
+    257              time = SET_0;
+   \   000102   8243....     MOV.W   #0x0, &time
+    258               stop = OFF;
+   \   000106   C243....     MOV.B   #0x0, &stop
+    259              what_to_do_movement = THUMB_WHEEL;
+   \   00010A   F2400D00.... MOV.B   #0xd, &what_to_do_movement
+    260              current_step++;
+   \   000110   D253....     ADD.B   #0x1, &current_step
+   \   000114   1001         RETA
+    261          } else if(stop == ON && straight_direction == FORWARD && current_step == STEP_3) {
+   \                     ??project_5_process_2:
+   \   000116   D293....     CMP.B   #0x1, &stop
+   \   00011A   2220         JNE     ??project_5_process_3
+   \   00011C   D293....     CMP.B   #0x1, &straight_direction
+   \   000120   1F20         JNE     ??project_5_process_3
+   \   000122   F2900300.... CMP.B   #0x3, &current_step
+   \   000128   1B20         JNE     ??project_5_process_3
+    262            
+    263            P3OUT&=~R_REVERSE;
+   \   00012A   F2C020002202 BIC.B   #0x20, &0x222
+    264              P3OUT&=~L_REVERSE;
+   \   000130   F2C080002202 BIC.B   #0x80, &0x222
+    265              P3OUT&=~R_FORWARD;
+   \   000136   F2C010002202 BIC.B   #0x10, &0x222
+    266              P3OUT&=~L_FORWARD;
+   \   00013C   F2C040002202 BIC.B   #0x40, &0x222
+    267            
+    268              straight_direction = REVERSE;
+   \   000142   C243....     MOV.B   #0x0, &straight_direction
+    269              
+    270              time_limit = 1300; // 1300
+   \   000146   B2401405.... MOV.W   #0x514, &time_limit
+    271              time = SET_0;
+   \   00014C   8243....     MOV.W   #0x0, &time
+    272               stop = OFF;
+   \   000150   C243....     MOV.B   #0x0, &stop
+    273              what_to_do_movement = THUMB_WHEEL;
+   \   000154   F2400D00.... MOV.B   #0xd, &what_to_do_movement
+    274              current_step++;
+   \   00015A   D253....     ADD.B   #0x1, &current_step
+   \   00015E   1001         RETA
+    275          } else if(stop == ON && straight_direction == REVERSE && current_step == STEP_4) {
+   \                     ??project_5_process_3:
+   \   000160   D293....     CMP.B   #0x1, &stop
+   \   000164   0820         JNE     ??project_5_process_4
+   \   000166   C293....     CMP.B   #0x0, &straight_direction
+   \   00016A   0520         JNE     ??project_5_process_4
+   \   00016C   E292....     CMP.B   #0x4, &current_step
+   \   000170   0220         JNE     ??project_5_process_4
+    276              stop = SET_1;
+   \   000172   D243....     MOV.B   #0x1, &stop
+    277          }
+    278            
+    279          }
+   \                     ??project_5_process_4:
+   \   000176   1001         RETA
+   \   000178                REQUIRE _A_PBOUT_L
 
    Maximum stack usage in bytes:
 
@@ -662,8 +704,6 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
       4   CLOCK_TIME_Process
       4   STRAIGHT_TIME_Process
       4   project_5_process
-        4   -> CLOCK_TIME_Process
-        4   -> STRAIGHT_TIME_Process
         4   -> disableADC
         4   -> five_msec_sleep
 
@@ -684,7 +724,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
        1  left_wheel_count
        1  left_wheel_on
        1  next_move
-     270  project_5_process
+     376  project_5_process
        1  right_wheel_count
        1  right_wheel_on
        1  stop
@@ -692,12 +732,12 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\shape.c
        2  time_limit
 
  
- 930 bytes in segment CODE
-   4 bytes in segment DATA16_AN
-  17 bytes in segment DATA16_Z
+ 1 036 bytes in segment CODE
+     4 bytes in segment DATA16_AN
+    17 bytes in segment DATA16_Z
  
- 930 bytes of CODE memory
-  17 bytes of DATA memory (+ 4 bytes shared)
+ 1 036 bytes of CODE memory
+    17 bytes of DATA memory (+ 4 bytes shared)
 
 Errors: none
-Warnings: 2
+Warnings: 1

@@ -14,9 +14,9 @@
 #include "functions.h"
 
 
-volatile unsigned char what_to_do, shape_selection = SET_0;
+volatile unsigned char what_to_do, shape_selection = SET_0, what_to_do_movement;
 extern volatile unsigned int Time_Sequence, cycle_time, complete;
-extern char count_time, straight_direction, left_wheel_on, right_wheel_on, left_wheel_count, right_wheel_count;
+extern unsigned char count_time, straight_direction, left_wheel_on, right_wheel_on, left_wheel_count, right_wheel_count;
 
 
 
@@ -86,7 +86,7 @@ void shape_menu(void){
 	
 struct {  // let's define our menu structure
         unsigned int value;
-        unsigned char* description;
+        char* description;
         unsigned char action;
     } menu_list[] = {
         { 250, "   Project 4   ",  PROJECT_04},

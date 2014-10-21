@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:26:40
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:56
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -56,15 +56,10 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\main.c
 
   #define Z                    (0x04) // Port 3 Pin 2 offset
           ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",56  Warning[Pe047]: 
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",57  Warning[Pe047]: 
           incompatible redefinition of macro "Z" (declared at line 149 of
           "C:\Program Files (x86)\IAR Systems\Embedded Workbench
           7.0\430\inc\msp430fr5739.h")
-
-  #define FIGURE_8			(0x0E)
-          ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
-          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
      15          
      16          
      17          // Global Variables
@@ -74,7 +69,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\main.c
      18          volatile unsigned char control_state[CNTL_STATE_INDEX];
    \                     control_state:
    \   000000                DS8 3
-     19          extern volatile unsigned char what_to_do, sample;
+     19          extern volatile unsigned char what_to_do, sample, what_to_do_movement;
      20          extern volatile unsigned int Time_Sequence, ADC_Thumb, ADC_Right_Detector, ADC_Left_Detector;
      21          
      22          //=========================================================================== 
@@ -117,94 +112,87 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\main.c
    \   000026   ........     CALLA   #five_msec_sleep
      46            Init_LEDs();                              // Initialize LEDs
    \   00002A   ........     CALLA   #Init_LEDs
-     47            Init_ADC(); 
+     47            Init_ADC();
    \   00002E   ........     CALLA   #Init_ADC
-     48          
-     49            
-     50             int old_value;
-     51             char* ascii_value;
-     52          //------------------------------------------------------------------------------
-     53          // Begining of the "While" Operating System
+     48            
+     49            //P3OUT |= TEST_PROBE;
+     50          
+     51                    ADC_Process();		// Let' sample the ADC values
+   \   000032   ........     CALLA   #ADC_Process
+   \   000036   023C         JMP     ??main_1
+     52          
+     53             int old_value;
      54          //------------------------------------------------------------------------------
-     55           while(ALWAYS) {                            // Can the Operating system run
-     56           
-     57                  // if (Time_Sequence%3 == 0){
-     58                     sample = ON;
+     55          // Begining of the "While" Operating System
+     56          //------------------------------------------------------------------------------
+     57           while(ALWAYS) {                            // Can the Operating system run
+     58           
+     59                  // if (Time_Sequence%3 == 0){
+     60                     sample = ON;
+     61                  // } else {
+     62                  //   sample = OFF;
+     63                  // }
+     64                  // Are we on a black line
+     65                  sample_process();    // Are we sampling or not?
+     66                  Switches_Process();  // Switches YEAH!
+     67                   if (ADC_Thumb != old_value){
+     68                     menu_process(ADC_Thumb);
+     69                     //five_msec_sleep(1);
+     70                   }
+     71                   old_value = ADC_Thumb;
+     72          	 
+     73                   if(Time_Sequence > 250){
+     74                      Time_Sequence = 0;
+     75                      
+     76                   }
+     77                   
+     78                    black_line_detect(); 
+     79                    project_5_process(); 
+     80                    if(what_to_do_movement == STRAIGHT) {
+     81                       STRAIGHT_TIME_Process();
    \                     ??main_0:
-   \   000032   D243....     MOV.B   #0x1, &sample
-     59                  // } else {
-     60                  //   sample = OFF;
-     61                  // }
-     62                  black_line_detect(); // Are we on a black line
-                         ^
-Warning[Pe223]: function "black_line_detect" declared implicitly
-   \   000036   ........     CALLA   #black_line_detect
-     63                  sample_process();    // Are we sampling or not?
-   \   00003A   ........     CALLA   #sample_process
-     64                  Switches_Process();  // Switches YEAH!
-   \   00003E   ........     CALLA   #Switches_Process
-     65                  ADC_Process();		// Let' sample the ADC values
-   \   000042   ........     CALLA   #ADC_Process
-     66                   if (ADC_Thumb != old_value){
-   \   000046   829A....     CMP.W   R10, &ADC_Thumb
-   \   00004A   0D24         JEQ     ??main_1
-     67                     //lcd_out("               ",LCD_LINE_2);
-     68                     ascii_value = itoa(ADC_Thumb);
-   \   00004C   1C42....     MOV.W   &ADC_Thumb, R12
-   \   000050   ........     CALLA   #itoa
-   \   000054   0A4C         MOV.W   R12, R10
-     69                     menu_process(ADC_Thumb);
-   \   000056   1C42....     MOV.W   &ADC_Thumb, R12
-   \   00005A   ........     CALLA   #menu_process
-     70                     //lcd_out(ascii_value,LCD_LINE_2);
-     71                     five_msec_sleep(50);
-   \   00005E   3C403200     MOV.W   #0x32, R12
-   \   000062   ........     CALLA   #five_msec_sleep
-     72                   }
-     73                   old_value = ADC_Thumb;
+   \   000038   ........     CALLA   #STRAIGHT_TIME_Process
+     82                       
+     83                     } else if (what_to_do_movement ==  THUMB_WHEEL) {
    \                     ??main_1:
-   \   000066   1A42....     MOV.W   &ADC_Thumb, R10
-     74          	 
-     75                   if(Time_Sequence > 250){
-   \   00006A   B290FB00.... CMP.W   #0xfb, &Time_Sequence
-   \   000070   0228         JNC     ??main_2
-     76                      Time_Sequence = 0;
-   \   000072   8243....     MOV.W   #0x0, &Time_Sequence
-     77                      
-     78                   }
-     79                   
-     80                   if (what_to_do == PROJECT_05 || what_to_do == STRAIGHT || what_to_do ==  THUMB_WHEEL){
+   \   00003C   D243....     MOV.B   #0x1, &sample
+   \   000040   ........     CALLA   #sample_process
+   \   000044   ........     CALLA   #Switches_Process
+   \   000048   829A....     CMP.W   R10, &ADC_Thumb
+   \   00004C   0424         JEQ     ??main_2
+   \   00004E   1C42....     MOV.W   &ADC_Thumb, R12
+   \   000052   ........     CALLA   #menu_process
    \                     ??main_2:
-   \   000076   F2900900.... CMP.B   #0x9, &what_to_do
-   \   00007C   0824         JEQ     ??main_3
-   \   00007E   F2900A00.... CMP.B   #0xa, &what_to_do
-   \   000084   0424         JEQ     ??main_3
-   \   000086   F2900D00.... CMP.B   #0xd, &what_to_do
-   \   00008C   D223         JNE     ??main_0
-     81                    project_5_process(); 
-                           ^
-Warning[Pe223]: function "project_5_process" declared implicitly
-
-     char* ascii_value;
-           ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\main.c",51  Warning[Pe550]: 
-          variable "ascii_value" was set but never used
+   \   000056   1A42....     MOV.W   &ADC_Thumb, R10
+   \   00005A   B290FB00.... CMP.W   #0xfb, &Time_Sequence
+   \   000060   0228         JNC     ??main_3
+   \   000062   8243....     MOV.W   #0x0, &Time_Sequence
    \                     ??main_3:
-   \   00008E   ........     CALLA   #project_5_process
-   \   000092   CF3F         JMP     ??main_0
-   \   000094   0343         NOP
-   \   000096                REQUIRE _A_PJOUT_L
-     82                   }
-     83                   
-     84                   
-     85                	}
-     86          //------------------------------------------------------------------------------
-     87          }
-     88          
-     89          
-     90          
-     91          
-     92          
+   \   000066   ........     CALLA   #black_line_detect
+   \   00006A   ........     CALLA   #project_5_process
+   \   00006E   F2900A00.... CMP.B   #0xa, &what_to_do_movement
+   \   000074   E127         JEQ     ??main_0
+   \   000076   F2900D00.... CMP.B   #0xd, &what_to_do_movement
+   \   00007C   DF23         JNE     ??main_1
+     84                       CLOCK_TIME_Process();
+   \   00007E   ........     CALLA   #CLOCK_TIME_Process
+   \   000082   DC3F         JMP     ??main_1
+   \   000084   0343         NOP
+   \   000086                REQUIRE _A_PJOUT_L
+     85                       
+     86                     }
+     87          
+     88                     
+     89                   
+     90                   
+     91                	}
+     92          //------------------------------------------------------------------------------
+     93          }
+     94          
+     95          
+     96          
+     97          
+     98          
 
    Maximum stack usage in bytes:
 
@@ -212,6 +200,7 @@ Warning[Pe223]: function "project_5_process" declared implicitly
    ------ --------
       6   main
         6   -> ADC_Process
+        6   -> CLOCK_TIME_Process
         6   -> Init_ADC
         6   -> Init_Clocks
         6   -> Init_Conditions
@@ -219,10 +208,10 @@ Warning[Pe223]: function "project_5_process" declared implicitly
         6   -> Init_LEDs
         6   -> Init_Ports
         6   -> Init_Timers
+        6   -> STRAIGHT_TIME_Process
         6   -> Switches_Process
         6   -> black_line_detect
         6   -> five_msec_sleep
-        6   -> itoa
         6   -> menu_process
         6   -> project_5_process
         6   -> sample_process
@@ -234,15 +223,15 @@ Warning[Pe223]: function "project_5_process" declared implicitly
    -----  --------------
        2  _A_PJOUT_L
        3  control_state
-     150  main
+     134  main
 
  
- 150 bytes in segment CODE
+ 134 bytes in segment CODE
    2 bytes in segment DATA16_AN
    3 bytes in segment DATA16_Z
  
- 150 bytes of CODE memory
+ 134 bytes of CODE memory
    3 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none
-Warnings: 5
+Warnings: 1

@@ -58,10 +58,14 @@ void CIRCLE_Process(void);
 void TRIANGLE_Process(void);
 void FIGURE_8_Process(void);
 void ONE_CIRCLE_Process(int complete);
+void STRAIGHT_TIME_Process(void);
+void CLOCK_TIME_Process(void);
+void project_5_process(void);
 
 // Timers
 void Init_Timer_A0(void);
 void ten_msec_timer_code_switch(void);
+void fifty_msec_sleep_A1(unsigned int);
 
 
 // ADC
@@ -74,3 +78,4 @@ void enableADC(void);
 void IR_calibration(unsigned char);
 void do_stuff(void);
 void set_treshold(void);
+void black_line_detect(void);

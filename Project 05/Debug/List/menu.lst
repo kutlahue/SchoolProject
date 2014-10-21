@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:26:40
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:56
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -46,11 +46,6 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
      10          
      11          
      12          #include "macros.h"
-
-  #define FIGURE_8			(0x0E)
-          ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
-          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
      13          #include "msp430.h"
      14          #include "functions.h"
      15          
@@ -58,7 +53,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
 
    \                                 In  segment DATA16_Z, align 1, align-sorted
    \   000000                REQUIRE ?cstart_init_zero
-     17          volatile unsigned char what_to_do, shape_selection = SET_0;
+     17          volatile unsigned char what_to_do, shape_selection = SET_0, what_to_do_movement;
    \                     what_to_do:
    \   000000                DS8 1
 
@@ -66,8 +61,13 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
    \   000000                REQUIRE ?cstart_init_zero
    \                     shape_selection:
    \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     what_to_do_movement:
+   \   000000                DS8 1
      18          extern volatile unsigned int Time_Sequence, cycle_time, complete;
-     19          extern char count_time, straight_direction, left_wheel_on, right_wheel_on, left_wheel_count, right_wheel_count;
+     19          extern unsigned char count_time, straight_direction, left_wheel_on, right_wheel_on, left_wheel_count, right_wheel_count;
      20          
      21          
      22          
@@ -230,7 +230,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
      86          	
      87          struct {  // let's define our menu structure
      88                  unsigned int value;
-     89                  unsigned char* description;
+     89                  char* description;
      90                  unsigned char action;
 
    \                                 In  segment DATA16_I, align 2, align-sorted
@@ -273,9 +273,6 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\menu.c
    \   00001C   44180E5F     ADDX.W  R15, R14
    \   000020   D24E........ MOV.B   menu_list + 4(R14), &what_to_do
     103            display = menu_list[i].description;
-                           ^
-Warning[Pe513]: a value of type "unsigned char *" cannot be assigned to an
-          entity of type "char *"
    \   000026   4F4F         MOV.B   R15, R15
    \   000028   0E4F         MOV.W   R15, R14
    \   00002A                RPT     #0x5
@@ -381,17 +378,18 @@ Warning[Pe513]: a value of type "unsigned char *" cannot be assigned to an
      110  shape_menu
        1  shape_selection
        1  what_to_do
+       1  what_to_do_movement
 
  
  304 bytes in segment CODE
  134 bytes in segment DATA16_C
   24 bytes in segment DATA16_I
   24 bytes in segment DATA16_ID
-   2 bytes in segment DATA16_Z
+   3 bytes in segment DATA16_Z
  
  304 bytes of CODE  memory
  158 bytes of CONST memory
-  26 bytes of DATA  memory
+  27 bytes of DATA  memory
 
 Errors: none
-Warnings: 2
+Warnings: none

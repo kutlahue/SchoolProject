@@ -68,7 +68,6 @@ void Init_LEDs(void){
 }
 
 
-
 void Init_Clocks(void){
 //------------------------------------------------------------------------------
 // Clock Configurtaions

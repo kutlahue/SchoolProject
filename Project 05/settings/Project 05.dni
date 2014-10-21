@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=-248094496
+Checksum=-2084226367
 [Stack]
 FillEnabled=0
 OverflowWarningsEnabled=1
@@ -29,9 +29,13 @@ ShowArgs=0
 MixedMode=1
 [EEM Sequencer]
 Buffer=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[watch_formats]
+Fmt0={W}0:black_space	3	0
+Fmt1={W}0:current_step	3	0
+Fmt2={W}0:stop	3	0
+Fmt3={W}0:straight_direction	3	0
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\adc.c}.140.2" 0 0 0 0 "" 0 ""
-Count=1
+Count=0
 [FET]
 Clock mode=46
 Extended Clock mode=1039

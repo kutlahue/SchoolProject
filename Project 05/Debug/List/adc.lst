@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         20/Oct/2014  18:26:39
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:38:55
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -86,20 +86,20 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
    \   union <unnamed> _A_PAOUT_L
    \                     _A_PAOUT_L:
    \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
      13          #include  "functions.h"
      14          #include  "macros.h"
 
   #define Z                    (0x04) // Port 3 Pin 2 offset
           ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",56  Warning[Pe047]: 
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",57  Warning[Pe047]: 
           incompatible redefinition of macro "Z" (declared at line 149 of
           "C:\Program Files (x86)\IAR Systems\Embedded Workbench
           7.0\430\inc\msp430fr5739.h")
-
-  #define FIGURE_8			(0x0E)
-          ^
-"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\macros.h",92  Warning[Pe047]: 
-          incompatible redefinition of macro "FIGURE_8" (declared at line 77)
      15          
 
    \                                 In  segment DATA16_Z, align 2, align-sorted
@@ -400,151 +400,172 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c
    \   000004   1F52....     ADD.W   &ADC_Left_Detector, R15
    \   000008   5F03         RRUM.W  #0x1, R15
     139          	
-    140          	if(ADC_detect_average < tresholds[SET_0]) {
-   \   00000A   1F92....     CMP.W   &tresholds, R15
-   \   00000E   032C         JC      ??black_line_detect_0
-    141          	    black_space = SET_0;
-   \   000010   C243....     MOV.B   #0x0, &black_space
-   \   000014   1001         RETA
-    142          	} else {
-    143          	    black_space = SET_1;
-   \                     ??black_line_detect_0:
-   \   000016   D243....     MOV.B   #0x1, &black_space
-    144          	}		
-    145          }
+    140          	if(ADC_Left_Detector > tresholds[SET_0]) {
+   \   00000A   9292........ CMP.W   &ADC_Left_Detector, &tresholds
+   \   000010   052C         JC      ??black_line_detect_0
+    141          	    black_space = ON;
+   \   000012   D243....     MOV.B   #0x1, &black_space
+    142                      P3OUT |= TEST_PROBE;
+   \   000016   F2D22202     BIS.B   #0x8, &0x222
    \   00001A   1001         RETA
-    146          
-    147          
+    143          	} else if (ADC_Left_Detector < tresholds[SET_0]) {
+   \                     ??black_line_detect_0:
+   \   00001C   9292........ CMP.W   &tresholds, &ADC_Left_Detector
+   \   000022   022C         JC      ??black_line_detect_1
+    144          	    //black_space = OFF;
+    145                      P3OUT &= ~TEST_PROBE;
+   \   000024   F2C22202     BIC.B   #0x8, &0x222
+    146          	}		
+    147          }
+   \                     ??black_line_detect_1:
+   \   000028   1001         RETA
+   \   00002A                REQUIRE _A_PBOUT_L
     148          
     149          
     150          
-    151          //=========================================================================== 
-    152          // Function name: disableADC
-    153          //
-    154          // Description: This function disables the ADC
+    151          
+    152          
+    153          //=========================================================================== 
+    154          // Function name: disableADC
     155          //
-    156          // Passed : no variables passed
-    157          // Locals: no variables declared
-    158          // Returned: no values returned
-    159          // Globals: none
-    160          //
-    161          // Author: Mattia Muller
-    162          // Date: Sept 2013
-    163          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
-    164          //******************************************************************************
-    165          //------------------------------------------------------------------------------
+    156          // Description: This function disables the ADC
+    157          //
+    158          // Passed : no variables passed
+    159          // Locals: no variables declared
+    160          // Returned: no values returned
+    161          // Globals: none
+    162          //
+    163          // Author: Mattia Muller
+    164          // Date: Sept 2013
+    165          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    166          //******************************************************************************
+    167          //------------------------------------------------------------------------------
 
    \                                 In  segment CODE, align 2
-    166          void disableADC(void)
+    168          void disableADC(void)
    \                     disableADC:
-    167          {
-    168          
-    169            ADC10IE &= ~ADC10IE0;  
+    169          {
+    170          
+    171            ADC10IE &= ~ADC10IE0;  
    \   000000   92C31A07     BIC.W   #0x1, &0x71a
-    170            ten_msec_count_timer_A2=SET_0;   
+    172            ten_msec_count_timer_A2=SET_0;   
    \   000004   C243....     MOV.B   #0x0, &ten_msec_count_timer_A2
-    171          }
+    173          }
    \   000008   1001         RETA
    \   00000A                REQUIRE _A_ADC10IE_L
-    172          
-    173          
-    174          //=========================================================================== 
-    175          // Function name: enableADC
-    176          //
-    177          // Description: This function enables the ADC
+    174          
+    175          
+    176          //=========================================================================== 
+    177          // Function name: enableADC
     178          //
-    179          // Passed : no variables passed
-    180          // Locals: no variables declared
-    181          // Returned: no values returned
-    182          // Globals: none
-    183          //
-    184          // Author: Mattia Muller
-    185          // Date: Sept 2013
-    186          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
-    187          //******************************************************************************
-    188          //------------------------------------------------------------------------------
+    179          // Description: This function enables the ADC
+    180          //
+    181          // Passed : no variables passed
+    182          // Locals: no variables declared
+    183          // Returned: no values returned
+    184          // Globals: none
+    185          //
+    186          // Author: Mattia Muller
+    187          // Date: Sept 2013
+    188          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    189          //******************************************************************************
+    190          //------------------------------------------------------------------------------
 
    \                                 In  segment CODE, align 2
-    189          void enableADC(void)
+    191          void enableADC(void)
    \                     enableADC:
-    190          {
-    191          
-    192          ADC10IE |= ADC10IE0; 
+    192          {
+    193          
+    194          ADC10IE |= ADC10IE0; 
    \   000000   92D31A07     BIS.W   #0x1, &0x71a
-    193          }
+    195          }
    \   000004   1001         RETA
    \   000006                REQUIRE _A_ADC10IE_L
-    194          
-    195          
+    196          
+    197          
 
    \                                 In  segment CODE, align 2
-    196          void IR_calibration(unsigned char state){
+    198          void IR_calibration(unsigned char state){
    \                     IR_calibration:
-   \   000000   0A12         PUSH.W  R10
+   \   000000   1B15         PUSHM.W #0x2, R11
    \   000002   4A4C         MOV.B   R12, R10
-    197            
-    198            unsigned int base_value_right, base_value_left;
-    199          
-    200            sample = ON;
-   \   000004   D243....     MOV.B   #0x1, &sample
-    201            
-    202            if (state == SET_0)
-   \   000008   4A93         CMP.B   #0x0, R10
-   \   00000A   0220         JNE     ??IR_calibration_0
-    203              sample = OFF;
-   \   00000C   C243....     MOV.B   #0x0, &sample
-    204            
-    205            sample_process();
-   \                     ??IR_calibration_0:
-   \   000010   ........     CALLA   #sample_process
-    206            ADC_Process();
-   \   000014   ........     CALLA   #ADC_Process
-    207            fifty_msec_sleep_A1(SET_1);
-                   ^
-Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
+    199            
+    200            unsigned int base_value_right, base_value_left;
+                                ^
+Warning[Pe550]: variable "base_value_right" was set but never used
 
   	int ADC_detect_average = (ADC_Right_Detector + ADC_Left_Detector) >> SET_1;
   	    ^
 "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\adc.c",138  Warning[Pa082]: 
           undefined behavior: the order of volatile accesses is undefined in
           this statement
-   \   000018   1C43         MOV.W   #0x1, R12
-   \   00001A   ........     CALLA   #fifty_msec_sleep_A1
-    208            base_value_right = ADC_Right_Detector;
-   \   00001E   1F42....     MOV.W   &ADC_Right_Detector, R15
-    209            base_value_left = ADC_Left_Detector;
-   \   000022   1E42....     MOV.W   &ADC_Left_Detector, R14
-    210            
-    211            
-    212            tresholds[state] = (base_value_left +  base_value_right) >> SET_1; 
-   \   000026   0E5F         ADD.W   R15, R14
-   \   000028   5E03         RRUM.W  #0x1, R14
-   \   00002A   4F4A         MOV.B   R10, R15
-   \   00002C   0F5F         RLA.W   R15
-   \   00002E   8F4E....     MOV.W   R14, tresholds(R15)
+    201          
+    202            sample = ON;
+   \   000004   D243....     MOV.B   #0x1, &sample
+    203            
+    204            if (state == SET_0) {
+   \   000008   4A93         CMP.B   #0x0, R10
+   \   00000A   0220         JNE     ??IR_calibration_0
+    205              sample = OFF;
+   \   00000C   C243....     MOV.B   #0x0, &sample
+    206            }
+    207            
+    208            sample_process();
+   \                     ??IR_calibration_0:
+   \   000010   ........     CALLA   #sample_process
+    209            ADC_Process();
+   \   000014   ........     CALLA   #ADC_Process
+    210            five_msec_sleep(SET_10);
+   \   000018   3C400A00     MOV.W   #0xa, R12
+   \   00001C   ........     CALLA   #five_msec_sleep
+    211            base_value_right = ADC_Right_Detector;
+   \   000020   1B42....     MOV.W   &ADC_Right_Detector, R11
+    212            base_value_left = ADC_Left_Detector;
+   \   000024   1F42....     MOV.W   &ADC_Left_Detector, R15
     213            
-    214            if (state == STEP_2)
-   \   000032   6A93         CMP.B   #0x2, R10
-   \   000034   0220         JNE     ??IR_calibration_1
-    215              set_treshold();
-   \   000036   ........     CALLA   #set_treshold
-    216          }
+    214            
+    215            //tresholds[state] = (base_value_left +  base_value_right) >> SET_1; 
+    216            
+    217            tresholds[state] = base_value_left;
+   \   000028   4E4A         MOV.B   R10, R14
+   \   00002A   0E5E         RLA.W   R14
+   \   00002C   8E4F....     MOV.W   R15, tresholds(R14)
+    218            
+    219             char* ascii_value = itoa(tresholds[state]);
+   \   000030   4F4A         MOV.B   R10, R15
+   \   000032   0F5F         RLA.W   R15
+   \   000034   1C4F....     MOV.W   tresholds(R15), R12
+   \   000038   ........     CALLA   #itoa
+    220             lcd_out(ascii_value,LCD_LINE_2);
+   \   00003C   7D40C000     MOV.B   #0xc0, R13
+   \   000040   ........     CALLA   #lcd_out
+    221                     
+    222                     
+    223                     
+    224            if (state == STEP_2)
+   \   000044   6A93         CMP.B   #0x2, R10
+   \   000046   0220         JNE     ??IR_calibration_1
+    225              set_treshold();
+   \   000048   ........     CALLA   #set_treshold
+    226          }
    \                     ??IR_calibration_1:
-   \   00003A   3A41         POP.W   R10
-   \   00003C   1001         RETA
-    217          
+   \   00004C   1A17         POPM.W  #0x2, R11
+   \   00004E   1001         RETA
+    227          
 
    \                                 In  segment CODE, align 2
-    218          void set_treshold(void){
+    228          void set_treshold(void){
    \                     set_treshold:
-    219            
-    220            tresholds[SET_0]= (tresholds[STEP_2]+tresholds[SET_1])>>SET_1;
+    229            
+    230            tresholds[SET_0]= tresholds[SET_1]+((tresholds[STEP_2]-tresholds[SET_1])>>SET_1) + SET_100;// - 100;
    \   000000   1F42....     MOV.W   &tresholds + 4, R15
-   \   000004   1F52....     ADD.W   &tresholds + 2, R15
+   \   000004   1F82....     SUB.W   &tresholds + 2, R15
    \   000008   5F03         RRUM.W  #0x1, R15
-   \   00000A   824F....     MOV.W   R15, &tresholds
-    221          }
-   \   00000E   1001         RETA
+   \   00000A   1F52....     ADD.W   &tresholds + 2, R15
+   \   00000E   3F506400     ADD.W   #0x64, R15
+   \   000012   824F....     MOV.W   R15, &tresholds
+    231          }
+   \   000016   1001         RETA
 
    \                                 In  segment INTVEC, offset 0x5c, root
    \                     `??ADC10_ISR??INTVEC 92`:
@@ -556,11 +577,13 @@ Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
    ------ --------
       8   ADC10_ISR
       4   ADC_Process
-      6   IR_calibration
-        6   -> ADC_Process
-        6   -> fifty_msec_sleep_A1
-        6   -> sample_process
-        6   -> set_treshold
+      8   IR_calibration
+        8   -> ADC_Process
+        8   -> five_msec_sleep
+        8   -> itoa
+        8   -> lcd_out
+        8   -> sample_process
+        8   -> set_treshold
       4   Init_ADC
       4   black_line_detect
       4   disableADC
@@ -581,7 +604,7 @@ Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
       14  ADC_Process
        2  ADC_Right_Detector
        2  ADC_Thumb
-      62  IR_calibration
+      80  IR_calibration
      108  Init_ADC
        2  _A_ADC10CTL0_L
        2  _A_ADC10CTL1_L
@@ -591,7 +614,8 @@ Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
        2  _A_ADC10MCTL0_L
        2  _A_ADC10MEM0_L
        2  _A_PAOUT_L
-      28  black_line_detect
+       2  _A_PBOUT_L
+      42  black_line_detect
        1  black_space
       16  buffer
       10  disableADC
@@ -599,19 +623,19 @@ Warning[Pe223]: function "fifty_msec_sleep_A1" declared implicitly
       70  itoa
        1  sample
       18  sample_process
-      16  set_treshold
+      24  set_treshold
        6  tresholds
 
  
- 332 bytes in segment CODE
-  16 bytes in segment DATA16_AN
+ 372 bytes in segment CODE
+  18 bytes in segment DATA16_AN
   31 bytes in segment DATA16_Z
    2 bytes in segment INTVEC
  102 bytes in segment ISR_CODE
  
- 434 bytes of CODE  memory
+ 474 bytes of CODE  memory
    0 bytes of CONST memory (+  2 bytes shared)
-  31 bytes of DATA  memory (+ 16 bytes shared)
+  31 bytes of DATA  memory (+ 18 bytes shared)
 
 Errors: none
-Warnings: 4
+Warnings: 3

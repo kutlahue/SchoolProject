@@ -16,7 +16,7 @@
 
 // Global Variables
 volatile unsigned char control_state[CNTL_STATE_INDEX];
-extern volatile unsigned char what_to_do, sample;
+extern volatile unsigned char what_to_do, sample, what_to_do_movement;
 extern volatile unsigned int Time_Sequence, ADC_Thumb, ADC_Right_Detector, ADC_Left_Detector;
 
 //=========================================================================== 
@@ -44,11 +44,13 @@ void main(void){
   Init_LCD();                               // Initialize LCD
   five_msec_sleep(INIT_TIMER);              // 375 msec delay for the clock to settle
   Init_LEDs();                              // Initialize LEDs
-  Init_ADC(); 
-
+  Init_ADC();
   
+  //P3OUT |= TEST_PROBE;
+
+          ADC_Process();		// Let' sample the ADC values
+
    int old_value;
-   char* ascii_value;
 //------------------------------------------------------------------------------
 // Begining of the "While" Operating System
 //------------------------------------------------------------------------------
@@ -59,16 +61,12 @@ void main(void){
         // } else {
         //   sample = OFF;
         // }
-        black_line_detect(); // Are we on a black line
+        // Are we on a black line
         sample_process();    // Are we sampling or not?
         Switches_Process();  // Switches YEAH!
-        ADC_Process();		// Let' sample the ADC values
          if (ADC_Thumb != old_value){
-           //lcd_out("               ",LCD_LINE_2);
-           ascii_value = itoa(ADC_Thumb);
            menu_process(ADC_Thumb);
-           //lcd_out(ascii_value,LCD_LINE_2);
-           five_msec_sleep(50);
+           //five_msec_sleep(1);
          }
          old_value = ADC_Thumb;
 	 
@@ -77,9 +75,17 @@ void main(void){
             
          }
          
-         if (what_to_do == PROJECT_05 || what_to_do == STRAIGHT || what_to_do ==  THUMB_WHEEL){
+          black_line_detect(); 
           project_5_process(); 
-         }
+          if(what_to_do_movement == STRAIGHT) {
+             STRAIGHT_TIME_Process();
+             
+           } else if (what_to_do_movement ==  THUMB_WHEEL) {
+             CLOCK_TIME_Process();
+             
+           }
+
+           
          
          
       	}

@@ -14,7 +14,7 @@
 #include  "macros.h"
 
 
-extern volatile unsigned char what_to_do;
+extern volatile unsigned char what_to_do, what_to_do_movement, sample;
 extern char *display_1;
 extern char *display_2;
 extern volatile unsigned int Time_Sequence, five_msec_count_timer_A0, time;
@@ -203,13 +203,19 @@ void project_5_process(void){
 	
 	if(black_space == ON && stop == OFF && straight_direction == FORWARD && current_step == STEP_0)
       {
-  		
+  
+    
+        P3OUT&=~R_REVERSE;
+    P3OUT&=~L_REVERSE;
+    P3OUT&=~R_FORWARD;
+    P3OUT&=~L_FORWARD;
+        
     five_msec_count_timer_A0 = SET_0;//Start distance timer
     distance = SET_0;
     five_msec_sleep(SET_100);	//Stop for .5 seconds
-   	disableADC();    				//Disable ADC for .5 seconds
+    disableADC();    				//Disable ADC for .5 seconds
     
-    what_to_do = STRAIGHT;
+    what_to_do_movement = STRAIGHT;
     time_limit = SET_NEG_1;
     stop = OFF;
     straight_direction = REVERSE;
@@ -219,34 +225,55 @@ void project_5_process(void){
 
 else if(black_space == ON && stop == OFF && straight_direction == REVERSE && current_step == STEP_1)
 {
+  
+  
+  P3OUT&=~R_REVERSE;
+    P3OUT&=~L_REVERSE;
+    P3OUT&=~R_FORWARD;
+    P3OUT&=~L_FORWARD;
+  
     five_msec_sleep(SET_100);
-    what_to_do = STRAIGHT;
-    time_limit = five_msec_count_timer_A0 >> SET_1;	// distance time divided by 2
+    what_to_do_movement = STRAIGHT;
+    time_limit = five_msec_count_timer_A0 >> SET_2;	// distance time divided by 2
     five_msec_count_timer_A0 = SET_0;
+    time = SET_0;
     straight_direction = FORWARD;
     black_space = OFF;
     stop = OFF;
     current_step++;
+    sample = OFF;
 }
 else if(stop == ON && straight_direction == FORWARD && current_step == STEP_2)
 {
+  
+  P3OUT&=~R_REVERSE;
+    P3OUT&=~L_REVERSE;
+    P3OUT&=~R_FORWARD;
+    P3OUT&=~L_FORWARD;
+  
     five_msec_sleep(SET_100);
     straight_direction = FORWARD;
-    time = 25;
+    time_limit = 800; // 800 
+    time = SET_0;
      stop = OFF;
-    what_to_do = THUMB_WHEEL;
+    what_to_do_movement = THUMB_WHEEL;
     current_step++;
-} else if(stop == ON && straight_direction == REVERSE && current_step == STEP_3) {
+} else if(stop == ON && straight_direction == FORWARD && current_step == STEP_3) {
+  
+  P3OUT&=~R_REVERSE;
+    P3OUT&=~L_REVERSE;
+    P3OUT&=~R_FORWARD;
+    P3OUT&=~L_FORWARD;
+  
     straight_direction = REVERSE;
-    time = 25;
+    
+    time_limit = 1300; // 1300
+    time = SET_0;
      stop = OFF;
-    what_to_do = THUMB_WHEEL;
+    what_to_do_movement = THUMB_WHEEL;
     current_step++;
 } else if(stop == ON && straight_direction == REVERSE && current_step == STEP_4) {
     stop = SET_1;
 }
-
-STRAIGHT_TIME_Process();
-CLOCK_TIME_Process();
   
 }

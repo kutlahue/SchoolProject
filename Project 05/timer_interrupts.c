@@ -26,7 +26,7 @@
 // timerA0-0 Interrupt handler
 volatile unsigned int time = SET_0;
 extern volatile unsigned char okay_to_look_at_switch1, okay_to_look_at_switch2, what_to_do, stop, straight_direction, state = SET_0, sw1_position, sw2_position;
-extern volatile unsigned int five_msec_count_timer_A0, fifty_msec_count_timer_A1, count_debounce_SW1, count_debounce_SW2;
+extern volatile unsigned int five_msec_count_timer_A0, fifty_msec_count_timer_A1, count_debounce_SW1, count_debounce_SW2, ADC_Left_Detector;
 extern volatile int time_limit;
 volatile unsigned char ten_msec_count_timer_A2;
 
@@ -51,13 +51,7 @@ __interrupt void Timer0_A0_ISR(void){
   time++;
   five_msec_count_timer_A0++;
   
-  
-  if (stop) {
-    P3OUT&=~R_REVERSE;
-    P3OUT&=~L_REVERSE;
-    P3OUT&=~R_FORWARD;
-    P3OUT&=~L_FORWARD;
-  }
+ 
   
   if (time > time_limit && time_limit != SET_NEG_1) {
   	
@@ -65,6 +59,14 @@ __interrupt void Timer0_A0_ISR(void){
   	
   }
   
+  
+  
+   if (stop) {
+    P3OUT&=~R_REVERSE;
+    P3OUT&=~L_REVERSE;
+    P3OUT&=~R_FORWARD;
+    P3OUT&=~L_FORWARD;
+  }
   
 //    if (time==HALFSEC) {
 //      stop = SET_0;
@@ -131,7 +133,9 @@ __interrupt void TIMER0_A1_ISR(void){
       }
       
       if (fifty_msec_count_timer_A1%DEBOUNCE_TIME  == SET_0){
-        //P3OUT ^= TEST_PROBE;
+
+        
+
       }
       TA0CCR1 += TA0CCR1_INTERVAL;     // Add Offset to TACCR1
       break;
@@ -159,12 +163,17 @@ __interrupt void TIMER0_A1_ISR(void){
 void ten_msec_timer_code_switch(void){
 	
 	switch (ten_msec_count_timer_A2){
-		case 20:
+                 case 101:
+                ten_msec_count_timer_A2 = SET_0;
+                break;
+                case 100:
+		
 		  	// Do the 200 msec stuff
                   if (!(ADC10IE & ADC10IE0)) { // if ADC is disabled
 				enableADC();
 			}
                   break;
+                  case 20:
 		case 19: break;
 		case 18: break;
 		case 17: break;
@@ -177,6 +186,7 @@ void ten_msec_timer_code_switch(void){
 		case 12:
 		case 11:
 		case 10:
+               
 			// Do the 100 msec stuff
 		case  9:
 		case  8:
@@ -190,7 +200,7 @@ void ten_msec_timer_code_switch(void){
 		  // Do the 10 msec stuff
 		  break;
 		default:
-			ten_msec_count_timer_A2 = SET_0;
+			
 		  break;
 	}	
 

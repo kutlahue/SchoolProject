@@ -13,17 +13,19 @@
 #include "msp430.h"
 #include "functions.h"
 
-extern char *display_1, current_step;
+extern unsigned char black_space;
+extern char *display_1;
 extern char *display_2;
-volatile char okay_to_look_at_switch1 = NOT_OKAY;
-volatile char okay_to_look_at_switch2 = NOT_OKAY;
-volatile char sw1_position = RELEASED;
-volatile char sw2_position = RELEASED;
-volatile int count_debounce_SW1 = SET_0;
-volatile int count_debounce_SW2 = SET_0;
-extern char current_step, what_to_do;
-extern volatile unsigned char stop, straight_direction;
+volatile unsigned char okay_to_look_at_switch1 = NOT_OKAY;
+volatile unsigned char okay_to_look_at_switch2 = NOT_OKAY;
+volatile unsigned char sw1_position = RELEASED;
+volatile unsigned char sw2_position = RELEASED;
+volatile unsigned int count_debounce_SW1 = SET_0;
+volatile unsigned int count_debounce_SW2 = SET_0;
+extern unsigned char current_step;
+extern volatile unsigned char stop, straight_direction, sample, what_to_do, what_to_do_movement;
 extern volatile int time_limit;
+extern unsigned char right_wheel_count, left_wheel_count;
 
 //=========================================================================== 
 // Function name: Switch1_Process
@@ -176,10 +178,11 @@ void enableInput(void)
 void do_stuff(void){
   switch(what_to_do){
 		case CALIBRATE:
+                  lcd_out("              ", LCD_LINE_2);
                        IR_calibration(current_step);
-                       char* ascii_value = itoa(current_step);            
-                       lcd_out("              ", LCD_LINE_2);   
-                       lcd_out(ascii_value, LCD_LINE_2);     
+                       //char* ascii_value = itoa(current_step);            
+                          
+                       //lcd_out(ascii_value, LCD_LINE_2);     
                 break;
 		case STRAIGHT: // 1250 msec 
 			STRAIGHT_TIME_Process();
@@ -191,6 +194,11 @@ void do_stuff(void){
                         current_step = SET_0;
                         time_limit = SET_NEG_1;
 			what_to_do = PROJECT_05;
+                        left_wheel_count = LEFT_WHEEL_COUNT;
+ 			right_wheel_count = RIGHT_WHEEL_COUNT;
+                        what_to_do_movement = STRAIGHT;
+                        sample = ON;
+                        black_space = OFF;
 		break;
                 case THUMB_WHEEL: // 1250 msec 
 			CLOCK_TIME_Process();

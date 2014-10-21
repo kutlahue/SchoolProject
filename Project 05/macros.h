@@ -37,6 +37,7 @@
 #define SET_0                   (0) // Set the state to 0
 #define SET_1                   (1) // Set the state to 1
 #define SET_NEG_1               (-1)
+#define SET_2                   (2)
 #define ERROR                   (1) // Return an error
 #define V_DETECT_R           (0x01) // Port 1 Pin 0 offset
 #define V_DETECT_L           (0x02) // Port 1 Pin 1 offset
@@ -70,11 +71,11 @@
 #define RIGHT_WHEEL_COUNT 	 (17)
 #define LEFT_WHEEL_COUNT_CIRCLE 	(2)
 #define RIGHT_WHEEL_COUNT_CIRCLE 	(22)
-#define WHEEL_COUNT 		 (20)
+#define WHEEL_COUNT 		 (35)
 #define COMPLETE_CIRCLE 	 (900)
 #define COMPLETE_STRAIGHT 	 (60)
 #define SIXTY_DEGREES            (140)
-#define FIGURE_8                 (450)
+#define FIGURE_8_2                (450)
 
 #define	LED_STATE			(0x01)
 #define RW_FOR_ON			(0x02)
