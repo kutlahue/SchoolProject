@@ -1,0 +1,395 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         30/Oct/2014  17:54:02
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\menu.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\menu.c" -lC
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\List\"
+#        -o "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE
+#        306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\List\menu.lst
+#    Object file   =  
+#        E:\Fall 14\ECE
+#        306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\menu.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\menu.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name : menu.c
+      3          //
+      4          //  Description: This file contains the menu control functions
+      5          //
+      6          //  Mattia Muller
+      7          //  Sep 2014
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          
+     12          #include "macros.h"
+     13          #include "msp430.h"
+     14          #include "functions.h"
+     15          
+     16          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          volatile unsigned char what_to_do, shape_selection = SET_0, what_to_do_movement;
+   \                     what_to_do:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     shape_selection:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     what_to_do_movement:
+   \   000000                DS8 1
+     18          extern volatile unsigned int Time_Sequence, cycle_time, complete;
+     19          extern unsigned char count_time, straight_direction, left_wheel_on, right_wheel_on, left_wheel_count, right_wheel_count;
+     20          
+     21          
+     22          
+
+   \                                 In  segment CODE, align 2
+     23          void select_menu(void){
+   \                     select_menu:
+     24          	switch(shape_selection){
+   \   000000   5E42....     MOV.B   &shape_selection, R14
+   \   000004   5E83         SUB.B   #0x1, R14
+   \   000006   0E24         JEQ     ??select_menu_0
+   \   000008   7E800900     SUB.B   #0x9, R14
+   \   00000C   0E24         JEQ     ??select_menu_1
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   1624         JEQ     ??select_menu_2
+   \   000012   5E83         SUB.B   #0x1, R14
+   \   000014   1E24         JEQ     ??select_menu_3
+   \   000016   5E83         SUB.B   #0x1, R14
+   \   000018   2724         JEQ     ??select_menu_4
+   \   00001A   5E83         SUB.B   #0x1, R14
+   \   00001C   2F24         JEQ     ??select_menu_5
+   \   00001E   5E83         SUB.B   #0x1, R14
+   \   000020   2724         JEQ     ??select_menu_6
+   \   000022   1001         RETA
+     25          		case LED_STATE:
+     26           			what_to_do = LED_STATE;
+   \                     ??select_menu_0:
+   \   000024   D243....     MOV.B   #0x1, &what_to_do
+     27           			break;
+   \   000028   1001         RETA
+     28           		case STRAIGHT:
+     29           			what_to_do = STRAIGHT;
+   \                     ??select_menu_1:
+   \   00002A   F2400A00.... MOV.B   #0xa, &what_to_do
+     30           			left_wheel_count = LEFT_WHEEL_COUNT;
+   \   000030   F2401E00.... MOV.B   #0x1e, &left_wheel_count
+     31           			right_wheel_count = RIGHT_WHEEL_COUNT;
+   \   000036   F2401100.... MOV.B   #0x11, &right_wheel_count
+     32           			break;
+   \   00003C   1001         RETA
+     33           		case PROJECT_04:
+     34           			what_to_do = PROJECT_04;
+   \                     ??select_menu_2:
+   \   00003E   F2400B00.... MOV.B   #0xb, &what_to_do
+     35                                  left_wheel_count = LEFT_WHEEL_COUNT;
+   \   000044   F2401E00.... MOV.B   #0x1e, &left_wheel_count
+     36           			right_wheel_count = RIGHT_WHEEL_COUNT;
+   \   00004A   F2401100.... MOV.B   #0x11, &right_wheel_count
+     37           			break;
+   \   000050   1001         RETA
+     38           		case CIRCLE:
+     39           			what_to_do = CIRCLE;
+   \                     ??select_menu_3:
+   \   000052   F2400C00.... MOV.B   #0xc, &what_to_do
+     40           			left_wheel_count = LEFT_WHEEL_COUNT_CIRCLE;
+   \   000058   E243....     MOV.B   #0x2, &left_wheel_count
+     41           			right_wheel_count = RIGHT_WHEEL_COUNT_CIRCLE;
+   \   00005C   F2401600.... MOV.B   #0x16, &right_wheel_count
+     42           			cycle_time = SET_0;
+   \   000062   8243....     MOV.W   #0x0, &cycle_time
+     43           			break;
+   \   000066   1001         RETA
+     44           		case THUMB_WHEEL:
+     45           			what_to_do = THUMB_WHEEL;
+   \                     ??select_menu_4:
+   \   000068   F2400D00.... MOV.B   #0xd, &what_to_do
+     46           			break;
+   \   00006E   1001         RETA
+     47                          case TRIANGLE:
+     48                                  what_to_do = TRIANGLE;
+   \                     ??select_menu_6:
+   \   000070   F2400F00.... MOV.B   #0xf, &what_to_do
+     49                                  cycle_time = SET_0;
+   \   000076   8243....     MOV.W   #0x0, &cycle_time
+     50           			break;
+   \   00007A   1001         RETA
+     51                          case FIGURE_8:
+     52                                  what_to_do = FIGURE_8; 
+   \                     ??select_menu_5:
+   \   00007C   F2400E00.... MOV.B   #0xe, &what_to_do
+     53          			cycle_time = SET_0;
+   \   000082   8243....     MOV.W   #0x0, &cycle_time
+     54                                  break;
+     55          	}
+     56          } 
+   \   000086   1001         RETA
+     57          
+     58          //---------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     59          void shape_menu(void){
+   \                     shape_menu:
+     60          	shape_selection++;
+   \   000000   D253....     ADD.B   #0x1, &shape_selection
+     61          	if(shape_selection > TRIANGLE){
+   \   000004   F2901000.... CMP.B   #0x10, &shape_selection
+   \   00000A   0228         JNC     ??shape_menu_2
+     62           		shape_selection = LED_STATE;
+   \   00000C   D243....     MOV.B   #0x1, &shape_selection
+     63           	}
+     64           	switch(shape_selection){
+   \                     ??shape_menu_2:
+   \   000010   5E42....     MOV.B   &shape_selection, R14
+   \   000014   5E83         SUB.B   #0x1, R14
+   \   000016   2A24         JEQ     ??shape_menu_1
+   \   000018   7E800900     SUB.B   #0x9, R14
+   \   00001C   0924         JEQ     ??shape_menu_3
+   \   00001E   5E83         SUB.B   #0x1, R14
+   \   000020   1F24         JEQ     ??shape_menu_4
+   \   000022   5E83         SUB.B   #0x1, R14
+   \   000024   0B24         JEQ     ??shape_menu_5
+   \   000026   6E83         SUB.B   #0x2, R14
+   \   000028   0F24         JEQ     ??shape_menu_6
+   \   00002A   5E83         SUB.B   #0x1, R14
+   \   00002C   1324         JEQ     ??shape_menu_7
+   \   00002E   1001         RETA
+     65           		case LED_STATE:
+     66           			//shape_LED_STATE();
+     67           			break;
+     68           		case STRAIGHT:
+     69                                    lcd_out("  Straight  ",LCD_LINE_1);
+   \                     ??shape_menu_3:
+   \   000030   7D408000     MOV.B   #0x80, R13
+   \   000034   3C40....     MOV.W   #`?<Constant "  Straight  ">`, R12
+   \   000038   ........     BRA     #lcd_out
+     70          			 break;
+     71           		case CIRCLE:
+     72                                      lcd_out("  Circle  ",LCD_LINE_1);
+   \                     ??shape_menu_5:
+   \   00003C   7D408000     MOV.B   #0x80, R13
+   \   000040   3C40....     MOV.W   #`?<Constant "  Circle  ">`, R12
+   \   000044   ........     BRA     #lcd_out
+     73           			break;
+     74           		case FIGURE_8:
+     75                                    lcd_out(" Figure 8  ",LCD_LINE_1);
+   \                     ??shape_menu_6:
+   \   000048   7D408000     MOV.B   #0x80, R13
+   \   00004C   3C40....     MOV.W   #`?<Constant " Figure 8  ">`, R12
+   \   000050   ........     BRA     #lcd_out
+     76          			 break;
+     77           		case TRIANGLE:
+     78                                    lcd_out(" Triangle  ",LCD_LINE_1);
+   \                     ??shape_menu_7:
+   \   000054   7D408000     MOV.B   #0x80, R13
+   \   000058   3C40....     MOV.W   #`?<Constant " Triangle  ">`, R12
+   \   00005C   ........     BRA     #lcd_out
+     79           			break;
+     80                          case PROJECT_04:
+     81                                    lcd_out("   PROJECT 04       ",LCD_LINE_1);
+   \                     ??shape_menu_4:
+   \   000060   7D408000     MOV.B   #0x80, R13
+   \   000064   3C40....     MOV.W   #`?<Constant "   PROJECT 04       ">`, R12
+   \   000068   ........     CALLA   #lcd_out
+     82           			break;
+     83           	}
+     84          //-----------------------------------------------------
+     85          }
+   \                     ??shape_menu_1:
+   \   00006C   1001         RETA
+     86          	
+     87          struct {  // let's define our menu structure
+     88                  unsigned int value;
+     89                  char* description;
+     90                  unsigned char action;
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     91              } menu_list[] = {
+   \                     menu_list:
+   \   000000                DS8 24
+   \   000018                REQUIRE `?<Initializer for menu_list>`
+     92                  { MENU1, "   Project 4   ",  PROJECT_04},
+     93                  { MENU2, "   Project 5   ",  PROJECT_05},
+     94                  { MENU3, "    Calibrate   ",  CALIBRATE},
+     95                  { MENU4, "    SERIAL     ", SERIAL }
+     96              };
+     97          
+
+   \                                 In  segment CODE, align 2
+     98          void menu_process(int adc_value){
+   \                     menu_process:
+     99            unsigned char i;
+    100            char* display;
+    101            for ( i=SET_0; i<SET_4 && adc_value>=menu_list[i].value; i++) ;
+   \   000000   4F43         MOV.B   #0x0, R15
+   \   000002   013C         JMP     ??menu_process_1
+   \                     ??menu_process_0:
+   \   000004   5F53         ADD.B   #0x1, R15
+   \                     ??menu_process_1:
+   \   000006   6F92         CMP.B   #0x4, R15
+   \   000008   072C         JC      ??menu_process_2
+   \   00000A   4F4F         MOV.B   R15, R15
+   \   00000C   0E4F         MOV.W   R15, R14
+   \   00000E                RPT     #0x5
+   \   00000E   44180E5F     ADDX.W  R15, R14
+   \   000012   1C9E....     CMP.W   menu_list(R14), R12
+   \   000016   F62F         JC      ??menu_process_0
+    102            what_to_do =  menu_list[i].action;
+   \                     ??menu_process_2:
+   \   000018   4F4F         MOV.B   R15, R15
+   \   00001A   0E4F         MOV.W   R15, R14
+   \   00001C                RPT     #0x5
+   \   00001C   44180E5F     ADDX.W  R15, R14
+   \   000020   D24E........ MOV.B   menu_list + 4(R14), &what_to_do
+    103            display = menu_list[i].description;
+   \   000026   4F4F         MOV.B   R15, R15
+   \   000028   0E4F         MOV.W   R15, R14
+   \   00002A                RPT     #0x5
+   \   00002A   44180E5F     ADDX.W  R15, R14
+   \   00002E   1C4E....     MOV.W   menu_list + 2(R14), R12
+    104            lcd_out(display, LCD_LINE_1);
+   \   000032   7D408000     MOV.B   #0x80, R13
+   \   000036   ........     BRA     #lcd_out
+    105            
+    106          }
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for menu_list>`:
+   \   000000   FA00....     DC16 250, `?<Constant "   Project 4   ">`
+   \   000004   0B00         DC8 11, 0
+   \   000006   F401....     DC16 500, `?<Constant "   Project 5   ">`
+   \   00000A   0900         DC8 9, 0
+   \   00000C   EE02....     DC16 750, `?<Constant "    Calibrate   ">`
+   \   000010   0800         DC8 8, 0
+   \   000012   0004....     DC16 1024, `?<Constant "    SERIAL     ">`
+   \   000016   0200         DC8 2, 0
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Project 4   ">`:
+   \   000000   20202050726F DC8 "   Project 4   "
+   \            6A6563742034
+   \            20202000    
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   Project 5   ">`:
+   \   000000   20202050726F DC8 "   Project 5   "
+   \            6A6563742035
+   \            20202000    
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "    Calibrate   ">`:
+   \   000000   202020204361 DC8 "    Calibrate   "
+   \            6C6962726174
+   \            6520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "    SERIAL     ">`:
+   \   000000   202020205345 DC8 "    SERIAL     "
+   \            5249414C2020
+   \            20202000    
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  Straight  ">`:
+   \   000000   202053747261 DC8 "  Straight  "
+   \            696768742020
+   \            00          
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  Circle  ">`:
+   \   000000   202043697263 DC8 "  Circle  "
+   \            6C65202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Figure 8  ">`:
+   \   000000   204669677572 DC8 " Figure 8  "
+   \            652038202000
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " Triangle  ">`:
+   \   000000   20547269616E DC8 " Triangle  "
+   \            676C65202000
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   PROJECT 04       ">`:
+   \   000000   20202050524F DC8 "   PROJECT 04       "
+   \            4A4543542030
+   \            342020202020
+   \            202000      
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   menu_process
+        4   -> lcd_out
+      4   select_menu
+      4   shape_menu
+        4   -> lcd_out
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "    Calibrate   ">
+      16  ?<Constant "    SERIAL     ">
+      21  ?<Constant "   PROJECT 04       ">
+      16  ?<Constant "   Project 4   ">
+      16  ?<Constant "   Project 5   ">
+      11  ?<Constant "  Circle  ">
+      13  ?<Constant "  Straight  ">
+      12  ?<Constant " Figure 8  ">
+      12  ?<Constant " Triangle  ">
+      24  ?<Initializer for menu_list>
+      24  menu_list
+      58  menu_process
+     136  select_menu
+     110  shape_menu
+       1  shape_selection
+       1  what_to_do
+       1  what_to_do_movement
+
+ 
+ 304 bytes in segment CODE
+ 134 bytes in segment DATA16_C
+  24 bytes in segment DATA16_I
+  24 bytes in segment DATA16_ID
+   3 bytes in segment DATA16_Z
+ 
+ 304 bytes of CODE  memory
+ 158 bytes of CONST memory
+  27 bytes of DATA  memory
+
+Errors: none
+Warnings: none

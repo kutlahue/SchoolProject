@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:48:15
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         22/Oct/2014  19:34:27
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -337,12 +337,26 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c
    \   00000C                REQUIRE _A_PBIFG_L
     175          
     176          
-    177          
+    177          //=========================================================================== 
+    178          // Function name: do_stuff
+    179          //
+    180          // Description: Do stuff when SW1 or SW2 are pressed
+    181          //
+    182          // Passed : no variables passed
+    183          // Locals: no variables declared
+    184          // Returned: no values returned
+    185          // Globals: none
+    186          //
+    187          // Author: Mattia Muller
+    188          // Date: Sept 2013
+    189          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+    190          //******************************************************************************
+    191          //------------------------------------------------------------------------------
 
    \                                 In  segment CODE, align 2
-    178          void do_stuff(void){
+    192          void do_stuff(void){
    \                     do_stuff:
-    179            switch(what_to_do){
+    193            switch(what_to_do){
    \   000000   5E42....     MOV.B   &what_to_do, R14
    \   000004   7E82         SUB.B   #0x8, R14
    \   000006   0D24         JEQ     ??do_stuff_4
@@ -359,72 +373,72 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 05\switch.c
    \   00001C   5E83         SUB.B   #0x1, R14
    \   00001E   2C24         JEQ     ??do_stuff_3
    \   000020   1001         RETA
-    180          		case CALIBRATE:
-    181                            lcd_out("              ", LCD_LINE_2);
+    194          		case CALIBRATE:
+    195                            lcd_out("              ", LCD_LINE_2);
    \                     ??do_stuff_4:
    \   000022   7D40C000     MOV.B   #0xc0, R13
    \   000026   3C40....     MOV.W   #`?<Constant "              ">`, R12
    \   00002A   ........     CALLA   #lcd_out
-    182                                 IR_calibration(current_step);
+    196                                 IR_calibration(current_step);
    \   00002E   5C42....     MOV.B   &current_step, R12
    \   000032   ........     BRA     #IR_calibration
-    183                                 //char* ascii_value = itoa(current_step);            
-    184                                    
-    185                                 //lcd_out(ascii_value, LCD_LINE_2);     
-    186                          break;
-    187          		case STRAIGHT: // 1250 msec 
-    188          			STRAIGHT_TIME_Process();
+    197                                 //char* ascii_value = itoa(current_step);            
+    198                                    
+    199                                 //lcd_out(ascii_value, LCD_LINE_2);     
+    200                          break;
+    201          		case STRAIGHT: // 1250 msec 
+    202          			STRAIGHT_TIME_Process();
    \                     ??do_stuff_6:
    \   000036   ........     BRA     #STRAIGHT_TIME_Process
-    189          		break;
-    190                          case PROJECT_05: // 1250 msec 
-    191                                  fifty_msec_sleep_A1(SET_10);
+    203          		break;
+    204                          case PROJECT_05: // 1250 msec 
+    205                                  fifty_msec_sleep_A1(SET_10);
    \                     ??do_stuff_5:
    \   00003A   3C400A00     MOV.W   #0xa, R12
    \   00003E   ........     CALLA   #fifty_msec_sleep_A1
-    192                                  stop = OFF;
+    206                                  stop = OFF;
    \   000042   C243....     MOV.B   #0x0, &stop
-    193                                  straight_direction = FORWARD;
+    207                                  straight_direction = FORWARD;
    \   000046   D243....     MOV.B   #0x1, &straight_direction
-    194                                  current_step = SET_0;
+    208                                  current_step = SET_0;
    \   00004A   C243....     MOV.B   #0x0, &current_step
-    195                                  time_limit = SET_NEG_1;
+    209                                  time_limit = SET_NEG_1;
    \   00004E   B243....     MOV.W   #0xffff, &time_limit
-    196          			what_to_do = PROJECT_05;
+    210          			what_to_do = PROJECT_05;
    \   000052   F2400900.... MOV.B   #0x9, &what_to_do
-    197                                  left_wheel_count = LEFT_WHEEL_COUNT;
+    211                                  left_wheel_count = LEFT_WHEEL_COUNT;
    \   000058   F2401E00.... MOV.B   #0x1e, &left_wheel_count
-    198           			right_wheel_count = RIGHT_WHEEL_COUNT;
+    212           			right_wheel_count = RIGHT_WHEEL_COUNT;
    \   00005E   F2401100.... MOV.B   #0x11, &right_wheel_count
-    199                                  what_to_do_movement = STRAIGHT;
+    213                                  what_to_do_movement = STRAIGHT;
    \   000064   F2400A00.... MOV.B   #0xa, &what_to_do_movement
-    200                                  sample = ON;
+    214                                  sample = ON;
    \   00006A   D243....     MOV.B   #0x1, &sample
-    201                                  black_space = OFF;
+    215                                  black_space = OFF;
    \   00006E   C243....     MOV.B   #0x0, &black_space
-    202          		break;
+    216          		break;
    \   000072   1001         RETA
-    203                          case THUMB_WHEEL: // 1250 msec 
-    204          			CLOCK_TIME_Process();
+    217                          case THUMB_WHEEL: // 1250 msec 
+    218          			CLOCK_TIME_Process();
    \                     ??do_stuff_7:
    \   000074   ........     CALLA   #CLOCK_TIME_Process
-    205          		break;
-    206          		case CIRCLE: // 1250 msec 
-    207          			//CIRCLE_Process();
-    208          		break;
-    209          		case FIGURE_8: // 1250 msec 
-    210          		 	//FIGURE_8_Process();
-    211          		break;
-    212          		case TRIANGLE: // 1250 msec 
-    213          			//TRIANGLE_Process();
-    214          		break;
-    215          		default: 
-    216          		 	//Default_Process();
-    217          		break;
-    218          		}
-    219            
-    220            
-    221          }
+    219          		break;
+    220          		case CIRCLE: // 1250 msec 
+    221          			//CIRCLE_Process();
+    222          		break;
+    223          		case FIGURE_8: // 1250 msec 
+    224          		 	//FIGURE_8_Process();
+    225          		break;
+    226          		case TRIANGLE: // 1250 msec 
+    227          			//TRIANGLE_Process();
+    228          		break;
+    229          		default: 
+    230          		 	//Default_Process();
+    231          		break;
+    232          		}
+    233            
+    234            
+    235          }
    \                     ??do_stuff_3:
    \   000078   1001         RETA
 

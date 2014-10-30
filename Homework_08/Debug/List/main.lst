@@ -1,0 +1,248 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         30/Oct/2014  17:54:02
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\main.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\main.c" -lC
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\List\"
+#        -o "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE
+#        306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\List\main.lst
+#    Object file   =  
+#        E:\Fall 14\ECE
+#        306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\main.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\main.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name: main.c
+      3          //
+      4          //  Description: This file contains the Main Routine - "While" Operating System
+      5          //
+      6          //  Mattia Muller
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\macros.h",58  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+     15          
+     16          
+     17          // Global Variables
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile unsigned char control_state[CNTL_STATE_INDEX];
+   \                     control_state:
+   \   000000                DS8 3
+     19          extern volatile unsigned char what_to_do, sample, what_to_do_movement;
+     20          extern volatile unsigned int Time_Sequence, ADC_Thumb, ADC_Right_Detector, ADC_Left_Detector;
+     21          
+     22          //=========================================================================== 
+     23          // Function name: Main
+     24          //
+     25          // Description: This function contains the while loop that runs continuously
+     26          // to act for the operating system. It also calls all the functions to // initialize the system.
+     27          //
+     28          // Passed : no variables passed
+     29          // Locals: no variables declared
+     30          // Returned: no values returned
+     31          // Globals: control_state[CNTL_STATE_INDEX]
+     32          //
+     33          // Author: Mattia Muller
+     34          // Date: Sept 2013
+     35          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) 
+     36          //===========================================================================
+
+   \                                 In  segment CODE, align 2
+     37          void main(void){
+   \                     main:
+   \   000000   0A12         PUSH.W  R10
+     38            Init_Ports();                             // Initialize Ports
+   \   000002   ........     CALLA   #Init_Ports
+     39            Init_Clocks();                            // Initialize Clock System 
+   \   000006   ........     CALLA   #Init_Clocks
+     40            Init_Conditions();
+   \   00000A   ........     CALLA   #Init_Conditions
+     41            PJOUT |= LED1;                            // Turn LED 1 on to indicate boot
+   \   00000E   92D32203     BIS.W   #0x1, &0x322
+     42            Init_Timers();                            // Initialize Timers
+   \   000012   ........     CALLA   #Init_Timers
+     43            five_msec_sleep(INIT_TIMER);              // 375 msec delay for the clock to settle
+   \   000016   3C404B00     MOV.W   #0x4b, R12
+   \   00001A   ........     CALLA   #five_msec_sleep
+     44            Init_LCD();                               // Initialize LCD
+   \   00001E   ........     CALLA   #Init_LCD
+     45            five_msec_sleep(INIT_TIMER);              // 375 msec delay for the clock to settle
+   \   000022   3C404B00     MOV.W   #0x4b, R12
+   \   000026   ........     CALLA   #five_msec_sleep
+     46            Init_LEDs();                              // Initialize LEDs
+   \   00002A   ........     CALLA   #Init_LEDs
+     47            Init_ADC();
+   \   00002E   ........     CALLA   #Init_ADC
+     48            Init_Serial_UCA1();
+                   ^
+Warning[Pe223]: function "Init_Serial_UCA1" declared implicitly
+   \   000032   ........     CALLA   #Init_Serial_UCA1
+     49            
+     50            //P3OUT |= TEST_PROBE;
+     51          
+     52                    ADC_Process();		// Let' sample the ADC values
+   \   000036   ........     CALLA   #ADC_Process
+   \   00003A   023C         JMP     ??main_1
+     53          /*
+     54                    uart_send_byte(0x1);
+     55                    uart_send_byte(0x0);
+     56                    uart_send_byte('a');
+     57                    uart_send_byte(0x1);
+     58                    */
+     59                    
+     60             int old_value;
+     61          //------------------------------------------------------------------------------
+     62          // Begining of the "While" Operating System
+     63          //------------------------------------------------------------------------------
+     64           while(ALWAYS) {                            // Can the Operating system run
+     65           
+     66                  // if (Time_Sequence%3 == 0){
+     67                     sample = ON;
+     68                  // } else {
+     69                  //   sample = OFF;
+     70                  // }
+     71                  // Are we on a black line
+     72                  sample_process();    // Are we sampling or not?
+     73                  Switches_Process();  // Switches YEAH!
+     74                   if (ADC_Thumb != old_value){
+     75                     menu_process(ADC_Thumb);
+     76                     //five_msec_sleep(1);
+     77                   }
+     78                   old_value = ADC_Thumb;
+     79          	 
+     80                   if(Time_Sequence > SET_250){
+     81                      Time_Sequence = SET_0;
+     82                      
+     83                   }
+     84                   
+     85                    black_line_detect(); 
+     86                    project_5_process(); 
+     87                    if(what_to_do_movement == STRAIGHT) {
+     88                       STRAIGHT_TIME_Process();
+   \                     ??main_0:
+   \   00003C   ........     CALLA   #STRAIGHT_TIME_Process
+     89                       
+     90                     } else if (what_to_do_movement ==  THUMB_WHEEL) {
+   \                     ??main_1:
+   \   000040   D243....     MOV.B   #0x1, &sample
+   \   000044   ........     CALLA   #sample_process
+   \   000048   ........     CALLA   #Switches_Process
+   \   00004C   829A....     CMP.W   R10, &ADC_Thumb
+   \   000050   0424         JEQ     ??main_2
+   \   000052   1C42....     MOV.W   &ADC_Thumb, R12
+   \   000056   ........     CALLA   #menu_process
+   \                     ??main_2:
+   \   00005A   1A42....     MOV.W   &ADC_Thumb, R10
+   \   00005E   B290FB00.... CMP.W   #0xfb, &Time_Sequence
+   \   000064   0228         JNC     ??main_3
+   \   000066   8243....     MOV.W   #0x0, &Time_Sequence
+   \                     ??main_3:
+   \   00006A   ........     CALLA   #black_line_detect
+   \   00006E   ........     CALLA   #project_5_process
+   \   000072   F2900A00.... CMP.B   #0xa, &what_to_do_movement
+   \   000078   E127         JEQ     ??main_0
+   \   00007A   F2900D00.... CMP.B   #0xd, &what_to_do_movement
+   \   000080   DF23         JNE     ??main_1
+     91                       CLOCK_TIME_Process();
+   \   000082   ........     CALLA   #CLOCK_TIME_Process
+   \   000086   DC3F         JMP     ??main_1
+   \   000088   0343         NOP
+   \   00008A                REQUIRE _A_PJOUT_L
+     92                       
+     93                     }
+     94          
+     95                     
+     96                   
+     97                   
+     98                	}
+     99          //------------------------------------------------------------------------------
+    100          }
+    101          
+    102          
+    103          
+    104          
+    105          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   main
+        6   -> ADC_Process
+        6   -> CLOCK_TIME_Process
+        6   -> Init_ADC
+        6   -> Init_Clocks
+        6   -> Init_Conditions
+        6   -> Init_LCD
+        6   -> Init_LEDs
+        6   -> Init_Ports
+        6   -> Init_Serial_UCA1
+        6   -> Init_Timers
+        6   -> STRAIGHT_TIME_Process
+        6   -> Switches_Process
+        6   -> black_line_detect
+        6   -> five_msec_sleep
+        6   -> menu_process
+        6   -> project_5_process
+        6   -> sample_process
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PJOUT_L
+       3  control_state
+     138  main
+
+ 
+ 138 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+   3 bytes in segment DATA16_Z
+ 
+ 138 bytes of CODE memory
+   3 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: 2

@@ -174,7 +174,21 @@ void enableInput(void)
 }
 
 
-
+//=========================================================================== 
+// Function name: do_stuff
+//
+// Description: Do stuff when SW1 or SW2 are pressed
+//
+// Passed : no variables passed
+// Locals: no variables declared
+// Returned: no values returned
+// Globals: none
+//
+// Author: Mattia Muller
+// Date: Sept 2013
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1) //===========================================================================
+//******************************************************************************
+//------------------------------------------------------------------------------
 void do_stuff(void){
   switch(what_to_do){
 		case CALIBRATE:

@@ -103,7 +103,7 @@
 
 #define TA0CCR0_INTERVAL                (2500)
 #define TA0CCR1_INTERVAL                (25000)
-#define TA0CCR2_INTERVAL				(5000)
+#define TA0CCR2_INTERVAL	        (5000)
 #define ONESEC                          (200)
 #define HALFSEC                         (100)
 #define TWOSEC                          (400)

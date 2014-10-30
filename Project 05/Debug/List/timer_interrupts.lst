@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         21/Oct/2014  19:48:15
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         22/Oct/2014  19:34:27
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -290,7 +290,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
     138          
     139                }
     140                TA0CCR1 += TA0CCR1_INTERVAL;     // Add Offset to TACCR1
-   \   00005C   B250A8615403 ADD.W   #0x61a8, &0x354
+   \   00005C   B25090D05403 ADD.W   #0xd090, &0x354
     141                break;
    \   000062   073C         JMP     ??TIMER0_A1_ISR_1
     142              case  4:                           // CCR2 used for ???
