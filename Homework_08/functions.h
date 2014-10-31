@@ -83,3 +83,4 @@ void black_line_detect(void);
 
 // Serial
 void uart_send_byte(unsigned char data);
+void compare_receive_ring_buffer(void);

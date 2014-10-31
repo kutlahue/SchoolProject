@@ -27,6 +27,8 @@ extern volatile unsigned char stop, straight_direction, sample, what_to_do, what
 extern volatile int time_limit;
 extern unsigned char right_wheel_count, left_wheel_count;
 
+extern volatile unsigned int cpu_rx_ring_wr, cpu_rx_ring_rd, cpu_tx_ring_wr, cpu_tx_ring_rd;
+
 //=========================================================================== 
 // Function name: Switch1_Process
 //
@@ -218,8 +220,15 @@ void do_stuff(void){
 		break;
 		case SERIAL: 
                   if (current_step == SET_0) {
-                       uart_send_byte('N');
+                    char temp = UCA1RXBUF;
+                    UCA1IE |= UCTXIE;
                   } else {
+                   // UCA1IE &= ~UCTXIE;
+                   // UCA1IFG = SET_2;
+                    cpu_rx_ring_wr = SET_0;
+                    cpu_rx_ring_rd = SET_0;
+                    cpu_tx_ring_wr = SET_0;
+                    cpu_tx_ring_rd = SET_0;
                     lcd_out("               ",LCD_LINE_2);
                   }
 		break;

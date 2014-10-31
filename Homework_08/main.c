@@ -50,12 +50,7 @@ void main(void){
   //P3OUT |= TEST_PROBE;
 
           ADC_Process();		// Let' sample the ADC values
-/*
-          uart_send_byte(0x1);
-          uart_send_byte(0x0);
-          uart_send_byte('a');
-          uart_send_byte(0x1);
-          */
+
           
    int old_value;
 //------------------------------------------------------------------------------

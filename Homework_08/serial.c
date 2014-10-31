@@ -15,27 +15,30 @@
 
 const char string[] = "NCSU #1";
 
-unsigned int usb_rx_ring_wr, usb_rx_ring_rd, usb_tx_ring_wr, usb_tx_ring_rd, i;
-char* USB_Char_Rx;
-char* USB_Char_Tx;
+volatile unsigned int cpu_rx_ring_wr, cpu_rx_ring_rd, cpu_tx_ring_wr, cpu_tx_ring_rd;
+char CPU_Char_Rx[SMALL_RING_SIZE];
+char CPU_Char_Tx[LARGE_RING_SIZE];
 
-char reception[16];
+
+char to_display[16];
+
+volatile unsigned int i;
 
 //---------------------------------------------------------------------------- 
 void Init_Serial_UCA1(void){
-volatile int i;
+
 
 for(i=SET_0; i<SMALL_RING_SIZE; i++){
-  USB_Char_Rx[i] = SET_0;       // USB Character
+  CPU_Char_Rx[i] = SET_0;       // CPU Character
   }
-  usb_rx_ring_wr = SET_0;
-  usb_rx_ring_rd = SET_0;
+  cpu_rx_ring_wr = SET_0;
+  cpu_rx_ring_rd = SET_0;
 
 for(i=SET_0; i<LARGE_RING_SIZE; i++){ 
-    USB_Char_Tx[i] = SET_0;     // USB Character
+    CPU_Char_Tx[i] = string[i];     // CPU Character
   }
-  usb_tx_ring_wr = SET_0;
-  usb_tx_ring_rd = SET_0;
+  cpu_tx_ring_wr = SET_0;
+  cpu_tx_ring_rd = SET_0;
   
 // Configure UART 0
 UCA1CTLW0 = SET_0; // Use word register 
@@ -88,33 +91,28 @@ switch(__even_in_range(UCA1IV,0x08)){
     case 0: // Vector 0 - no interrupt
       break;
     case 2: // Vector 2 - RXIFG
-      /*
-      temp = usb_rx_ring_wr++; 
-      USB_Char_Rx[temp] = UCA0RXBUF; // RX -> USB_Char_Rx character
-      if (usb_rx_ring_wr >= (SMALL_RING_SIZE)){
-        usb_rx_ring_wr = BEGINNING; // Circular buffer back to beginning
-      }
-      */
+      //UCA1IE &= ~UCRXIE; // Disable USCI_A1 RX interrupt
       PJOUT |= LED3; 
-      if (i < (sizeof string - SET_NEG_1)) {
-        if (UCA1RXBUF == string[i] ) {
-            UCA1TXBUF = string[i++];
-            reception[i] = UCA1RXBUF;
-            i++;
-        }
-      }
       
-          PJOUT &= ~LED3;
+      CPU_Char_Rx[cpu_rx_ring_wr] = UCA1RXBUF;
+      cpu_rx_ring_wr++;
+      
+      compare_receive_ring_buffer();
+      
+      UCA1IE |= UCTXIE; // Enable USCI_A1 RX interrupt
+      PJOUT &= ~LED3;
       break;
     case 4: // Vector 4 – TXIFG 
      
       PJOUT |= LED2;
-     // UCA1TXBUF = string[i++]; // TX next character 
-    
-      if (i == sizeof string - 1){ // TX over? 
-        //UCA1IE &= ~UCTXIE; // Disable USCI_A0 TX interrupt 
-        i=0;
+      UCA1IE &= ~UCTXIE; // Disable USCI_A1 TX interrupt
+      
+      if (cpu_tx_ring_wr < sizeof CPU_Char_Tx){ // TX over? 
+          UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr]; // TX next character 
+          cpu_tx_ring_wr++;
       }
+      
+      //UCA1IE |= UCRXIE; // Enable USCI_A1 RX interrupt
       PJOUT &= ~LED2;
       break;
     default: break;
@@ -124,3 +122,10 @@ switch(__even_in_range(UCA1IV,0x08)){
 
 
 
+void compare_receive_ring_buffer(void){
+  if(cpu_rx_ring_wr > cpu_rx_ring_rd) {
+    to_display[cpu_rx_ring_rd] = CPU_Char_Rx[cpu_rx_ring_rd];
+    cpu_rx_ring_rd++;
+    lcd_out(to_display, LCD_LINE_2);
+  }
+}

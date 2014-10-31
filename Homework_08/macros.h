@@ -139,6 +139,6 @@
 #define MENU4                           (1024)
 
 
-#define SMALL_RING_SIZE                 (7)
-#define LARGE_RING_SIZE                 (8)
+#define SMALL_RING_SIZE                 (16)
+#define LARGE_RING_SIZE                 (16)
 #define BEGINNING                       (0)

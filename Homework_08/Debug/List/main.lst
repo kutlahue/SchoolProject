@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         30/Oct/2014  17:54:02
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         31/Oct/2014  15:18:26
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -124,46 +124,41 @@ Warning[Pe223]: function "Init_Serial_UCA1" declared implicitly
      52                    ADC_Process();		// Let' sample the ADC values
    \   000036   ........     CALLA   #ADC_Process
    \   00003A   023C         JMP     ??main_1
-     53          /*
-     54                    uart_send_byte(0x1);
-     55                    uart_send_byte(0x0);
-     56                    uart_send_byte('a');
-     57                    uart_send_byte(0x1);
-     58                    */
-     59                    
-     60             int old_value;
-     61          //------------------------------------------------------------------------------
-     62          // Begining of the "While" Operating System
-     63          //------------------------------------------------------------------------------
-     64           while(ALWAYS) {                            // Can the Operating system run
-     65           
-     66                  // if (Time_Sequence%3 == 0){
-     67                     sample = ON;
-     68                  // } else {
-     69                  //   sample = OFF;
-     70                  // }
-     71                  // Are we on a black line
-     72                  sample_process();    // Are we sampling or not?
-     73                  Switches_Process();  // Switches YEAH!
-     74                   if (ADC_Thumb != old_value){
-     75                     menu_process(ADC_Thumb);
-     76                     //five_msec_sleep(1);
-     77                   }
-     78                   old_value = ADC_Thumb;
-     79          	 
-     80                   if(Time_Sequence > SET_250){
-     81                      Time_Sequence = SET_0;
-     82                      
-     83                   }
-     84                   
-     85                    black_line_detect(); 
-     86                    project_5_process(); 
-     87                    if(what_to_do_movement == STRAIGHT) {
-     88                       STRAIGHT_TIME_Process();
+     53          
+     54                    
+     55             int old_value;
+     56          //------------------------------------------------------------------------------
+     57          // Begining of the "While" Operating System
+     58          //------------------------------------------------------------------------------
+     59           while(ALWAYS) {                            // Can the Operating system run
+     60           
+     61                  // if (Time_Sequence%3 == 0){
+     62                     sample = ON;
+     63                  // } else {
+     64                  //   sample = OFF;
+     65                  // }
+     66                  // Are we on a black line
+     67                  sample_process();    // Are we sampling or not?
+     68                  Switches_Process();  // Switches YEAH!
+     69                   if (ADC_Thumb != old_value){
+     70                     menu_process(ADC_Thumb);
+     71                     //five_msec_sleep(1);
+     72                   }
+     73                   old_value = ADC_Thumb;
+     74          	 
+     75                   if(Time_Sequence > SET_250){
+     76                      Time_Sequence = SET_0;
+     77                      
+     78                   }
+     79                   
+     80                    black_line_detect(); 
+     81                    project_5_process(); 
+     82                    if(what_to_do_movement == STRAIGHT) {
+     83                       STRAIGHT_TIME_Process();
    \                     ??main_0:
    \   00003C   ........     CALLA   #STRAIGHT_TIME_Process
-     89                       
-     90                     } else if (what_to_do_movement ==  THUMB_WHEEL) {
+     84                       
+     85                     } else if (what_to_do_movement ==  THUMB_WHEEL) {
    \                     ??main_1:
    \   000040   D243....     MOV.B   #0x1, &sample
    \   000044   ........     CALLA   #sample_process
@@ -184,25 +179,25 @@ Warning[Pe223]: function "Init_Serial_UCA1" declared implicitly
    \   000078   E127         JEQ     ??main_0
    \   00007A   F2900D00.... CMP.B   #0xd, &what_to_do_movement
    \   000080   DF23         JNE     ??main_1
-     91                       CLOCK_TIME_Process();
+     86                       CLOCK_TIME_Process();
    \   000082   ........     CALLA   #CLOCK_TIME_Process
    \   000086   DC3F         JMP     ??main_1
    \   000088   0343         NOP
    \   00008A                REQUIRE _A_PJOUT_L
-     92                       
-     93                     }
-     94          
-     95                     
-     96                   
-     97                   
-     98                	}
-     99          //------------------------------------------------------------------------------
-    100          }
-    101          
-    102          
-    103          
-    104          
-    105          
+     87                       
+     88                     }
+     89          
+     90                     
+     91                   
+     92                   
+     93                	}
+     94          //------------------------------------------------------------------------------
+     95          }
+     96          
+     97          
+     98          
+     99          
+    100          
 
    Maximum stack usage in bytes:
 
