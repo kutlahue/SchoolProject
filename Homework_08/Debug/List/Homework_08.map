@@ -9,7 +9,7 @@ Warning[w6]: Type conflict for external/entry "Init_Serial_UCA1", in module main
 #                                                                              #
 #      IAR Universal Linker V6.0.0.46                                          #
 #                                                                              #
-#           Link time     =  31/Oct/2014  16:26:22                             #
+#           Link time     =  05/Nov/2014  12:29:58                             #
 #           Target CPU    =  MSP430                                            #
 #           List file     =  "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEW #
 #                            ORK_08\Debug\List\Homework_08.map"                #
@@ -171,16 +171,16 @@ adc ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\adc.r43 )
         sample                              1C45
         black_space                         1C46
         tresholds                           1C20
-        Init_ADC                            CBAE
+        Init_ADC                            CB56
         ADC10_ISR                           C2AA
-        ADC_Process                         D0B8
-        itoa                                CCB2
-        sample_process                      D062
-        black_line_detect                   CE04
-        disableADC                          D0EA
-        enableADC                           D12C
-        IR_calibration                      CC1A
-        set_treshold                        CFD8
+        ADC_Process                         D0D0
+        itoa                                CCA6
+        sample_process                      D07A
+        black_line_detect                   CDF8
+        disableADC                          D102
+        enableADC                           D144
+        IR_calibration                      CBC2
+        set_treshold                        CFF0
         ADC10_ISR::??INTVEC 92              FFEC
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -223,11 +223,11 @@ init ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\init.r43
         _A_PBOUT_L                          NOT NEEDED
         _A_PJOUT_L                          0322
         _A_WDTCTL_L                         015C
-        Init_Ports                          D020
-        Init_Conditions                     D13E
-        Init_Timers                         D0D2
-        Init_LEDs                           CE2E
-        Init_Clocks                         CF46
+        Init_Ports                          D038
+        Init_Conditions                     D156
+        Init_Timers                         D0EA
+        Init_LEDs                           CE76
+        Init_Clocks                         CF5E
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         CSCTL0                              0160
@@ -266,21 +266,21 @@ LCD ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\LCD.r43 )
         current_line                        1C57
         update_display_count                NOT NEEDED
         display_update_time                 NOT NEEDED
-        Init_SPI_B0                         CEFC
-        SPI_B0_write                        D04E
-        spi_rs_data                         D0FC
-        spi_rs_command                      D0F4
-        spi_chipselect_idle                 D10C
-        spi_chipselect_active               D114
-        spi_reset_idle                      D11C
-        spi_reset_active                    D124
-        Init_LCD                            C92E
+        Init_SPI_B0                         CECA
+        SPI_B0_write                        D066
+        spi_rs_data                         D114
+        spi_rs_command                      D134
+        spi_chipselect_idle                 D13C
+        spi_chipselect_active               D124
+        spi_reset_idle                      D12C
+        spi_reset_active                    D11C
+        Init_LCD                            C944
         lcd_clear                           NOT NEEDED
-        lcd_write                           CCF8
+        lcd_write                           CCEC
         lcd_command                         NOT NEEDED
-        lcd_putc                            CDA6
+        lcd_putc                            CD9A
         lcd_puts                            NOT NEEDED
-        lcd_out                             CF22
+        lcd_out                             CF16
         Display_Process                     NOT NEEDED
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -310,7 +310,7 @@ LED ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\LED.r43 )
 main ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\main.r43 )
         _A_PJOUT_L                          NOT NEEDED
         control_state                       NOT NEEDED
-        main                                C9BC
+        main                                C9D2
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PJOUT                               0322
@@ -323,7 +323,7 @@ menu ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\menu.r43
         select_menu                         NOT NEEDED
         shape_menu                          NOT NEEDED
         menu_list                           1C00
-        menu_process                        CD38
+        menu_process                        CD2C
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 ports ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\ports.r43 )
@@ -342,11 +342,11 @@ ports ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\ports.r
         _A_PJDIR_L                          0324
         _A_PJSEL0_L                         032A
         _A_PJSEL1_L                         032C
-        Init_Port1                          CA46
-        Init_Port2                          CED6
-        Init_Port3                          CE58
-        Init_Port4                          CE82
-        Init_PortJ                          CDD6
+        Init_Port1                          CA5C
+        Init_Port2                          CEF0
+        Init_Port3                          CE22
+        Init_Port4                          CE4C
+        Init_PortJ                          CDCA
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PAOUT                               0202
@@ -412,10 +412,11 @@ serial ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\serial
         CPU_Char_Tx                         1C6A
         to_display                          1C7A
         i                                   1C30
-        Init_Serial_UCA1                    CB40
+        Init_Serial_UCA1                    CF3A
+        reset_buffers                       CC12
         uart_send_byte                      NOT NEEDED
         USCI_A1_ISR                         C310
-        compare_receive_ring_buffer         CEAC
+        compare_receive_ring_buffer         CEA0
         USCI_A1_ISR::??INTVEC 86            FFE6
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -456,8 +457,8 @@ shape ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\shape.r
         stop                                1C90
         distance                            1C32
         time_limit                          1C34
-        STRAIGHT_TIME_Process               C5F0
-        CLOCK_TIME_Process                  C73A
+        STRAIGHT_TIME_Process               C73A
+        CLOCK_TIME_Process                  C5F0
         project_5_process                   C478
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -472,7 +473,7 @@ switch ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\switch
         _A_PBIFG_L                          023C
         P4IV                                023E
         _A_PJOUT_L                          NOT NEEDED
-        _A_UCA1RXBUF_L                      NOT NEEDED
+        _A_UCA1TXBUF_L                      NOT NEEDED
         _A_UCA1IE_L                         NOT NEEDED
         okay_to_look_at_switch1             1C91
         okay_to_look_at_switch2             1C92
@@ -480,11 +481,11 @@ switch ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\switch
         sw2_position                        1C19
         count_debounce_SW1                  1C36
         count_debounce_SW2                  1C38
-        Switch1_Process                     CFA2
-        Switch2_Process                     CF86
-        Switches_Process                    D104
+        Switch1_Process                     CF82
+        Switch2_Process                     CFBA
+        Switches_Process                    D10C
         PORT4_VECTOR_ISR                    C36E
-        disableInput                        D0C6
+        disableInput                        D0F6
         enableInput                         D0DE
         do_stuff                            C884
         PORT4_VECTOR_ISR::??INTVEC 64       FFD0
@@ -499,14 +500,14 @@ switch ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\switch
         PJOUT                               0322
         PJOUT_H                             0323
         PJOUT_L                             0322
-        UCA1RXBUF                           05EC
-        UCA1RXBUF_H                         05ED
-        UCA1RXBUF_L                         05EC
+        UCA1TXBUF                           05EE
+        UCA1TXBUF_H                         05EF
+        UCA1TXBUF_L                         05EE
         UCA1IE                              05FA
         UCA1IE_H                            05FB
         UCA1IE_L                            05FA
 system ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\system.r43 )
-        enable_interrupts                   D136
+        enable_interrupts                   D14E
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timer_interrupts ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\timer_interrupts.r43 )
@@ -522,7 +523,7 @@ timer_interrupts ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\
         ten_msec_count_timer_A2             1C93
         Timer0_A0_ISR                       C3AC
         TIMER0_A1_ISR                       C3F2
-        ten_msec_timer_code_switch          CAD0
+        ten_msec_timer_code_switch          CAE6
         TIMER0_A1_ISR::??INTVEC 88          FFE8
         Timer0_A0_ISR::??INTVEC 90          FFEA
         ?setjmp_save_r4                     NOT NEEDED
@@ -550,12 +551,12 @@ timers ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\Debug\Obj\timers
         one_time                            1C94
         five_msec_count_timer_A0            1C40
         fifty_msec_count_timer_A1           1C42
-        usleep10                            D008
+        usleep10                            D020
         five_msec_sleep_A0                  NOT NEEDED
-        five_msec_sleep                     D098
-        TimerB0code                         D038
-        Init_Timer_A0                       CC6A
-        fifty_msec_sleep_A1                 D0A8
+        five_msec_sleep                     D0B0
+        TimerB0code                         D050
+        Init_Timer_A0                       CC5E
+        fifty_msec_sleep_A1                 D0C0
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timersB2 ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\timersB2.r43 )
@@ -565,7 +566,7 @@ timersB2 ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\timersB2.r43 )
         TB2EX0                              0460
         sleeping                            NOT NEEDED
         sleeptime                           NOT NEEDED
-        Init_Timer_B2                       CFBE
+        Init_Timer_B2                       CFD6
         led_blink                           NOT NEEDED
         gps_resetting                       NOT NEEDED
         gps_2b_reset                        NOT NEEDED
@@ -579,15 +580,15 @@ timersB2 ( E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\timersB2.r43 )
 ?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         abort                               NOT NEEDED
 ?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __DebugBreak                        D146
+        __DebugBreak                        D15E
 ?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         __dwrite                            NOT NEEDED
 ?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __exit                              CFF0
+        __exit                              D008
 ?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         __write                             NOT NEEDED
 ?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        _exit                               D142
+        _exit                               D15A
         __cstart_call_dtors                 NOT NEEDED
         __cstart_closeall                   NOT NEEDED
         __cstart_clearlocks                 NOT NEEDED
@@ -616,22 +617,22 @@ lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib
 ?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         ?reset_vector                       FFFE
 ?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        exit                                D13A
+        exit                                D152
 ?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         malloc                              NOT NEEDED
 ?DivMod816u ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        ?DivMod8u                           CF6A
-        ?DivMod16u                          CF6E
+        ?DivMod8u                           CF9E
+        ?DivMod16u                          CFA2
 ?DivMod816s ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        ?DivMod8s                           CD72
-        ?DivMod16s                          CD76
+        ?DivMod8s                           CD66
+        ?DivMod16s                          CD6A
 ?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        memcpy                              D074
+        memcpy                              D08C
 ?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         memmove                             NOT NEEDED
 ?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
-        __data16_memzero                    D086
-        __data16_memcpy                     D132
+        __data16_memzero                    D09E
+        __data16_memcpy                     D14A
         __data16_memmove                    NOT NEEDED
 ?MpuInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.r43 )
         __iar_430_mpu_init                  NOT NEEDED
@@ -694,11 +695,11 @@ main                  138
 menu                   58     26            89
 ports                 306            22
   + shared                            2
-serial                246     58     10      8
+serial                248     58     10      8
   + shared             88             4
   + common
 shape               1 036     11      2
-switch                320      8      4     33
+switch                342      8      4     33
   + common             66
 system                  4
 timer_interrupts      300      3      2
@@ -710,7 +711,7 @@ timersB2               42             8
 N/A (command line)           160
 N/A (alignment)
 ----------          -----    ---    ---    ---
-Total:              3 784    309    108    130
+Total:              3 808    309    108    130
   + common             94
 
 
@@ -760,7 +761,7 @@ DATA16_C                               C200 - C267              68   rel    0
 DATA16_ID                              C268 - C281              1A   rel    1
 CSTART                                 C282 - C2A9              28   rel    1
 ISR_CODE                               C2AA - C477             1CE   rel    1
-<CODE> 1                               C478 - D147             CD0   rel    1
+<CODE> 1                               C478 - D15F             CE8   rel    1
 INTVEC                                 FF90 - FFED              5E   com    1
 RESET                                  FFFE - FFFF               2   rel    1
 
@@ -770,7 +771,7 @@ RESET                                  FFFE - FFFF               2   rel    1
                 *                                      *
                 ****************************************
 
- 3 878 bytes of CODE  memory
+ 3 902 bytes of CODE  memory
    309 bytes of DATA  memory (+ 108 absolute )
    130 bytes of CONST memory
 

@@ -27,6 +27,10 @@ extern volatile unsigned char stop, straight_direction, sample, what_to_do, what
 extern volatile int time_limit;
 extern unsigned char right_wheel_count, left_wheel_count;
 
+extern volatile char CPU_Char_Rx[SMALL_RING_SIZE];
+extern volatile char CPU_Char_Tx[LARGE_RING_SIZE];
+
+
 extern volatile unsigned int cpu_rx_ring_wr, cpu_rx_ring_rd, cpu_tx_ring_wr, cpu_tx_ring_rd;
 
 //=========================================================================== 
@@ -220,7 +224,8 @@ void do_stuff(void){
 		break;
 		case SERIAL: 
                   if (current_step == SET_0) {
-                    char temp = UCA1RXBUF;
+                    reset_buffers();
+                    UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr++];
                     UCA1IE |= UCTXIE;
                   } else {
                    // UCA1IE &= ~UCTXIE;

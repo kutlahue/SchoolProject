@@ -16,8 +16,8 @@
 const char string[] = "NCSU #1";
 
 volatile unsigned int cpu_rx_ring_wr, cpu_rx_ring_rd, cpu_tx_ring_wr, cpu_tx_ring_rd;
-char CPU_Char_Rx[SMALL_RING_SIZE];
-char CPU_Char_Tx[LARGE_RING_SIZE];
+volatile char CPU_Char_Rx[SMALL_RING_SIZE];
+volatile char CPU_Char_Tx[LARGE_RING_SIZE];
 
 
 char to_display[16];
@@ -26,19 +26,6 @@ volatile unsigned int i;
 
 //---------------------------------------------------------------------------- 
 void Init_Serial_UCA1(void){
-
-
-for(i=SET_0; i<SMALL_RING_SIZE; i++){
-  CPU_Char_Rx[i] = SET_0;       // CPU Character
-  }
-  cpu_rx_ring_wr = SET_0;
-  cpu_rx_ring_rd = SET_0;
-
-for(i=SET_0; i<LARGE_RING_SIZE; i++){ 
-    CPU_Char_Tx[i] = string[i];     // CPU Character
-  }
-  cpu_tx_ring_wr = SET_0;
-  cpu_tx_ring_rd = SET_0;
   
 // Configure UART 0
 UCA1CTLW0 = SET_0; // Use word register 
@@ -71,6 +58,20 @@ UCA1IE |= UCRXIE; // Enable RX interrupt
 }
 
 
+void reset_buffers(void){
+
+  for(i=SET_0; i<SMALL_RING_SIZE; i++){
+    CPU_Char_Rx[i] = SET_0;       // CPU Character
+    }
+    cpu_rx_ring_wr = SET_0;
+    cpu_rx_ring_rd = SET_0;
+
+  for(i=SET_0; i<LARGE_RING_SIZE; i++){ 
+      CPU_Char_Tx[i] = string[i];     // CPU Character
+    }
+    cpu_tx_ring_wr = SET_0;
+    cpu_tx_ring_rd = SET_0;
+}
 
 void uart_send_byte( unsigned char data ) {
   
