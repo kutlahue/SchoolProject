@@ -142,3 +142,4 @@
 #define SMALL_RING_SIZE                 (16)
 #define LARGE_RING_SIZE                 (16)
 #define BEGINNING                       (0)
+#define SPACE                           (0x20)

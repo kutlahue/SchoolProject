@@ -29,11 +29,19 @@ ShowArgs=0
 MixedMode=1
 [EEM Sequencer]
 Buffer=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[watch_formats]
+Fmt0={W}0:circle_number	3	0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\WORKSPACE\SCHOOLPROJECT\PROJECT 06\switch.c}.228.21" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c}.134.5" 1 0 0 0 "" 0 ""
-Bp2=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c}.151.5" 1 0 0 0 "" 0 ""
-Count=3
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\FALL 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\switch.c}.228.21" 1 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\FALL 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c}.146.5" 1 0 0 0 "" 0 ""
+Count=2
 [FET]
 Clock mode=46
 Extended Clock mode=1039
@@ -54,13 +62,6 @@ SP=0
 SR=0
 all registers=0
 File name=
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Aliases]
 A0=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_03\LCD.c" ""
 Count=1

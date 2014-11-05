@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         05/Nov/2014  12:29:57
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         05/Nov/2014  13:30:45
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -384,9 +384,9 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\switch.c
    \   000016   7E800300     SUB.B   #0x3, R14
    \   00001A   2E24         JEQ     ??do_stuff_7
    \   00001C   5E83         SUB.B   #0x1, R14
-   \   00001E   4F24         JEQ     ??do_stuff_2
+   \   00001E   4924         JEQ     ??do_stuff_2
    \   000020   5E83         SUB.B   #0x1, R14
-   \   000022   4D24         JEQ     ??do_stuff_2
+   \   000022   4724         JEQ     ??do_stuff_2
    \   000024   1001         RETA
     199          		case CALIBRATE:
     200                            lcd_out("              ", LCD_LINE_2);
@@ -459,38 +459,32 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\switch.c
     230                            } else {
     231                             // UCA1IE &= ~UCTXIE;
     232                             // UCA1IFG = SET_2;
-    233                              cpu_rx_ring_wr = SET_0;
+    233                              reset_buffers();
    \                     ??do_stuff_8:
-   \   0000A2   8243....     MOV.W   #0x0, &cpu_rx_ring_wr
-    234                              cpu_rx_ring_rd = SET_0;
-   \   0000A6   8243....     MOV.W   #0x0, &cpu_rx_ring_rd
-    235                              cpu_tx_ring_wr = SET_0;
-   \   0000AA   8243....     MOV.W   #0x0, &cpu_tx_ring_wr
-    236                              cpu_tx_ring_rd = SET_0;
-   \   0000AE   8243....     MOV.W   #0x0, &cpu_tx_ring_rd
-    237                              lcd_out("               ",LCD_LINE_2);
-   \   0000B2   7D40C000     MOV.B   #0xc0, R13
-   \   0000B6   3C40....     MOV.W   #`?<Constant "               ">`, R12
-   \   0000BA   ........     CALLA   #lcd_out
-    238                            }
+   \   0000A2   ........     CALLA   #reset_buffers
+    234                              lcd_out("               ",LCD_LINE_2);
+   \   0000A6   7D40C000     MOV.B   #0xc0, R13
+   \   0000AA   3C40....     MOV.W   #`?<Constant "               ">`, R12
+   \   0000AE   ........     CALLA   #lcd_out
+    235                            }
+    236          		break;
+    237          		case FIGURE_8: // 1250 msec 
+    238          		 	//FIGURE_8_Process();
     239          		break;
-    240          		case FIGURE_8: // 1250 msec 
-    241          		 	//FIGURE_8_Process();
+    240          		case TRIANGLE: // 1250 msec 
+    241          			//TRIANGLE_Process();
     242          		break;
-    243          		case TRIANGLE: // 1250 msec 
-    244          			//TRIANGLE_Process();
+    243          		default: 
+    244          		 	//Default_Process();
     245          		break;
-    246          		default: 
-    247          		 	//Default_Process();
-    248          		break;
-    249          		}
-    250            
-    251            
-    252          }
+    246          		}
+    247            
+    248            
+    249          }
    \                     ??do_stuff_2:
-   \   0000BE   1001         RETA
-   \   0000C0                REQUIRE _A_UCA1TXBUF_L
-   \   0000C0                REQUIRE _A_UCA1IE_L
+   \   0000B2   1001         RETA
+   \   0000B4                REQUIRE _A_UCA1TXBUF_L
+   \   0000B4                REQUIRE _A_UCA1IE_L
 
    \                                 In  segment INTVEC, offset 0x40, root
    \                     `??PORT4_VECTOR_ISR??INTVEC 64`:
@@ -562,7 +556,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\switch.c
        2  count_debounce_SW1
        2  count_debounce_SW2
       12  disableInput
-     192  do_stuff
+     180  do_stuff
       12  enableInput
        1  okay_to_look_at_switch1
        1  okay_to_look_at_switch2
@@ -570,7 +564,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\switch.c
        1  sw2_position
 
  
- 280 bytes in segment CODE
+ 268 bytes in segment CODE
   12 bytes in segment DATA16_AN
   31 bytes in segment DATA16_C
    2 bytes in segment DATA16_I
@@ -579,7 +573,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\switch.c
    2 bytes in segment INTVEC
   62 bytes in segment ISR_CODE
  
- 342 bytes of CODE  memory
+ 330 bytes of CODE  memory
   33 bytes of CONST memory (+  2 bytes shared)
    8 bytes of DATA  memory (+ 12 bytes shared)
 

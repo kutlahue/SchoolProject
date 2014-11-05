@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         05/Nov/2014  12:29:57
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         05/Nov/2014  13:30:56
 # Copyright 1996-2014 IAR Systems AB.
 # Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
 #
@@ -98,10 +98,11 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\serial.c
      15          
 
    \                                 In  segment DATA16_C, align 1, align-sorted
-     16          const char string[] = "NCSU #1";
+     16          const char string[] = "NCSU #1         ";
    \                     string:
-   \   000000   4E4353552023 DC8 "NCSU #1"
-   \            3100        
+   \   000000   4E4353552023 DC8 "NCSU #1         "
+   \            312020202020
+   \            2020202000  
      17          
 
    \                                 In  segment DATA16_Z, align 2, align-sorted
@@ -208,14 +209,14 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\serial.c
      62          
      63            for(i=SET_0; i<SMALL_RING_SIZE; i++){
    \   000000   8243....     MOV.W   #0x0, &i
-   \   000004   063C         JMP     ??reset_buffers_2
+   \   000004   063C         JMP     ??reset_buffers_3
      64              CPU_Char_Rx[i] = SET_0;       // CPU Character
    \                     ??reset_buffers_0:
    \   000006   1F42....     MOV.W   &i, R15
    \   00000A   CF43....     MOV.B   #0x0, CPU_Char_Rx(R15)
      65              }
    \   00000E   9253....     ADD.W   #0x1, &i
-   \                     ??reset_buffers_2:
+   \                     ??reset_buffers_3:
    \   000012   B2901000.... CMP.W   #0x10, &i
    \   000018   F62B         JNC     ??reset_buffers_0
      66              cpu_rx_ring_wr = SET_0;
@@ -225,7 +226,7 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\serial.c
      68          
      69            for(i=SET_0; i<LARGE_RING_SIZE; i++){ 
    \   000022   8243....     MOV.W   #0x0, &i
-   \   000026   093C         JMP     ??reset_buffers_3
+   \   000026   093C         JMP     ??reset_buffers_4
      70                CPU_Char_Tx[i] = string[i];     // CPU Character
    \                     ??reset_buffers_1:
    \   000028   1F42....     MOV.W   &i, R15
@@ -233,42 +234,54 @@ E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\serial.c
    \   000030   DF4E........ MOV.B   string(R14), CPU_Char_Tx(R15)
      71              }
    \   000036   9253....     ADD.W   #0x1, &i
-   \                     ??reset_buffers_3:
+   \                     ??reset_buffers_4:
    \   00003A   B2901000.... CMP.W   #0x10, &i
    \   000040   F32B         JNC     ??reset_buffers_1
      72              cpu_tx_ring_wr = SET_0;
    \   000042   8243....     MOV.W   #0x0, &cpu_tx_ring_wr
      73              cpu_tx_ring_rd = SET_0;
    \   000046   8243....     MOV.W   #0x0, &cpu_tx_ring_rd
-     74          }
-   \   00004A   1001         RETA
-     75          
+     74              
+     75             for (i=SET_0; i<LARGE_RING_SIZE; i++)
+   \   00004A   8243....     MOV.W   #0x0, &i
+   \   00004E   073C         JMP     ??reset_buffers_5
+     76               to_display[i] = SPACE;
+   \                     ??reset_buffers_2:
+   \   000050   1F42....     MOV.W   &i, R15
+   \   000054   FF402000.... MOV.B   #0x20, to_display(R15)
+   \   00005A   9253....     ADD.W   #0x1, &i
+   \                     ??reset_buffers_5:
+   \   00005E   B2901000.... CMP.W   #0x10, &i
+   \   000064   F52B         JNC     ??reset_buffers_2
+     77          }
+   \   000066   1001         RETA
+     78          
 
    \                                 In  segment CODE, align 2
-     76          void uart_send_byte( unsigned char data ) {
+     79          void uart_send_byte( unsigned char data ) {
    \                     uart_send_byte:
-     77            
-     78            //data <<= SET_1;
-     79              // Wait until USCI_A0 TX buffer is ready
-     80            while (!(SET_2&UCTXIFG)) ;
-     81              // Send the byte
-     82              UCA1TXBUF = data;
+     80            
+     81            //data <<= SET_1;
+     82              // Wait until USCI_A0 TX buffer is ready
+     83            while (!(SET_2&UCTXIFG)) ;
+     84              // Send the byte
+     85              UCA1TXBUF = data;
    \   000000   4C4C         MOV.B   R12, R12
    \   000002   824CEE05     MOV.W   R12, &0x5ee
-     83          }
+     86          }
    \   000006   1001         RETA
    \   000008                REQUIRE _A_UCA1TXBUF_L
-     84          
-     85          
-     86          
-     87          //------------------------------------------------------------------------------ 
-     88          #pragma vector=USCI_A1_VECTOR
+     87          
+     88          
+     89          
+     90          //------------------------------------------------------------------------------ 
+     91          #pragma vector=USCI_A1_VECTOR
 
    \                                 In  segment ISR_CODE, align 2
-     89          __interrupt void USCI_A1_ISR(void){
+     92          __interrupt void USCI_A1_ISR(void){
    \                     USCI_A1_ISR:
    \   000000   3F15         PUSHM.W #0x4, R15
-     90          unsigned int temp;
+     93          unsigned int temp;
                               ^
 Warning[Pe177]: variable "temp" was declared but never referenced
 
@@ -277,108 +290,109 @@ Warning[Pe177]: variable "temp" was declared but never referenced
 "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\HOMEWORK_08\serial.c",70  Warning[Pa082]: 
           undefined behavior: the order of volatile accesses is undefined in
           this statement
-     91          switch(__even_in_range(UCA1IV,0x08)){
+     94          switch(__even_in_range(UCA1IV,0x08)){
    \   000002   1F42FE05     MOV.W   &0x5fe, R15
    \   000006   E00F         ADDA    R15, PC
    \                     `?<Jumptable for USCI_A1_ISR>_0`:
-   \   000008   283C         JMP     ??USCI_A1_ISR_0
+   \   000008   2A3C         JMP     ??USCI_A1_ISR_0
    \   00000A   033C         JMP     ??USCI_A1_ISR_2
    \   00000C   133C         JMP     ??USCI_A1_ISR_3
-   \   00000E   253C         JMP     ??USCI_A1_ISR_0
-   \   000010   243C         JMP     ??USCI_A1_ISR_0
-     92              case 0: // Vector 0 - no interrupt
-     93                break;
-     94              case 2: // Vector 2 - RXIFG
-     95                //UCA1IE &= ~UCRXIE; // Disable USCI_A1 RX interrupt
-     96                PJOUT |= LED3; 
+   \   00000E   273C         JMP     ??USCI_A1_ISR_0
+   \   000010   263C         JMP     ??USCI_A1_ISR_0
+     95              case 0: // Vector 0 - no interrupt
+     96                break;
+     97              case 2: // Vector 2 - RXIFG
+     98                //UCA1IE &= ~UCRXIE; // Disable USCI_A1 RX interrupt
+     99                PJOUT |= LED3; 
    \                     ??USCI_A1_ISR_2:
    \   000012   A2D22203     BIS.W   #0x4, &0x322
-     97                
-     98                CPU_Char_Rx[cpu_rx_ring_wr] = UCA1RXBUF;
+    100                
+    101                CPU_Char_Rx[cpu_rx_ring_wr] = UCA1RXBUF;
                        ^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
    \   000016   1F42....     MOV.W   &cpu_rx_ring_wr, R15
    \   00001A   1E42EC05     MOV.W   &0x5ec, R14
    \   00001E   CF4E....     MOV.B   R14, CPU_Char_Rx(R15)
-     99                cpu_rx_ring_wr++;
+    102                cpu_rx_ring_wr++;
    \   000022   9253....     ADD.W   #0x1, &cpu_rx_ring_wr
-    100                
-    101                compare_receive_ring_buffer();
+    103                
+    104                compare_receive_ring_buffer();
    \   000026   ........     CALLA   #compare_receive_ring_buffer
-    102                
-    103                UCA1IE |= UCTXIE; // Enable USCI_A1 RX interrupt
+    105                
+    106                UCA1IE |= UCTXIE; // Enable USCI_A1 RX interrupt
    \   00002A   A2D3FA05     BIS.W   #0x2, &0x5fa
-    104                PJOUT &= ~LED3;
+    107                PJOUT &= ~LED3;
    \   00002E   A2C22203     BIC.W   #0x4, &0x322
-    105                break;
-   \   000032   133C         JMP     ??USCI_A1_ISR_0
-    106              case 4: // Vector 4 – TXIFG 
-    107               
-    108                PJOUT |= LED2;
+    108                break;
+   \   000032   153C         JMP     ??USCI_A1_ISR_0
+    109              case 4: // Vector 4 – TXIFG 
+    110               
+    111                PJOUT |= LED2;
    \                     ??USCI_A1_ISR_3:
    \   000034   A2D32203     BIS.W   #0x2, &0x322
-    109                UCA1IE &= ~UCTXIE; // Disable USCI_A1 TX interrupt
+    112                UCA1IE &= ~UCTXIE; // Disable USCI_A1 TX interrupt
    \   000038   A2C3FA05     BIC.W   #0x2, &0x5fa
-    110                
-    111                if (cpu_tx_ring_wr < sizeof CPU_Char_Tx){ // TX over? 
+    113                
+    114                if (cpu_tx_ring_wr < LARGE_RING_SIZE){ // TX over? 
    \   00003C   B2901000.... CMP.W   #0x10, &cpu_tx_ring_wr
-   \   000042   092C         JC      ??USCI_A1_ISR_1
-    112                    UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr]; // TX next character 
+   \   000042   0B2C         JC      ??USCI_A1_ISR_1
+    115                    UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr++]; // TX next character 
    \   000044   1F42....     MOV.W   &cpu_tx_ring_wr, R15
-   \   000048   5F4F....     MOV.B   CPU_Char_Tx(R15), R15
-   \   00004C   4F4F         MOV.B   R15, R15
-   \   00004E   824FEE05     MOV.W   R15, &0x5ee
-    113                    cpu_tx_ring_wr++;
-   \   000052   9253....     ADD.W   #0x1, &cpu_tx_ring_wr
-    114                }
-    115                
-    116                //UCA1IE |= UCRXIE; // Enable USCI_A1 RX interrupt
-    117                PJOUT &= ~LED2;
+   \   000048   0E4F         MOV.W   R15, R14
+   \   00004A   1E53         ADD.W   #0x1, R14
+   \   00004C   824E....     MOV.W   R14, &cpu_tx_ring_wr
+   \   000050   5F4F....     MOV.B   CPU_Char_Tx(R15), R15
+   \   000054   4F4F         MOV.B   R15, R15
+   \   000056   824FEE05     MOV.W   R15, &0x5ee
+    116                }
+    117                
+    118                //UCA1IE |= UCRXIE; // Enable USCI_A1 RX interrupt
+    119                PJOUT &= ~LED2;
    \                     ??USCI_A1_ISR_1:
-   \   000056   A2C32203     BIC.W   #0x2, &0x322
-    118                break;
-    119              default: break;
-    120            } 
-    121          }
+   \   00005A   A2C32203     BIC.W   #0x2, &0x322
+    120                break;
+    121              default: break;
+    122            } 
+    123          }
    \                     ??USCI_A1_ISR_0:
-   \   00005A   3C17         POPM.W  #0x4, R15
-   \   00005C   0013         RETI
-   \   00005E                REQUIRE _A_PJOUT_L
-   \   00005E                REQUIRE _A_UCA1RXBUF_L
-   \   00005E                REQUIRE _A_UCA1IE_L
-   \   00005E                REQUIRE _A_UCA1TXBUF_L
-   \   00005E                REQUIRE UCA1IV
-    122          //------------------------------------------------------------------------------
-    123          
-    124          
+   \   00005E   3C17         POPM.W  #0x4, R15
+   \   000060   0013         RETI
+   \   000062                REQUIRE _A_PJOUT_L
+   \   000062                REQUIRE _A_UCA1RXBUF_L
+   \   000062                REQUIRE _A_UCA1IE_L
+   \   000062                REQUIRE _A_UCA1TXBUF_L
+   \   000062                REQUIRE UCA1IV
+    124          //------------------------------------------------------------------------------
     125          
+    126          
+    127          
 
    \                                 In  segment CODE, align 2
-    126          void compare_receive_ring_buffer(void){
+    128          void compare_receive_ring_buffer(void){
    \                     compare_receive_ring_buffer:
-    127            if(cpu_rx_ring_wr > cpu_rx_ring_rd) {
+    129            if(cpu_rx_ring_wr > cpu_rx_ring_rd) {
                    ^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
    \   000000   1F42....     MOV.W   &cpu_rx_ring_rd, R15
    \   000004   1F92....     CMP.W   &cpu_rx_ring_wr, R15
    \   000008   0F2C         JC      ??compare_receive_ring_buffer_0
-    128              to_display[cpu_rx_ring_rd] = CPU_Char_Rx[cpu_rx_ring_rd];
+    130              to_display[cpu_rx_ring_rd] = CPU_Char_Rx[cpu_rx_ring_rd];
                      ^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
    \   00000A   1F42....     MOV.W   &cpu_rx_ring_rd, R15
    \   00000E   1E42....     MOV.W   &cpu_rx_ring_rd, R14
    \   000012   DF4E........ MOV.B   CPU_Char_Rx(R14), to_display(R15)
-    129              cpu_rx_ring_rd++;
+    131              cpu_rx_ring_rd++;
    \   000018   9253....     ADD.W   #0x1, &cpu_rx_ring_rd
-    130              lcd_out(to_display, LCD_LINE_2);
+    132              lcd_out(to_display, LCD_LINE_2);
    \   00001C   7D40C000     MOV.B   #0xc0, R13
    \   000020   3C40....     MOV.W   #to_display, R12
    \   000024   ........     CALLA   #lcd_out
-    131            }
-    132          }
+    133            }
+    134          }
    \                     ??compare_receive_ring_buffer_0:
    \   000028   1001         RETA
 
@@ -408,7 +422,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
       16  CPU_Char_Tx
       36  Init_Serial_UCA1
        2  UCA1IV
-      94  USCI_A1_ISR
+      98  USCI_A1_ISR
        2  _A_PJOUT_L
        2  _A_UCA1BRW_L
        2  _A_UCA1CTLW0_L
@@ -422,21 +436,21 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
        2  cpu_tx_ring_rd
        2  cpu_tx_ring_wr
        2  i
-      76  reset_buffers
-       8  string
+     104  reset_buffers
+      17  string
       16  to_display
        8  uart_send_byte
 
  
- 162 bytes in segment CODE
+ 190 bytes in segment CODE
   16 bytes in segment DATA16_AN
-   8 bytes in segment DATA16_C
+  17 bytes in segment DATA16_C
   58 bytes in segment DATA16_Z
    2 bytes in segment INTVEC
-  94 bytes in segment ISR_CODE
+  98 bytes in segment ISR_CODE
  
- 256 bytes of CODE  memory
-   8 bytes of CONST memory (+  2 bytes shared)
+ 288 bytes of CODE  memory
+  17 bytes of CONST memory (+  2 bytes shared)
   58 bytes of DATA  memory (+ 16 bytes shared)
 
 Errors: none

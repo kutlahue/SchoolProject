@@ -13,7 +13,7 @@
 #include  "functions.h"
 #include  "macros.h"
 
-const char string[] = "NCSU #1";
+const char string[] = "NCSU #1         ";
 
 volatile unsigned int cpu_rx_ring_wr, cpu_rx_ring_rd, cpu_tx_ring_wr, cpu_tx_ring_rd;
 volatile char CPU_Char_Rx[SMALL_RING_SIZE];
@@ -71,6 +71,9 @@ void reset_buffers(void){
     }
     cpu_tx_ring_wr = SET_0;
     cpu_tx_ring_rd = SET_0;
+    
+   for (i=SET_0; i<LARGE_RING_SIZE; i++)
+     to_display[i] = SPACE;
 }
 
 void uart_send_byte( unsigned char data ) {
@@ -108,9 +111,8 @@ switch(__even_in_range(UCA1IV,0x08)){
       PJOUT |= LED2;
       UCA1IE &= ~UCTXIE; // Disable USCI_A1 TX interrupt
       
-      if (cpu_tx_ring_wr < sizeof CPU_Char_Tx){ // TX over? 
-          UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr]; // TX next character 
-          cpu_tx_ring_wr++;
+      if (cpu_tx_ring_wr < LARGE_RING_SIZE){ // TX over? 
+          UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr++]; // TX next character 
       }
       
       //UCA1IE |= UCRXIE; // Enable USCI_A1 RX interrupt

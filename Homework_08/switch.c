@@ -230,10 +230,7 @@ void do_stuff(void){
                   } else {
                    // UCA1IE &= ~UCTXIE;
                    // UCA1IFG = SET_2;
-                    cpu_rx_ring_wr = SET_0;
-                    cpu_rx_ring_rd = SET_0;
-                    cpu_tx_ring_wr = SET_0;
-                    cpu_tx_ring_rd = SET_0;
+                    reset_buffers();
                     lcd_out("               ",LCD_LINE_2);
                   }
 		break;
