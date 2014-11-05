@@ -1,0 +1,537 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.10.2.50871/W32 for MSP430         05/Nov/2014  13:06:06
+# Copyright 1996-2014 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c
+#    Command line  =  
+#        "E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c" -lC
+#        "E:\Fall 14\ECE 306\Workspace\SchoolProject\Project 06\Debug\List\" -o
+#        "E:\Fall 14\ECE 306\Workspace\SchoolProject\Project 06\Debug\Obj\"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.0\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -Ol --multiplier=32
+#        --multiplier_location=4C0 --hw_workaround=CPU40 --hw_workaround=CPU39
+#        --code_model=large
+#    List file     =  
+#        E:\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        06\Debug\List\serial.lst
+#    Object file   =  
+#        E:\Fall 14\ECE 306\Workspace\SchoolProject\Project
+#        06\Debug\Obj\serial.r43
+#
+###############################################################################
+
+E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c
+      1          //------------------------------------------------------------------------------
+      2          //  File Name: serial.c
+      3          //
+      4          //  Description: This file contains the serial communication functions
+      5          //
+      6          //  Mattia Muller
+      7          //  Oct 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5e0
+   \   union <unnamed> _A_UCA1CTLW0_L
+   \                     _A_UCA1CTLW0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5e6
+   \   union <unnamed> _A_UCA1BRW_L
+   \                     _A_UCA1BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5e8
+   \   union <unnamed> _A_UCA1MCTLW_L
+   \                     _A_UCA1MCTLW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ec
+   \   union <unnamed> _A_UCA1RXBUF_L
+   \                     _A_UCA1RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ee
+   \   union <unnamed> _A_UCA1TXBUF_L
+   \                     _A_UCA1TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fa
+   \   union <unnamed> _A_UCA1IE_L
+   \                     _A_UCA1IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fe
+   \   unsigned short volatile UCA1IV
+   \                     UCA1IV:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+
+  #define Z                    (0x04) // Port 3 Pin 2 offset
+          ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\macros.h",58  Warning[Pe047]: 
+          incompatible redefinition of macro "Z" (declared at line 149 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          7.0\430\inc\msp430fr5739.h")
+     15          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          char string[SMALL_RING_SIZE];
+   \                     string:
+   \   000000                DS8 2
+     17          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile unsigned int cpu_rx_ring_wr, cpu_rx_ring_rd, cpu_tx_ring_wr, cpu_tx_ring_rd;
+   \                     cpu_rx_ring_wr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     cpu_rx_ring_rd:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     cpu_tx_ring_wr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     cpu_tx_ring_rd:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          volatile char CPU_Char_Rx[SMALL_RING_SIZE];
+   \                     CPU_Char_Rx:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          volatile char CPU_Char_Tx[LARGE_RING_SIZE];
+   \                     CPU_Char_Tx:
+   \   000000                DS8 2
+     21          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          unsigned int circle_number = SET_0;
+   \                     circle_number:
+   \   000000                DS8 2
+     23          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          char to_display[16];
+   \                     to_display:
+   \   000000                DS8 16
+     25          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          volatile unsigned int i;
+   \                     i:
+   \   000000                DS8 2
+     27          
+     28          //---------------------------------------------------------------------------- 
+
+   \                                 In  segment CODE, align 2
+     29          void Init_Serial_UCA1(void){
+   \                     Init_Serial_UCA1:
+     30            
+     31          // Configure UART 0
+     32          UCA1CTLW0 = SET_0; // Use word register 
+   \   000000   8243E005     MOV.W   #0x0, &0x5e0
+     33          UCA1CTLW0 |= UCSSEL__SMCLK; // Set SMCLK as fBRCLK 
+   \   000004   B2D08000E005 BIS.W   #0x80, &0x5e0
+     34          UCA1CTLW0 |= UCSWRST; // Set Software reset enable
+   \   00000A   92D3E005     BIS.W   #0x1, &0x5e0
+     35          
+     36          
+     37          // 9,600 Baud Rate
+     38          // 1. Calculate N = fBRCLK/Baudrate [if N > 16 continue with step 3, otherwise with step 2] 
+     39          // N = SMCLK / 4,800 => 8,000,000 / 4,800 = 1666.6666
+     40          // 2. OS16 = 0, UCBRx = INT(N) [continue with step 4]
+     41          // 3. OS16 = 1, UCx = INT(N/16), UCFx = INT([(N/16) – INT(N/16)] × 16)
+     42          // UCx = INT(N/16) = 1666.66666/16 => 104
+     43          // UCFx = INT([(N/16) – INT(N/16)] × 16) = ([1666.66666/16-INT(1666.66666/16)]*16) => (104.0208333-52)*16=>0.0208333*16=0.3333
+     44          // 4. UCSx can be found by looking up the fractional part of N ( = N - INT(N) ) in Table 18-4
+     45          // Decicmal of SMCLK / 8,000,000 / 9,600 = 1666.66666 => 0.666 yields 0xD6
+     46          // 5. If OS16 = 0 was chosen, a detailed error calculation is recommended to be performed
+     47          // 
+     48          //                                        TX error (%) RX error (%) 
+     49          // BRCLK   Baudrate UCOS16  UCBRx  UCFx   UCSx   neg    pos   neg    pos 
+     50          // 8000000 4800     1       104     0      0xD6   -0.08  0.04  -0.10  0.14
+     51          UCA1BRW = 104 ; // 4,800 baud
+   \   00000E   B2406800E605 MOV.W   #0x68, &0x5e6
+     52          // UCA0MCTLW = UCSx concatenate UCFx concatenate UCOS16;
+     53          // UCA0MCTLW = 0xD6 concatenate 1 concatenate 1;
+     54          UCA1MCTLW = 0xD621 ;
+   \   000014   B24021D6E805 MOV.W   #0xd621, &0x5e8
+     55          UCA1CTL1 &= ~UCSWRST; // Release from reset 
+   \   00001A   D2C3E005     BIC.B   #0x1, &0x5e0
+     56          UCA1IE |= UCRXIE; // Enable RX interrupt
+   \   00001E   92D3FA05     BIS.W   #0x1, &0x5fa
+     57          //UCA0IE |= UCTXIE;
+     58          
+     59          }
+   \   000022   1001         RETA
+   \   000024                REQUIRE _A_UCA1CTLW0_L
+   \   000024                REQUIRE _A_UCA1BRW_L
+   \   000024                REQUIRE _A_UCA1MCTLW_L
+   \   000024                REQUIRE _A_UCA1IE_L
+     60          
+     61          
+
+   \                                 In  segment CODE, align 2
+     62          void reset_buffers(void){
+   \                     reset_buffers:
+     63          
+     64            string[SET_0] = SET_0;
+   \   000000   C243....     MOV.B   #0x0, &string
+     65            string[SET_1] = SET_1;
+   \   000004   D243....     MOV.B   #0x1, &string + 1
+     66            
+     67            for(i=SET_0; i<SMALL_RING_SIZE; i++){
+   \   000008   8243....     MOV.W   #0x0, &i
+   \   00000C   063C         JMP     ??reset_buffers_2
+     68              CPU_Char_Rx[i] = SET_0;       // CPU Character
+   \                     ??reset_buffers_0:
+   \   00000E   1F42....     MOV.W   &i, R15
+   \   000012   CF43....     MOV.B   #0x0, CPU_Char_Rx(R15)
+     69              }
+   \   000016   9253....     ADD.W   #0x1, &i
+   \                     ??reset_buffers_2:
+   \   00001A   A293....     CMP.W   #0x2, &i
+   \   00001E   F72B         JNC     ??reset_buffers_0
+     70              cpu_rx_ring_wr = SET_0;
+   \   000020   8243....     MOV.W   #0x0, &cpu_rx_ring_wr
+     71              cpu_rx_ring_rd = SET_0;
+   \   000024   8243....     MOV.W   #0x0, &cpu_rx_ring_rd
+     72          
+     73            for(i=SET_0; i<LARGE_RING_SIZE; i++){ 
+   \   000028   8243....     MOV.W   #0x0, &i
+   \   00002C   093C         JMP     ??reset_buffers_3
+     74                CPU_Char_Tx[i] = string[i];     // CPU Character
+   \                     ??reset_buffers_1:
+   \   00002E   1F42....     MOV.W   &i, R15
+   \   000032   1E42....     MOV.W   &i, R14
+   \   000036   DF4E........ MOV.B   string(R14), CPU_Char_Tx(R15)
+     75              }
+   \   00003C   9253....     ADD.W   #0x1, &i
+   \                     ??reset_buffers_3:
+   \   000040   A293....     CMP.W   #0x2, &i
+   \   000044   F42B         JNC     ??reset_buffers_1
+     76              cpu_tx_ring_wr = SET_0;
+   \   000046   8243....     MOV.W   #0x0, &cpu_tx_ring_wr
+     77              cpu_tx_ring_rd = SET_0;
+   \   00004A   8243....     MOV.W   #0x0, &cpu_tx_ring_rd
+     78          }
+   \   00004E   1001         RETA
+     79          
+
+   \                                 In  segment CODE, align 2
+     80          void uart_send_byte( unsigned char data ) {
+   \                     uart_send_byte:
+     81            
+     82            //data <<= SET_1;
+     83              // Wait until USCI_A0 TX buffer is ready
+     84            while (!(SET_2&UCTXIFG)) ;
+     85              // Send the byte
+     86              UCA1TXBUF = data;
+   \   000000   4C4C         MOV.B   R12, R12
+   \   000002   824CEE05     MOV.W   R12, &0x5ee
+     87          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_UCA1TXBUF_L
+     88          
+     89          
+     90          
+     91          //------------------------------------------------------------------------------ 
+     92          #pragma vector=USCI_A1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     93          __interrupt void USCI_A1_ISR(void){
+   \                     USCI_A1_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     94          unsigned int temp;
+                              ^
+Warning[Pe177]: variable "temp" was declared but never referenced
+     95          switch(__even_in_range(UCA1IV,0x08)){
+   \   000002   1F42FE05     MOV.W   &0x5fe, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for USCI_A1_ISR>_0`:
+   \   000008   233C         JMP     ??USCI_A1_ISR_0
+   \   00000A   033C         JMP     ??USCI_A1_ISR_2
+   \   00000C   0F3C         JMP     ??USCI_A1_ISR_3
+   \   00000E   203C         JMP     ??USCI_A1_ISR_0
+   \   000010   1F3C         JMP     ??USCI_A1_ISR_0
+     96              case 0: // Vector 0 - no interrupt
+     97                break;
+     98              case 2: // Vector 2 - RXIFG
+     99                //UCA1IE &= ~UCRXIE; // Disable USCI_A1 RX interrupt
+    100                PJOUT |= LED3; 
+   \                     ??USCI_A1_ISR_2:
+   \   000012   A2D22203     BIS.W   #0x4, &0x322
+    101                
+    102                CPU_Char_Rx[cpu_rx_ring_wr] = UCA1RXBUF;
+   \   000016   1F42....     MOV.W   &cpu_rx_ring_wr, R15
+   \   00001A   1E42EC05     MOV.W   &0x5ec, R14
+   \   00001E   CF4E....     MOV.B   R14, CPU_Char_Rx(R15)
+    103                cpu_rx_ring_wr++;
+   \   000022   9253....     ADD.W   #0x1, &cpu_rx_ring_wr
+    104                      
+    105                // Enable USCI_A1 RX interrupt
+    106                PJOUT &= ~LED3;
+   \   000026   A2C22203     BIC.W   #0x4, &0x322
+    107                break;
+   \   00002A   123C         JMP     ??USCI_A1_ISR_0
+    108              case 4: // Vector 4 – TXIFG 
+    109               
+    110                PJOUT |= LED2;
+   \                     ??USCI_A1_ISR_3:
+   \   00002C   A2D32203     BIS.W   #0x2, &0x322
+    111                UCA1IE &= ~UCTXIE; // Disable USCI_A1 TX interrupt
+   \   000030   A2C3FA05     BIC.W   #0x2, &0x5fa
+    112                
+    113                if (cpu_tx_ring_wr < sizeof CPU_Char_Tx){ // TX over? 
+   \   000034   A293....     CMP.W   #0x2, &cpu_tx_ring_wr
+   \   000038   092C         JC      ??USCI_A1_ISR_1
+    114                    UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr]; // TX next character 
+   \   00003A   1F42....     MOV.W   &cpu_tx_ring_wr, R15
+   \   00003E   5F4F....     MOV.B   CPU_Char_Tx(R15), R15
+   \   000042   4F4F         MOV.B   R15, R15
+   \   000044   824FEE05     MOV.W   R15, &0x5ee
+    115                    cpu_tx_ring_wr++;
+   \   000048   9253....     ADD.W   #0x1, &cpu_tx_ring_wr
+    116                }
+    117                
+    118                //UCA1IE |= UCRXIE; // Enable USCI_A1 RX interrupt
+    119                PJOUT &= ~LED2;
+   \                     ??USCI_A1_ISR_1:
+   \   00004C   A2C32203     BIC.W   #0x2, &0x322
+    120                break;
+    121              default: break;
+    122            } 
+    123          }
+   \                     ??USCI_A1_ISR_0:
+   \   000050   1E17         POPM.W  #0x2, R15
+   \   000052   0013         RETI
+   \   000054                REQUIRE _A_PJOUT_L
+   \   000054                REQUIRE _A_UCA1RXBUF_L
+   \   000054                REQUIRE _A_UCA1IE_L
+   \   000054                REQUIRE _A_UCA1TXBUF_L
+   \   000054                REQUIRE UCA1IV
+    124          //------------------------------------------------------------------------------
+    125          
+
+   \                                 In  segment CODE, align 2
+    126          void receive_wait_and_send(void){
+   \                     receive_wait_and_send:
+    127            
+    128            if (cpu_rx_ring_wr > SET_1){
+   \   000000   A293....     CMP.W   #0x2, &cpu_rx_ring_wr
+   \   000004   3F28         JNC     ??receive_wait_and_send_0
+    129              UCA1IE &= ~UCRXIE;
+   \   000006   92C3FA05     BIC.W   #0x1, &0x5fa
+    130              // We have both chars
+    131              circle_number = SET_0;
+   \   00000A   8243....     MOV.W   #0x0, &circle_number
+    132              circle_number |= CPU_Char_Rx[SET_0];
+   \   00000E   5F42....     MOV.B   &CPU_Char_Rx, R15
+   \   000012   4F4F         MOV.B   R15, R15
+   \   000014   82DF....     BIS.W   R15, &circle_number
+    133              circle_number << SET_8;
+                     ^
+Warning[Pe174]: expression has no effect
+   \   000018   1F42....     MOV.W   &circle_number, R15
+   \   00001C   3FF0FF00     AND.W   #0xff, R15
+   \   000020   8F10         SWPB    R15
+    134              circle_number |= CPU_Char_Rx[SET_1];
+   \   000022   5F42....     MOV.B   &CPU_Char_Rx + 1, R15
+   \   000026   4F4F         MOV.B   R15, R15
+   \   000028   82DF....     BIS.W   R15, &circle_number
+    135              
+    136              circle_number++;
+   \   00002C   9253....     ADD.W   #0x1, &circle_number
+    137              cpu_rx_ring_wr = SET_0;
+   \   000030   8243....     MOV.W   #0x0, &cpu_rx_ring_wr
+    138              
+    139              lcd_out(itoa(circle_number), LCD_LINE_2);
+   \   000034   1C42....     MOV.W   &circle_number, R12
+   \   000038   ........     CALLA   #itoa
+   \   00003C   7D40C000     MOV.B   #0xc0, R13
+   \   000040   ........     CALLA   #lcd_out
+    140              
+    141              //wait 1 sec
+    142              
+    143              fifty_msec_sleep_A1(SET_20);
+   \   000044   3C401400     MOV.W   #0x14, R12
+   \   000048   ........     CALLA   #fifty_msec_sleep_A1
+    144              
+    145              
+    146              reset_buffers();
+   \   00004C   ........     CALLA   #reset_buffers
+    147              CPU_Char_Tx[SET_1] = circle_number;
+   \   000050   D242........ MOV.B   &circle_number, &CPU_Char_Tx + 1
+    148              circle_number >> SET_8;
+                     ^
+Warning[Pe174]: expression has no effect
+
+        CPU_Char_Tx[i] = string[i];     // CPU Character
+        ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c",74  Warning[Pa082]: 
+          undefined behavior: the order of volatile accesses is undefined in
+          this statement
+
+        CPU_Char_Rx[cpu_rx_ring_wr] = UCA1RXBUF;
+        ^
+"E:\Fall 14\ECE 306\WORKSPACE\SCHOOLPROJECT\PROJECT 06\serial.c",102  Warning[Pa082]: 
+          undefined behavior: the order of volatile accesses is undefined in
+          this statement
+   \   000056   1F42....     MOV.W   &circle_number, R15
+   \   00005A   8F10         SWPB    R15
+   \   00005C   3FF0FF00     AND.W   #0xff, R15
+    149              CPU_Char_Tx[SET_0] = circle_number;
+   \   000060   D242........ MOV.B   &circle_number, &CPU_Char_Tx
+    150              
+    151              
+    152              UCA1TXBUF = CPU_Char_Tx[cpu_tx_ring_wr++];
+   \   000066   1F42....     MOV.W   &cpu_tx_ring_wr, R15
+   \   00006A   0E4F         MOV.W   R15, R14
+   \   00006C   1E53         ADD.W   #0x1, R14
+   \   00006E   824E....     MOV.W   R14, &cpu_tx_ring_wr
+   \   000072   5F4F....     MOV.B   CPU_Char_Tx(R15), R15
+   \   000076   4F4F         MOV.B   R15, R15
+   \   000078   824FEE05     MOV.W   R15, &0x5ee
+    153              UCA1IE |= UCTXIE;
+   \   00007C   A2D3FA05     BIS.W   #0x2, &0x5fa
+    154              UCA1IE |= UCRXIE;
+   \   000080   92D3FA05     BIS.W   #0x1, &0x5fa
+    155          
+    156            }
+    157            
+    158          }
+   \                     ??receive_wait_and_send_0:
+   \   000084   1001         RETA
+   \   000086                REQUIRE _A_UCA1IE_L
+   \   000086                REQUIRE _A_UCA1TXBUF_L
+    159          
+
+   \                                 In  segment CODE, align 2
+    160          void compare_receive_ring_buffer(void){
+   \                     compare_receive_ring_buffer:
+    161            if(cpu_rx_ring_wr > cpu_rx_ring_rd) {
+                   ^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \   000000   1F42....     MOV.W   &cpu_rx_ring_rd, R15
+   \   000004   1F92....     CMP.W   &cpu_rx_ring_wr, R15
+   \   000008   0F2C         JC      ??compare_receive_ring_buffer_0
+    162              to_display[cpu_rx_ring_rd] = CPU_Char_Rx[cpu_rx_ring_rd];
+                     ^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \   00000A   1F42....     MOV.W   &cpu_rx_ring_rd, R15
+   \   00000E   1E42....     MOV.W   &cpu_rx_ring_rd, R14
+   \   000012   DF4E........ MOV.B   CPU_Char_Rx(R14), to_display(R15)
+    163              cpu_rx_ring_rd++;
+   \   000018   9253....     ADD.W   #0x1, &cpu_rx_ring_rd
+    164              lcd_out(to_display, LCD_LINE_2);
+   \   00001C   7D40C000     MOV.B   #0xc0, R13
+   \   000020   3C40....     MOV.W   #to_display, R12
+   \   000024   ........     CALLA   #lcd_out
+    165            }
+    166          }
+   \                     ??compare_receive_ring_buffer_0:
+   \   000028   1001         RETA
+
+   \                                 In  segment INTVEC, offset 0x56, root
+   \                     `??USCI_A1_ISR??INTVEC 86`:
+   \   000056   ....         DC16    USCI_A1_ISR
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Serial_UCA1
+      8   USCI_A1_ISR
+      4   compare_receive_ring_buffer
+        4   -> lcd_out
+      4   receive_wait_and_send
+        4   -> fifty_msec_sleep_A1
+        4   -> itoa
+        4   -> lcd_out
+        4   -> reset_buffers
+      4   reset_buffers
+      4   uart_send_byte
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??USCI_A1_ISR??INTVEC 86
+       2  CPU_Char_Rx
+       2  CPU_Char_Tx
+      36  Init_Serial_UCA1
+       2  UCA1IV
+      84  USCI_A1_ISR
+       2  _A_PJOUT_L
+       2  _A_UCA1BRW_L
+       2  _A_UCA1CTLW0_L
+       2  _A_UCA1IE_L
+       2  _A_UCA1MCTLW_L
+       2  _A_UCA1RXBUF_L
+       2  _A_UCA1TXBUF_L
+       2  circle_number
+      42  compare_receive_ring_buffer
+       2  cpu_rx_ring_rd
+       2  cpu_rx_ring_wr
+       2  cpu_tx_ring_rd
+       2  cpu_tx_ring_wr
+       2  i
+     134  receive_wait_and_send
+      80  reset_buffers
+       2  string
+      16  to_display
+       8  uart_send_byte
+
+ 
+ 300 bytes in segment CODE
+  16 bytes in segment DATA16_AN
+  34 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+  84 bytes in segment ISR_CODE
+ 
+ 384 bytes of CODE  memory
+   0 bytes of CONST memory (+  2 bytes shared)
+  34 bytes of DATA  memory (+ 16 bytes shared)
+
+Errors: none
+Warnings: 8

@@ -242,7 +242,7 @@
       <outputs>
         <tool>
           <name>ICC430</name>
-          <file> 25</file>
+          <file> 25 16</file>
         </tool>
         <tool>
           <name>BICOMP</name>
