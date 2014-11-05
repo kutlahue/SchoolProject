@@ -126,7 +126,7 @@ void TimerB0code(void){
 // Timer B0 interrupt code
 //------------------------------------------------------------------------------
   Time_Sequence++;
-  one_time = 1;
+  one_time = SET_1;
   if (five_msec_count < B0_COUNTER){
     five_msec_count++;
   }
