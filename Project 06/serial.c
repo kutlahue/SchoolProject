@@ -25,6 +25,19 @@ char to_display[16];
 
 volatile unsigned int i;
 
+//===========================================================================
+// Function name: Init_Serial_UCA1
+//
+// Description: initialize serial comms.
+// 
+// Passed : no variables passed
+// Locals: none
+// Returned: no values returned
+// Globals: none
+//
+// Author: Adam Dorenfeld
+// Date: Sept 2014
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
 //---------------------------------------------------------------------------- 
 void Init_Serial_UCA1(void){
   
@@ -38,9 +51,9 @@ UCA1CTLW0 |= UCSWRST; // Set Software reset enable
 // 1. Calculate N = fBRCLK/Baudrate [if N > 16 continue with step 3, otherwise with step 2] 
 // N = SMCLK / 4,800 => 8,000,000 / 4,800 = 1666.6666
 // 2. OS16 = 0, UCBRx = INT(N) [continue with step 4]
-// 3. OS16 = 1, UCx = INT(N/16), UCFx = INT([(N/16) – INT(N/16)] × 16)
+// 3. OS16 = 1, UCx = INT(N/16), UCFx = INT([(N/16) â€“ INT(N/16)] Ã— 16)
 // UCx = INT(N/16) = 1666.66666/16 => 104
-// UCFx = INT([(N/16) – INT(N/16)] × 16) = ([1666.66666/16-INT(1666.66666/16)]*16) => (104.0208333-52)*16=>0.0208333*16=0.3333
+// UCFx = INT([(N/16) â€“ INT(N/16)] Ã— 16) = ([1666.66666/16-INT(1666.66666/16)]*16) => (104.0208333-52)*16=>0.0208333*16=0.3333
 // 4. UCSx can be found by looking up the fractional part of N ( = N - INT(N) ) in Table 18-4
 // Decicmal of SMCLK / 8,000,000 / 9,600 = 1666.66666 => 0.666 yields 0xD6
 // 5. If OS16 = 0 was chosen, a detailed error calculation is recommended to be performed
@@ -58,7 +71,22 @@ UCA1IE |= UCRXIE; // Enable RX interrupt
 
 }
 
-
+//===========================================================================
+// Function name: reset_buffer
+//
+// Description: reset serial comm's buffer variables
+// 
+// Passed : no variables passed
+// Locals: none
+// Returned: no values returned
+// Globals: char string[], CPU_Char_Rx[], CPU_Char_Tx[],
+//          int cpu_rx_ring_wr, int cpu_rx_ring_rd,
+//          int cpu_tx_ring_wr, int cpu_tx_ring_rd
+//
+// Author: Mattia Muller
+// Date: Sept 2014
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//---------------------------------------------------------------------------- 
 void reset_buffers(void){
 
   string[SET_0] = SET_0;
@@ -77,6 +105,20 @@ void reset_buffers(void){
     cpu_tx_ring_rd = SET_0;
 }
 
+//===========================================================================
+// Function name: uart_send_byte
+//
+// Description: load char into transmit register for serial comm
+// 
+// Passed : unsigned char data
+// Locals: none
+// Returned: no values returned
+// Globals: none
+//
+// Author: Mattia Muller
+// Date: Sept 2014
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//---------------------------------------------------------------------------- 
 void uart_send_byte( unsigned char data ) {
   
   //data <<= SET_1;
@@ -87,7 +129,22 @@ void uart_send_byte( unsigned char data ) {
 }
 
 
-
+//===========================================================================
+// Function name: USCI_A1_ISR
+//
+// Description: Interrupt vector func. for Tx and Rx registers for serial comms.
+// 
+// Passed : no variables passed
+// Locals: none
+// Returned: no values returned
+// Globals: CPU_Char_Rx[], CPU_Char_Tx[],
+//          int cpu_rx_ring_wr,
+//          int cpu_tx_ring_wr
+//
+// Author: Mattia Muller
+// Date: Sept 2014
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//---------------------------------------------------------------------------- 
 //------------------------------------------------------------------------------ 
 #pragma vector=USCI_A1_VECTOR
 __interrupt void USCI_A1_ISR(void){
@@ -105,7 +162,7 @@ switch(__even_in_range(UCA1IV,0x08)){
       // Enable USCI_A1 RX interrupt
       PJOUT &= ~LED3;
       break;
-    case 4: // Vector 4 – TXIFG 
+    case 4: // Vector 4 â€“ TXIFG 
      
       PJOUT |= LED2;
       UCA1IE &= ~UCTXIE; // Disable USCI_A1 TX interrupt
@@ -123,6 +180,21 @@ switch(__even_in_range(UCA1IV,0x08)){
 }
 //------------------------------------------------------------------------------
 
+//===========================================================================
+// Function name: receive_wait_and_send
+//
+// Description: reset serial comm's buffer variables
+// 
+// Passed : no variables passed
+// Locals: none
+// Returned: no values returned
+// Globals: CPU_Char_Rx[], CPU_Char_Tx[],
+//          int cpu_tx_ring_wr, int circle_number
+//
+// Author: Mattia Muller
+// Date: Sept 2014
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//---------------------------------------------------------------------------- 
 void receive_wait_and_send(void){
   
   if (cpu_rx_ring_wr > SET_1){
@@ -157,6 +229,21 @@ void receive_wait_and_send(void){
   
 }
 
+//===========================================================================
+// Function name: compare_receive_ring_buffer
+//
+// Description: reset serial comm's buffer variables
+// 
+// Passed : no variables passed
+// Locals: none
+// Returned: no values returned
+// Globals: char CPU_Char_Rx[], char to_display[]
+//          int cpu_rx_ring_wr, int cpu_rx_ring_rd,
+//
+// Author: Mattia Muller
+// Date: Sept 2014
+// Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+//---------------------------------------------------------------------------- 
 void compare_receive_ring_buffer(void){
   if(cpu_rx_ring_wr > cpu_rx_ring_rd) {
     to_display[cpu_rx_ring_rd] = CPU_Char_Rx[cpu_rx_ring_rd];
